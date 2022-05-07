@@ -1,0 +1,61 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="input-group input-group-sm mb-1">
+        </div>
+        <div class="card-body">
+        <h5 class="card-title"><strong>{{client.client_name}}</strong></h5>
+            <div class="card text-white bg-primary">
+                <div class="row mt-2">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Folder Type</span>
+                                    {{form.folder_type}}
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;"> Client</span>
+                                    {{form.client}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Description</span>
+                                    {{form.folder_description}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Lawyer</span>
+                                    {{form.Supervisinglawyer}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Remarks</span>
+                                    {{form.remarks}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                            </div>
+                        </div>
+                        <a class= 'btn btn-success btn-sm mb-3 mt-2' href="{% url 'admin-matter-list' %}">Return</a>
+                        <input class='btn btn-success btn-sm mb-3 mt-2' type="submit" value="Save Record">
+                        <button class="btn btn-success btn-sm mb-3 mt-2" onclick="self.close()">Close</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

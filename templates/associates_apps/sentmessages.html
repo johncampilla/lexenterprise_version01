@@ -1,0 +1,52 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Matters {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">        
+        <div class="row my-1">
+            <div class="col">
+                <table class="table-hover table-bordered table-sm small table">
+                        <thead class="text-center">
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">To</th>
+                            <th scope="col">Message</th>
+                            <th class="text-center" scope="col"><a class="text-dark" href="{% url 'associate-new_alertmessage' %}"> new message </a></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for msg in sentmessages %}
+                            <tr>
+                                <td>{{ msg.date_alert }}</td>
+                                <td>{{ msg.messageto }}</td>
+                                <td>{{ msg.message_alert }}</td>
+                                <td class="text-center">
+                                    <a href="{% url 'associate-edit_alertmessage' msg.id %}" class="btn btn-info btn-sm btn-icon-split" >
+                                        <span class="icon text-white-20">
+                                            <i class="fa fa-edit"></i>
+                                        </span>
+                                        <span class="text">Message</span>
+                                    </a>
+                                </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                </table>     
+            </div>
+        </div>
+        <a href="{% url 'associate-alert_messages' %}" class="btn btn-info btn-sm btn-icon-split" >
+            <span class="icon text-white-20">
+                <i class="fa fa-times"></i>
+            </span>
+            <span class="text">Return</span>            
+        </a>
+
+    </div>
+
+{% endblock %}
+
+
+

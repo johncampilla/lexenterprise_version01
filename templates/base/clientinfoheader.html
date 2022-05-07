@@ -1,0 +1,44 @@
+<div class="card text-white bg-primary">
+    <div class="row">
+        <div class="col-lg-8">
+            <table class="table table-sm table-borderless small table my-2 text-white">
+                <tbody>
+                    <tr>
+                        <th>Client</th>
+                        <td>{{ client.client_name}} </td>
+                    </tr>
+                    <tr>
+                        <th>Address</th>
+                        <td>{{ client.address}} </td>
+                    </tr>
+                    <tr>
+                        <th>E-mail</th>
+                        <td>{{ client.email}} </td>
+                    </tr>
+                </tbody>
+            </table>    
+        </div>
+        <div class="col-lg-4">
+            <table class="table table-sm table-borderless small table my-2 text-white">
+                <tbody>
+                    <tr>
+                        <th>Mobile</th>
+                        <td>{{ client.mobile}} </td>
+                    </tr>
+                    <tr>
+                        <th>Industry</th>
+                        <td><a href="#">{{ client.industry }}</a></td>
+                    </tr>
+                    <tr>
+                        <th>Client Status</th>
+                        <td>{{ client.status }}</td>
+                    </tr>
+                </tbody>
+            </table>  
+        </div>
+    </div>
+    <div class="row">
+            <a class="text-white small" href="{% url 'client-full-details' client.id %}" style="font-style: italic;">&nbsp; Full Details</a>
+    </div>
+        
+</div>

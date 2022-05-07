@@ -1,0 +1,118 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Client Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% include 'base/caseinfoheader.html' %}    
+        <div class="card">
+
+            <!-- <div class="card-body"> -->
+                <div class="card text-white">
+                    <div class="row mt-2">
+                        <div class="text-center mb-2"> 
+                            {{matter.matter_title}}
+                        </div>
+                        <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+                        
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text" style="width: 110px;"> Matter</span>
+                                        {{form.matter}}
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text" style="width: 110px;">Pay Status</span>
+                                        {{form.payment_tag}}
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                        {{form.lawyer}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text" style="width: 110px;">Bill Number</span>
+                                        {{form.bill_number}}
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text" style="width: 110px;">Bill Date</span>
+                                        {{form.bill_date}}
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text" style="width: 110px;">Bill Amount</span>
+                                        {{form.bill_amount}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text" style="width: 110px;">PF Amount</span>
+                                        {{form.pf_amount}}
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text" style="width: 110px;">Filing Fees</span>
+                                        {{form.ofees_amount}}
+                                    </div>
+                                    <div class="input-group input-group-sm mb-1">
+                                        <span class="input-group-text" style="width: 110px;">Misc. Expenses</span>
+                                        {{form.ope_amount}}
+                                    </div>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                        <!-- <span class="input-group-text" style="width: 110px;">Invoice Image</span> -->
+                                        {{form.DocPDFs}}
+                                </div>
+                            </div>
+                            <div>
+                                <a class= 'btn btn-outline-primary btn-sm mb-3' href="#">Return</a>
+                                <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <h6 class="card-title bg-primary text-white text-center">Activities</h6>
+                <div>
+                    <table class="table-hover table-bordered table-sm small table">
+                        <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                        <thead class="table-primary text-center">
+                            <tr>
+                                <th style="width:10%;">Date</th>
+                                <th style="width:15%;">Lawyer</th>
+                                <th style="width:10%;">Doc Type</th>
+                                <th style="width:10%;">Tran Type</th>
+                                <th style="width:45%;">Activity</th>
+                                <th colspan="1" style="width:10%;"><a href="#"><i class="fas fa-plus text-center"></i>&nbsp;Activity</a></th>
+                            </tr>
+                        </thead>
+                        {% for task in tasks %}
+                            <tr>
+                                <td style="font-weight: bold;">{{ task.tran_date | date:'m/d/Y' }}</td>
+                                <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
+                                <td style="font-weight: bold;">{{ task.doc_type }}</td>
+                                <td style="font-weight: bold;">{{ task.tran_type }}</td>
+                                <td style="font-weight: bold;">{{ task.task }}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="#" title="Edit Activity">
+                                           <i class="fas fa-pen"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>    
+                </div>
+    
+            <!-- </div> -->
+        
+        </div>
+    
+
+    </div>
+
+{% endblock %}

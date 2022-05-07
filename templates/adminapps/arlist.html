@@ -1,0 +1,103 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <nav class="navbar navbar-light bg-light">
+                    <form class="form-inline">
+                      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                  </nav>        
+            </div>
+            <div class="col-md-6 my-2">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                      {% if page.has_previous %}
+                         <li class="page-item"><a class="page-link" href="{% url 'admin-ar-list' %}?page={{ page.previous_page_number }}">Previous</a></li>
+                      {% endif%}
+                      {% for num_page in page.paginator.page_range %}
+                      {% if page.number == num_page %}
+                        <li class="page-item active">
+                            <a class="page-link" href="{% url 'admin-ar-list' %}?page={{ num_page }}">{{ num_page }}</a>
+                        </li>
+                      {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{% url 'admin-ar-list' %}?page={{ num_page }}">{{ num_page }}</a>
+                        </li>
+                      {% endif %}
+                      {% endfor  %}
+                      <li class="page-item">
+                          {% if page.has_next %}
+                          <a class="page-link" href="{% url 'admin-ar-list' %}?page={{ page.next_page_number }}">Next</a>
+                          {% endif %}
+
+                        </li>
+                    </ul>
+                  </nav>
+            </div>
+        </div>
+        <div class="row my-0">
+            <div class="col">
+                <table class="table table-hover table-sm table-bordered small table table-dark table-striped ">
+                        
+                    <thead>
+                        <tr class="table-active table-primary bg-white text-dark">
+                            <th scope="col">Client</th>
+                            <th scope="col">Bill #</th>
+                            <th scope="col">Bill Date #</th>
+                            <th scope="col">Matter</th>
+                            <th scope="col">Currency</th>
+                            <th scope="col">PF</th>
+                            <th scope="col">Fees</th>
+                            <th scope="col">OPE</th>
+                            <th scope="col">Total Amount</th>
+
+                            <th class="text-center bg-primary" scope="col"><a class="text-white" href="#">Create AR Record</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ar in arlist %}
+                        <tr>
+                            <td>{{ ar.matter.folder.client }}</td>
+                            <td>{{ ar.bill_number }}</td>
+                            <td>{{ ar.bill_date }}</td>
+                            <td>{{ ar.matter.matter_title }}</td>
+                            <td>{{ ar.currency }}</td>
+                            <td>{{ ar.pf_amount }}</td>
+                            <td>{{ ar.ofees_amount }}</td>
+                            <td>{{ ar.ope_amount }}</td>
+                            <td>{{ ar.bill_amount }}</td>
+
+                            <td class="text-center">
+                                <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                    <span class="icon text-white-20">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                    <span class="text">Information</span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>Page: {{ page.number }}/{{ page.paginator.num_pages }}</p>
+                    </div>
+                    <div class="col-md-8 justify-content-end">
+                        <p>Total No. Of Records : {{ noofclients }}</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

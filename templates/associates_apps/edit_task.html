@@ -1,0 +1,115 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+        <h5 class="card-title">Fill Entry Form (New Activity/Task)</h5>
+            <div class="card text-white bg-primary">
+                <div class="row mt-2">
+                    <form method="POST">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+                    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;"> Matter</span>
+                                    {{form.matter}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Activity Date</span>
+                                    {{form.tran_date}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Tran Type</span>
+                                    {{form.tran_type}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Doc Type</span>
+                                    {{form.doc_type}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Activity Codes</span>
+                                    {{form.task_code}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Prepared By</span>
+                                    {{form.preparedby}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Prepared By</span>
+                                    {{form.lawyer}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Activity Details</span>
+                                    {{form.task}}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <a class= 'btn btn-success btn-sm mb-3' href="{% url 'admin-matter-list' %}">Return</a>
+                            <input class='btn btn-success btn-sm mb-3' type="submit" value="Save Record">
+                        </div>
+                    
+                    </form>
+                </div>
+            </div>
+            <table class="table-hover table-bordered table-sm mt-2" style="font-size:  14px;">
+                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th style="width:10%;">Activity Date</th>
+                        <th style="width:12%;">Lawyer</th>
+                        <th style="width:5%;">Doc Type</th>
+                        <th style="width:15%;">Tran Type</th>
+                        <th style="width:50%;">Activity</th>
+                        <th colspan="3" style="width:8%;">Action</th>
+                    </tr>
+                </thead>
+                {% for task in tasks %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ task.tran_date | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
+                        <td style="font-weight: bold;">{{ task.doc_type }}</td>
+                        <td style="font-weight: bold;">{{ task.tran_type }}</td>
+                        <td style="font-weight: bold;">{{ task.task }}</td>
+                        <td>
+                            <a href="{% url 'admin-uploaded-docs' task.id %}" class="btn btn-info btn-sm btn-icon-split" title="Attached Document" >
+                                <span class="icon text-white-20">
+                                    <i class="fas fa-envelope-open-text"></i>
+                                </span>
+                            </a>    
+                        </td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="#" title="Edit Matter">
+                                   <i class="fas fa-pen"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-info btn-sm btn-icon-split" href="#" title="Delete Matter">
+                                <span class="icon text-white-20">
+                                    <i class="fas fa-trash"></i>
+                                </span>                         
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+    
+        </div>
+    
+    </div>
+</div>
+
+{% endblock content%}
+
+

@@ -1,0 +1,64 @@
+<div class="card text-white bg-primary">
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-sm table-borderless small table my-2 text-white">
+                <tbody>
+                    <tr>
+                        <th scope="row">Client</th>
+                        <td>{{ matter.folder.client.client_name }} </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Folder</th>
+                        <td>{{ matter.folder }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Matter Title</th>
+                        <td>{{ matter.matter_title }} &nbsp; lawyer : {{matter.handling_lawyer.lawyer_name}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-3">
+            <table class="table table-sm table-borderless small table my-2 text-white">
+                <tbody>
+                    <tr>
+                        <th scope="row">Client Reference</th>
+                        <td>{{ matter.clientrefno }} </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">File Number</th>
+                        <td>{{ matter.referenceno }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date Filed</th>
+                        <td>{{ matter.filing_date }} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-3">
+            <table class="table table-sm table-borderless small table my-2 text-white">
+                <tbody>
+                    <tr>
+                        <th scope="row">Filed At</th>
+                        <td>{{ matter.filed_at }} </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Case Type</th>
+                        <td>{{ matter.case_type }} </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Nature</th>
+                        <td>{{ matter.nature }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+<div>
+        <a class="text-white small" href="{% url 'matter-full-details' matter.id %}" style="font-style: italic;">&nbsp;Full Details</a>
+    </div>
+    
+</div>
+

@@ -1,0 +1,80 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Matters {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <!-- <div class="card border-secondary">     -->
+        <div class="row">
+            <div class="card-body">
+                <div class="col-lg-6">
+                    <div class="card-title bg-primary text-white text-center"> Client Information Details </div>
+                            <div class="card border-secondary">
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px;text-align: left;">Client Name</span> 
+                                    <label type="text" class="form-control" >
+                                    {{ client.client_name }}   
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px;text-align: left;">Industry</span> 
+                                    <label type="text" class="form-control" >
+                                    {{ client.industry }}   
+                                </div>
+    
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px;text-align: left;">Address</span> 
+                                    <label type="text" class="form-control" >
+                                    {{ client.address }}   
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px;text-align: left;">City</span> 
+                                    <label type="text" class="form-control" >
+                                    {{ client.city }}   
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px;text-align: left;">State</span> 
+                                    <label type="text" class="form-control" >
+                                    {{ client.state }}   
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px;text-align: left;">Entity Type</span> 
+                                    <label type="text" class="form-control" >
+                                    {{ client.entity_type }}   
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px;text-align: left;">Contact</span> 
+                                    <label type="text" class="form-control" >
+                                    {{ client.main_contact}}   
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px;text-align: left;">E-Mail</span> 
+                                    <label type="text" class="form-control" >
+                                    <a href="#">{{ client.email }}</a>   
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px; text-align: left;">Contact Nos.</span> 
+                                    <label type="text" class="form-control" >
+                                    {{client.mobile}}   
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px; text-align: left;">Status</span> 
+                                    <label type="text" class="form-control" >
+                                    {{ client.status }}   
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Remarks</span> 
+                                    <label type="text" class="form-control" >
+                                    {{ client.remarks}}   
+                                </div>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+

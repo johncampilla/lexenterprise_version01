@@ -1,0 +1,68 @@
+<div class="card text-white bg-primary">
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-sm table-borderless small table my-2 text-white">
+                <tbody>
+                    <tr>
+                        <th>Client</th>
+                        <td>{{ matter.folder.client.client_name}} </td>
+                    </tr>
+                    <tr>
+                        <th>Folder</th>
+                        <td>{{ matter.folder}} </td>
+                    </tr>
+                    <tr>
+                        <th>Title</th>
+                        <td>{{ matter.matter_title}} </td>
+                    </tr>
+
+                </tbody>
+            </table>    
+        </div>
+        <div class="col-lg-3">
+            <table class="table table-sm table-borderless small table my-2 text-white">
+                <tbody>
+                    <tr>
+                        <th> Lawyer</th>
+                        <td>{{ matter.handling_lawyer}}</td>
+                    </tr>
+                    <tr>
+                        <th>Case Type</th>
+                        <td>{{ matter.case_type }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nature</th>
+                        <td><a href="#">{{ matter.nature }}</a></td>
+                    </tr>
+
+                </tbody>
+            </table>    
+        </div>
+        <div class="col-lg-3">
+            <table class="table table-sm table-borderless small table my-2 text-white">
+                <tbody>
+                    <tr>
+                        <th>App Type</th>
+                        <td>{{ matter.apptype }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Status</th>
+                        <td>{{ matter.status }}</td>
+                    </tr>
+                    <tr>
+                        <th>Oth Lawyers</th>
+                        <td>{{ matter.lawyers_involve }}</td>
+                    </tr>
+
+                </tbody>
+            </table>    
+        </div>
+
+    </div>        
+    <div>
+        <a class="text-white small" href="{% url 'matter-full-details' matter.id %}" style="font-style: italic;">&nbsp;Full Details</a>
+    </div>
+    
+</div>
+

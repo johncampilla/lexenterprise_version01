@@ -1,0 +1,26 @@
+{% extends 'base/main.html' %}
+{% block title %} LogIn System {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container bg-gradient-primary">
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <div class="border p-3 bg-gradient-primary">
+                    <h3> LogIn jo</h3>
+                    <hr>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{form|crispy}}
+                        <input class='btn btn-success' type="submit" value="Login">
+                        <a class="btn btn-success" href="{% url 'user-register' %}"> Register </a>                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

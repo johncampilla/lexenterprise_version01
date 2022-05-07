@@ -1,0 +1,93 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+        <h5 class="card-title">Fill Entry Form (Matter/Case Detail)</h5>
+            <div class="card text-white bg-primary">
+                <div class="row mt-2">
+                    <form method="POST">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+                    
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;"> Case Folder</span>
+                                {{form.folder}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Appearance</span>
+                                {{form.appearance}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Reference No.</span>
+                                {{form.referenceno}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Date Filed</span>
+                                {{form.filing_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Filed At</span>
+                                {{form.filed_at}}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Type Of Case</span>
+                                {{form.case_type}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Type Of Appln</span>
+                                {{form.apptype}}
+                            </div>
+
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Nature</span>
+                                {{form.nature}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                {{form.handling_lawyer}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Contact Person</span>
+                                {{form.matter_contact_person}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Matter Title</span>
+                                {{form.matter_title}}
+                            </div>
+                            <div class="input-group input-group-sm mb-2">
+                                <span class="input-group-text" style="width: 110px;">Remrks</span>
+                                {{form.remarks}}
+                            </div>
+
+                        </div>
+                    </div>
+                        <a class= 'btn btn-success btn-sm mb-3' href="{% url 'admin-matter-list' %}">Return</a>
+                        <input class='btn btn-success btn-sm mb-3' type="submit" value="Save Record">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content%}
+
+

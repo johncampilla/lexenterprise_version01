@@ -1,0 +1,103 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Create Button & get username -->
+    <div class="d-flex justify-content-between mt-1">
+        <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp; Print</a>
+        <span>
+            Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
+        </span>
+    </div>
+
+     <!-- input search + buttons search and reset -->
+     <form>
+        <div class="input-group input-group-sm mb-1 mt-2">
+            <input name="q" type="text" class="form-control" placeholder="Search for...">
+            <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+            <a href="{% url 'associate-billing_list' %}" class="btn btn-dark" style="margin: left 2px;"><i class="fas fa-sync-alt"></i></a>
+
+        </div>
+     </form>
+     <!-- Table -->
+     <table class="table-hover table-bordered table-sm small table">
+     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+             <thead class="table-primary text-center">
+                 <tr>
+                    <th style="width:10%;">Status</th>
+                    <th style="width:10%;">Bill Number</th>
+                    <th style="width:10%;">Bill Date</th>
+                    <th style="width:25%;">Matter Title</th>
+                    <th style="width:10%;">PF</th>
+                    <th style="width:10%;">Fees</th>
+                    <th style="width:10%;">OPE</th>
+                    <th style="width:10%;">Bill Amount</th>
+                    <th style="width:5%;">Action</th>
+                 </tr>
+             </thead>
+             {% for bills in page %}
+             <tr>
+                 <td style="font-weight: bold;">{{ bills.payment_tag }}</td>
+                 <td style="font-weight: bold;">{{ bills.bill_number }}</td>
+                 <td style="font-weight: bold;">{{ bills.bill_date | date:'m/d/Y' }}</td>
+                 <td style="font-weight: bold;">{{ bills.matter.matter_title }}</td>
+                 <td style="font-weight: bold;">{{ bills.pf_amount }}</td>
+                 <td style="font-weight: bold;">{{ bills.ofees_amount }}</td>
+                 <td style="font-weight: bold;">{{ bills.ope_amount }}</td>
+                 <td style="font-weight: bold;">{{ bills.bill_amount }}</td>
+                 <td>
+                     <a class="btn btn-primary btn-sm" href="#" title="Edit Posted Bills">
+                            <i class="fas fa-pen"></i>
+                     </a>
+                 </td>
+                 <!-- <td>
+                    <a class="btn btn-info btn-sm btn-icon-split" href="#" title="Delete Matter">
+                        <span class="icon text-white-20">
+                            <i class="fas fa-trash"></i>
+                        </span>                         
+                    </a>
+                 </td> -->
+            </tr>
+             {% endfor %}
+     </table>
+     <!-- Pagination-->
+     <nav class="small">
+         {% if matters.has_other_pages %}
+         <ul class="pagination justify-center-left">
+            {% if matters.has_previous %}
+                <a href="?page=1" class="btn btn-outline-primary mb-4" style="width: 60px; border-radius: 1px; border: 1px solid #d1d1d1;">First</a>
+                <li class="page-item"><a class="page-link" href="?page={{ matters.previous_page_number }}"><i class="fas fa-angle-double-left"></i></a></li>
+            {% else %}
+                <li class="page-item disabled"></li>
+            {% endif %}
+
+            {% for i in matters.paginator.page_range %}
+                {% if matters.number == i %}
+                <li class="page-item active"><span class="page-link">{{ i }}<span class="sr-only"></span></span></li>                
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if matters.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ matters.next_page_number }}"><i class="fas fa-angle-double-right"></i></a></li>
+                <a href="?page={{ matters.paginator.num_pages}}" class="btn btn-outline-primary mb-4" style="width: 60px; border-radius: 1px; border: 1px solid #d1d1d1; border-left: none;">Last</a>
+            {% else %}
+                <li class="page-item disabled"></li>
+            {% endif %}
+
+        </ul>
+         {% endif %}
+
+     </nav>
+
+</div>
+
+{% endblock %}
+
+
+

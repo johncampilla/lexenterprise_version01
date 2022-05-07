@@ -1,0 +1,48 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row my-0">
+            <div class="col">
+                <table class="table table-hover table-sm table-bordered small table table-dark table-striped ">
+                    <tbody>
+                        {% for list in list %}
+                            <tr>
+                                <!-- <td>{{list.folder.client.client_name}}</td>
+                                <td>{{list.folder.folder_description}}</td>
+                                <td>{{list.matter_title}}</td>
+                                <td>{{list.case_type}}</td>
+                                <td>{{list.handling_lawyer}}</td> -->
+
+                                <td>{{list.id}}</td>
+                                <td>{{list.username}}</td>
+                                <!-- {{list}} -->
+
+                            </tr>
+                        {% endfor %}
+                        <!-- {{list}} -->
+                        <!-- {% for list in list %}
+                        <tr>
+                            <!-- <td>{{ list.category }}</td>
+                            <td>{{ list.client_name }}</td>
+                            <td>{{ list.email }}</td>
+                            <td>{{ list.mobile }}</td>
+                            <td>{{ list.city }}</td>
+                            <td>{{ list.state }}</td>
+                            <td>{{ list.country }}</td> -->
+                            <!-- <td>{{ list.folder_description }}</td>
+                            <td>{{ list.matter_title }}</td>
+                        </tr> -->
+                        <!-- {% endfor %} -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

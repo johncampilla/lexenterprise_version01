@@ -1,0 +1,38 @@
+{% extends 'base/main.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'base/adminnavbar.html' %}
+
+<table class="table table-hover table-sm">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">client</th>
+        <th scope="col">Type</th>
+        <th scope="col">Reference</th>
+        <th scope="col">Matter Title</th>
+        <th scope="col">Functions</th>
+
+    </tr>
+    </thead>
+    <tbody>
+        {% for matter in matters %}
+        <tr>
+            <td> {{ matter.id }}</td>
+            <td>{{ matter.folder.client }}</td>
+            <td>{{ matter.folder.folder_type }}</td>
+            <td>{{ matter.case_number }}</td>
+            <td>{{ matter.handling_lawyer.lawyer_name }}</td>
+            <td>
+                <a class="btn btn-info btn-sm" href="{% url 'admin-view-matter' matter.id %}">View</a>
+                <a class="btn btn-info btn-sm" href="{% url 'admin-new-matter' %}">Add</a>
+                <a class="btn btn-info btn-sm" href="{% url 'admin-update-matter' matter.id %}">Edit</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'admin-delete-matter' matter.id %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>     
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Create Button & get username -->
+    <div class="d-flex justify-content-between mt-3">
+        <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp; Add Matter</a>
+        <span>
+            Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
+        </span>
+    </div>
+
+     <!-- input search + buttons search and reset -->
+     <div class="card text-white bg-primary">
+        <div class="row mt-2">
+            <div class="row">
+                <div class="col-lg-12">            
+                    <table class="table table-sm table-borderless small table table-primary table-hover my-2 bg-white">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Client</th>
+                                <td class="font-weight-bold">{{ task.matter.folder.client.client_name }} </td>
+                                <th scope="row">Activity Date</th>
+                                <td class="font-weight-bold"> {{ task.tran_date | date:'m/d/Y' }} </td>
+                                <th scope="row">Particulars</th>
+                                <td class="font-weight-bold"> {{ task.task }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>           
+        </div>
+    </div>
+
+     <form>
+        <div class="input-group input-group-sm mb-1 mt-2">
+            <input name="q" type="text" class="form-control" placeholder="Search for...">
+            <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+            <a href="#" class="btn btn-dark" style="margin: left 2px;"><i class="fas fa-sync-alt"></i></a>
+
+        </div>
+     </form>
+     <!-- Table -->
+     <table class="table-hover table-bordered table-sm" style="font-size:  14px;">
+     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+             <thead class="table-primary text-center">
+                 <tr">
+                    <th style="width:25%;">Document Date</th>
+                    <th style="width:40%;">Document</th>
+                    <th colspan="2" style="width:3%;">Action</th>
+                 </tr>
+             </thead>
+             {% for doc in docs %}
+             <tr>
+                 <td style="font-weight: bold;">{{ doc.DocDate | date:'m/d/Y' }}</td>
+                 <td style="font-weight: bold;">{{ doc.DocsPDF }}</td>
+                 <td>
+                     <a class="btn btn-primary btn-sm" href="#" title="Edit Matter">
+                        <i class="fas fa-pen"></i>
+                     </a>
+                 </td>
+                 <td>
+                    <a class="btn btn-info btn-sm btn-icon-split" href="#" title="Delete Matter">
+                        <span class="icon text-white-20">
+                            <i class="fas fa-trash"></i>
+                        </span>                         
+                    </a>
+               </td>
+            </tr>
+             {% endfor %}
+     </table>
+</div>
+
+{% endblock %}
+
+
+

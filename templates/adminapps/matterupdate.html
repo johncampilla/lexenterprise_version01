@@ -1,0 +1,67 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="border bg-white p-3 bg-gradient-primary text-white">
+                <h3>Engagement</h3>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <a class= 'btn btn-success' href="{% url 'admin-matter-list' %}">Return</a>
+                    <input class='btn btn-success' type="submit" value="Save Record">
+                    <a class= 'btn btn-success' href="{% url 'admin-IPmatter-edit-details'  matter_otherinfo.id %}">Other IP Details</a>
+
+                </form>
+
+            </div>
+
+        </div> 
+    </div>
+    <table class="table-hover table-bordered table-sm" style="font-size:  14px;">
+        <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+        <thead class="table-primary text-center">
+            <tr>
+                <th style="width:25%;">Activity Date</th>
+                <th style="width:12%;">Lawyer</th>
+                <th style="width:5%;">Doc Type</th>
+                <th style="width:15%;">Tran Type</th>
+                <th style="width:40%;">Activity</th>
+                <th colspan="2" style="width:3%;">Action</th>
+            </tr>
+        </thead>
+        {% for task in tasks %}
+            <tr>
+                <td style="font-weight: bold;">{{ task.tran_date }}</td>
+                <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
+                <td style="font-weight: bold;">{{ task.doc_type }}</td>
+                <td style="font-weight: bold;">{{ task.tran_type }}</td>
+                <td style="font-weight: bold;">{{ task.task }}</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="#" title="Edit Matter">
+                           <i class="fas fa-pen"></i>
+                    </a>
+                </td>
+                <td>
+                    <a class="btn btn-info btn-sm btn-icon-split" href="#" title="Delete Matter">
+                        <span class="icon text-white-20">
+                            <i class="fas fa-trash"></i>
+                        </span>                         
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+   
+</div>
+
+{% endblock %}

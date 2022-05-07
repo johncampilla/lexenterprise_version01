@@ -1,0 +1,24 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Matters {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="border bg-white p-3 bg-gradient-primary text-white">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <a class= 'btn btn-success' href="#">Return</a>
+                    <input class='btn btn-success' type="submit" value="Send Msg">
+
+                </form>
+            </div>
+        </div> 
+    </div>
+</div>
+{% endblock %}
+

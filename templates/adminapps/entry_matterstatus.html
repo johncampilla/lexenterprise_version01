@@ -1,0 +1,65 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Application Type Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+        <h5 class="card-title">Reference : Matter Status</h5>
+            <div class="card text-white">
+                <div class="row mt-2">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 150px; font-weight: bold;">Matter Status</span>
+                                    {{form.status}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <a class= 'btn btn-success btn-sm mb-1' href="{% url 'admin-matter-list' %}">Return</a>
+                                <input class='btn btn-success btn-sm mb-1' type="submit" value="Save Record">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table class="table-hover table-bordered table-sm mt-1" style="font-size:  14px;">
+                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                <thead class="table-primary text-center">
+                            <tr">
+                               <th>Status</th>
+                               <th colspan="2" style="width:3%;">Action</th>
+                            </tr>
+                </thead>
+                {% for status in status %}
+                <tr>
+                    <td style="font-weight: bold;">{{ status.status }}</td>
+                    <td>
+                        <a class="btn btn-outline-primary btn-sm" href="{% url 'admin-edit-matterstatus' status.id %}" title="Edit Apptype">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    </td>
+            
+                    <td>
+                        <a class="btn btn-outline-primary btn-sm btn-icon-split" href="#" title="Delete Item">
+                            <span class="icon text-white-20">
+                                <i class="fas fa-trash"></i>
+                            </span>                         
+                        </a>
+                            </td>
+                </tr>
+                {% endfor %}
+            </table>           
+        </div>
+    </div>
+
+</div>
+{% endblock %}

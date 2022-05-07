@@ -1,0 +1,122 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    {% include 'base/caseinfoheader.html' %}
+
+    <div class="card">
+        <!-- <div class="card-body"> -->
+            <div class="card text-white">
+                <div class="row mt-2">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;"> Matter</span>
+                                    {{form.matter}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Due Code</span>
+                                    {{form.duecode}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Due Date</span>
+                                    {{form.duedate}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Assigned To</span>
+                                    {{form.assignto}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Particulars</span>
+                                    {{form.particulars}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Date Complied</span>
+                                    {{form.date_complied}}
+                                </div>
+                            </div>
+                        </div>
+                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'associate-home' %}">Return</a>
+                        <input class='btn btn-outline-primary btn-sm mb-3 mt-2' type="submit" value="Save Record">
+                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="#">Send E-Mail</a>
+                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'recent-add_task' due_id matter.id %}"><i class="fas fa-plus"></i>&nbsp; Add Activity</a>
+
+                    </form>
+                </div>
+            </div>
+            <h6 class="card-title bg-primary text-white text-center">Activities</h6>
+            <table class="table-hover table-bordered table-sm small table">
+                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                        <thead class="table-primary text-center">
+                            <tr>
+                                <th scope="col">Activity Date</th>
+                                <th scope="col">Document Type</th>
+                                <th scope="col">Tran Type</th>
+                                <th scope="col">Lawyer</th>
+                                <th scope="col">Task</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        {% for activity in activity %}
+                        <tr>
+                           <td style="font-weight: bold;">{{ activity.tran_date }}</td>
+                           <td style="font-weight: bold;">{{ activity.doc_type }}</td>
+                           <td style="font-weight: bold;">{{ activity.tran_type }}</td>
+                           <td style="font-weight: bold;">{{ activity.lawyer }}</td>
+                           <td style="font-weight: bold;">{{ activity.task }}</td>
+                           <td>
+                            <a class="btn btn-primary btn-sm" href="{% url 'recent-activity-modify' activity.id due_id %}" title="Edit Activity">
+                               <i class="fas fa-pen"></i>
+                            </a>
+                        </td>
+                                </tr>
+                        {% endfor %}
+            </table> 
+            <h6 class="card-title bg-primary text-white text-center">Bill Summary</h6>
+            <table class="table-hover table-bordered table-sm small table">
+                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th style="width:3%;">Payment Tag</th>
+                        <th style="width:10%;">Bill Number</th>
+                        <th style="width:10%;">Bill Date</th>
+                        <th style="width:10%;">Bill_Amount</th>
+                        <th style="width:15%;">PF Amount</th>
+                        <th style="width:10%;">Filing Fees</th>
+                        <th style="width:10%;">OPE</th>
+                    </tr>
+                </thead>
+                {% for AR in ARBills %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ AR.payment_tag }}</td>
+                        <td style="font-weight: bold;">{{ AR.bill_number }}</td>
+                        <td style="font-weight: bold;">{{ AR.bill_date }}</td>
+                        <td style="font-weight: bold; text-align: right;"  >{{ AR.bill_amount}}</td>
+                        <td style="font-weight: bold; text-align: right;">{{ AR.pf_amount }}</td>
+                        <td style="font-weight: bold; text-align: right;">{{ AR.ofees_amount }}</td>
+                        <td style="font-weight: bold; text-align: right;">{{ AR.ope_amount }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div style = "font-weight: bold; font-size: small;" class="input-group input-group-sm mb-1 font font-weight">
+                Outstanding Balance : {{total_unpaid}}
+            </div>
+        <!-- </div> -->
+       
+    </div>
+</div>
+
+{% endblock content%}
+
+

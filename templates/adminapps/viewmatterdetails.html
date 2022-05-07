@@ -1,0 +1,69 @@
+{{% extends 'base/main2.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Accounts
+    <a class= 'btn btn-secondary' href="{% url 'admin-matter-list' %}">Return</a>
+    <a class= 'btn btn-secondary' href="#">Print</a>
+    <a class= 'btn btn-secondary' href="{% url 'admin-new-task' %}">Add Activity</a>
+    <a class= 'btn btn-danger'    href="{% url 'admin-delete-matter' matter.id %}">Delete Matter</a>
+
+    <hr>
+
+{% endblock %}
+{% block content %}
+<Style>
+    .john{
+        background:beige;
+        font-size: small;
+    }      
+
+
+</Style>
+    <div class="row mt-1">
+        <div class="col-md-4">
+            <div class="border bg-white p-3 john">
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset disabled="disabled">
+                        {{ form|crispy }}
+                    </fieldset>
+                </form>
+            </div>
+        </div> 
+        <div class="col-md-8">
+            <div class="border bg-white p-3">
+                <table class="table table-hover table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">Matter</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Lawyer</th>
+                        <th scope="col">Task</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <td>{{ task.matter }}</td>
+                            <td>{{ task.tran_date }}</td>
+                            <td>{{ task.tran_type }}</td>
+                            <td>{{ task.lawyer }}</td>
+                            <td>{{ task.task }}</td>
+                            <td>
+                               <!-- <a class= 'btn btn-secondary' href="{% url 'admin-view-docs' task.id %}">View Document</a> -->
+                               <a class= 'bi bi-file-pdf-fill' href="{% url 'admin-view-docs' task.id %}">Docs</a>
+                               <!-- <i class="bi bi-file-pdf-fill"></i> -->
+                               <!-- <i class="bi bi-file-pdf-fill"></i> -->
+                            </td>
+                        {% endfor %}
+                    </tbody>
+                  </table>     
+           
+            </div>
+        </div>
+    </div>
+    
+
+{% endblock%}

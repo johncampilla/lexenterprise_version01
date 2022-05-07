@@ -1,0 +1,25 @@
+{% extends 'base/main.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'base/adminnavbar.html' %}
+
+    <div class="row mt-1">
+        <div class="col-md-4">
+            <div class="border bg-white p-3">
+                <h3>Update Client Detail </h3>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <a class= 'btn btn-secondary' href="{% url 'admin-client-list' %}">Return</a>
+                    <input class='btn btn-danger' type="submit" value="Update Client">
+
+                </form>
+            </div>
+
+        </div> 
+    </div>
+
+{% endblock%}

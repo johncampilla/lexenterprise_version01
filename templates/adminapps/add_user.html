@@ -1,0 +1,103 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        <!-- <div class="card-body"> -->
+            <div class="card text-white">
+                <div class="row mt-2">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;"> User ID</span>
+                                    {{form.userid}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Address</span>
+                                    {{form.address}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Rank</span>
+                                    {{form.rank}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Mobile#</span>
+                                    {{form.mobile}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Picture</span>
+                                    {{form.image}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Remarks</span>
+                                    {{form.remarks}}
+                                </div>
+                            </div>
+                        </div>
+                        <a class= 'btn btn-success btn-sm mb-3 mt-2' href="{% url 'admin-matter-list' %}">Return</a>
+                        <input class='btn btn-success btn-sm mb-3 mt-2' type="submit" value="Save Record">
+                    </form>
+                   
+                </div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th scope="col">Category</th>
+                            <th scope="col">Client</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Mobile</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Country</th>
+                            <th colspan="2" style="width:3%;">Action</th>
+                        </tr>
+                    </thead>
+                    <!-- 'userid', 'address', 'rank', 'mobile', 'image', 'remarks' -->
+
+                    {% for users in userlist %}
+                        <tr>
+                           <td style="font-weight: bold;">{{ users.userid }}</td>
+                           <td style="font-weight: bold;">{{ users.address }}</td>
+                           <td style="font-weight: bold;">{{ users.rank }}</td>
+                           <td style="font-weight: bold;">{{ users.mobile }}</td>
+                           <!-- <td style="font-weight: bold;">{{ users.image }}</td> -->
+                           {% if users.image %}
+                                <td style="font-weight: bold;"><img class="img-thumbnail" src="{{ users.image.url }} "/></td>
+                           {% endif %} 
+                           <td style="font-weight: bold;">{{ users.remarks }}</td>
+                           <td>
+                              <a class="btn btn-primary btn-sm" href="#" title="Edit User">
+                                 <i class="fas fa-pen"></i>
+                              </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-info btn-sm btn-icon-split" href= "#" title="Delete Client">
+                                    <span class="icon text-white-20">
+                                        <i class="fas fa-trash"></i>
+                                    </span>                         
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        <!-- </div> -->
+    </div>
+</div>
+
+{% endblock content%}
+
+

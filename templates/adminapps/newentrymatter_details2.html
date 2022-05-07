@@ -1,0 +1,123 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card card-body border-dard text-primary mt-2">
+      <span class="text-center">Matter Entry Form</span>
+    </div>
+    <form method="POST" autocomplete="off" enctype="multipart/form-data" class="card p-3 border-dark mt-3"> 
+        {% csrf_token %}
+        <div class="row">
+        <div class="col-lg-12">
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text">Case Folder  &nbsp;&nbsp;</label>
+                <select class="form-select" name="folder">
+                    <option value="" hidden>Select Folder</option>> 
+                        {% for folderlist in showfolders %}
+                           <option> {{folderlist.client}}-{{ folderlist.folder_description }} </option>
+                        {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="input-group input-group-sm mb-1">
+                <span class="input-group-text">Reference No.</span>
+                <input type="text" class="form-control" name="referenceno" placeholder="Application No/Reference#"&nbsp>
+            </div>
+            <div class="input-group input-group-sm mb-1">
+                <span class="input-group-text">Date Of Filing </span>
+                <input type="date" class="form-control" name="filing_date" placeholder="Date Of Filing">
+            </div>
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text">Filed At&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <select class="form-select" name="filed_at">
+                    <option value="" hidden>Select Entity</option>> 
+                        {% for entitylist in showcourts %}
+                           <option> {{entitylist.court}} </option>
+                        {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-4">        
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text">Type Of Case</label>
+                <select class="form-select" name="case_type">
+                    <option value="" hidden>Select Type of Case</option>> 
+                        {% for casetypelist in showcasetype %}
+                            <option> {{casetypelist.case_type}} </option>
+                        {% endfor %}
+                </select>
+            </div>
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text">App Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <select class="form-select" name="apptype">
+                    <option value="" hidden>Select Type of Application</option>> 
+                    {% for apptypelist in showapptype %}
+                        <option> {{apptypelist.apptype}} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text">Nature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <select class="form-select" name="nature">
+                    <option value="" hidden>Select Nature Of The Matter</option>> 
+                    {% for naturelist in shownature %}
+                        <option> {{naturelist.nature}} </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-lg-4">   
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text">Appearance&nbsp;&nbsp;</label>
+                <select class="form-select" name="appearance">
+                    <option value="" hidden>Select Appearance</option>> 
+                        {% for appearancelist in showappearance %}
+                            <option> {{appearancelist.appearance}} </option>
+                        {% endfor %}
+                </select>
+            </div>
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text">Lawyers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <select class="form-select" name="handling_lawyer">
+                    <option value="" hidden>Select Lawyers</option>> 
+                        {% for lawyerlist in showlawyer %}
+                            <option> {{lawyerlist.lawyer_name}} </option>
+                        {% endfor %}
+                </select>
+            </div>
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text">Case Contact</label>
+                <select class="form-select" name="matter_contact_person">
+                    <option value="" hidden>Select client's contact</option>> 
+                        {% for contactlist in showcontacts %}
+                            <option> {{contactlist.contact_person}} </option>
+                        {% endfor %}
+                </select>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+      <div class="col-lg-12">
+          <div class="form-group mt-3">
+              <textarea class="form-control" name="matter_title" rows="4" placeholder="Matter Title/Description.."></textarea>
+          </div>
+      </div>
+      <div class="d-grid gap-2 mt-2">
+          <button type="submit" class="btn btn-primary btn-sm">
+              <i class="fas fa-plus"></i>Add
+          </button>
+          <a href="" class="btn btn-dark btn-sm"><i class="fas fa-chevron-left"></i>back</a>
+      </div>
+        <!-- </div> -->
+    </form>
+</div>
+{% endblock content%}

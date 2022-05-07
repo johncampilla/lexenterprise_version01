@@ -1,0 +1,234 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        {% include 'base/clientinfoheader.html' %}
+        <div class="card-body">
+            <div class="card text-white">
+                <div class="row mt-2">
+                    <form method="POST">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+                    
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;"> Case Folder</span>
+                                {{form.folder}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Appearance</span>
+                                {{form.appearance}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Reference No.</span>
+                                {{form.referenceno}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Date Filed</span>
+                                {{form.filing_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Filed At</span>
+                                {{form.filed_at}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Status</span>
+                                {{form.status}}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Type Of Case</span>
+                                {{form.case_type}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Type Of Appln</span>
+                                {{form.apptype}}
+                            </div>
+
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Nature</span>
+                                {{form.nature}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                {{form.handling_lawyer}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Client Ref#</span>
+                                {{form.clientrefno}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Our Ref#</span>
+                                {{form.matterno}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Matter Title</span>
+                                {{form.matter_title}}
+                            </div>
+                            <div class="input-group input-group-sm mb-2">
+                                <span class="input-group-text" style="width: 110px;">Remarks</span>
+                                {{form.remarks}}
+                            </div>
+
+                        </div>
+                    </div>
+                    <a href="{% url 'associates-view-myclient-det' client.id %}" class="btn btn-outline-primary btn-sm mb-3">Return</a>
+
+                    <!-- <a class= 'btn btn-success btn-sm mb-3' href="{% url 'associates-view-myclient-det' client.id %}">Return</a> -->
+                    <input class="btn btn-outline-primary btn-sm mb-3" type="submit" value="Save Changes">
+                        <a class= "btn btn-outline-primary btn-sm mb-3" href="{% url 'associate-matter-otherdetails' m_id matter.filed_at %}">Other Info Details</a>
+                        <a class= "btn btn-outline-primary btn-sm mb-3" href="#">Special Instructions</a>
+                    </form>
+                </div>
+            </div>
+<!----------------- Infocard for the activity of the selected matter ---------->
+            <h6 class="card-title bg-primary text-white text-center">Activities</h6>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width:10%;">Date</th>
+                            <th style="width:15%;">Lawyer</th>
+                            <th style="width:10%;">Doc Type</th>
+                            <th style="width:10%;">Tran Type</th>
+                            <th style="width:45%;">Activity</th>
+                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_new_task' m_id %}"><i class="fas fa-plus text-center"></i>&nbsp;Activity</a></th>
+                        </tr>
+                    </thead>
+                    {% for task in tasks %}
+                        <tr>
+                            <td style="font-weight: bold;">{{ task.tran_date | date:'m/d/Y' }}</td>
+                            <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
+                            <td style="font-weight: bold;">{{ task.doc_type }}</td>
+                            <td style="font-weight: bold;">{{ task.tran_type }}</td>
+                            <td style="font-weight: bold;">{{ task.task }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href="{% url 'associate-modify_task' task.id m_id %}" title="Edit Activity">
+                                       <i class="fas fa-pen"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>    
+            </div>
+<!----------------- Infocard for the duedates of the selected matter ---------->
+            <h6 class="card-title bg-primary text-white text-center">Due Dates</h6>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width:10%;">Due Date</th>
+                            <th style="width:70%;">Particulars</th>
+                            <th style="width:10%;">Date Complied</th>
+                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_duedate' m_id %}"><i class="fas fa-plus text-center"></i>&nbsp;Due Date</a></th>
+                        </tr>
+                    </thead>
+                    {% for duedate in duedatelist %}
+                        <tr>
+                            <td style="font-weight: bold;">{{ duedate.duedate | date:'m/d/Y' }}</td>
+                            <td style="font-weight: bold;">{{ duedate.particulars }}</td>
+                            <td style="font-weight: bold;">{{ duedate.date_complied | date:'m/d/Y' }}</td>                            
+                            <td>
+                                <a class="btn btn-primary btn-sm" href="{% url 'associate-edit_duedate' duedate.id m_id %}" title="Edit Due Date">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>        
+            </div> 
+
+            <!----------------- Infocard for the Accounts Receivable of the selected matter ---------->
+            <h6 class="card-title bg-primary text-white text-center">Billing Summary</h6>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width:15%;">Payment Status</th>
+                            <th style="width:25%;">Bill Number</th>
+                            <th style="width:10%;">Bill Date</th>
+                            <th style="width:10%;">PF</th>
+                            <th style="width:10%;">Filing Fees</th>
+                            <th style="width:10%;">Misc Expenses</th>
+                            <th style="width:10%;">Bill Amount</th>
+                            <th style="width:10%;"><a href="{% url 'associate-ar-new' matter.id %}"><i class="fas fa-circle text-center"></i>&nbsp; View </a></th>
+                        </tr>
+                    </thead>
+                    {% for ar in ardetails %}
+                        <tr>
+                            <td style="font-weight: bold;">{{ ar.payment_tag }}</td>
+                            <td style="font-weight: bold;">{{ ar.bill_number }}</td>
+                            <td style="font-weight: bold;">{{ ar.bill_date | date:'m/d/Y'}}</td>
+                            <td style="font-weight: bold; text-align: right;">{{ ar.pf_amount }}</td>
+                            <td style="font-weight: bold; text-align: right;">{{ ar.ofees_amount }}</td>
+                            <td style="font-weight: bold; text-align: right;">{{ ar.ope_amount }}</td>
+                            <td style="font-weight: bold; text-align: right;">{{ ar.bill_amount}}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm" href= "{% url 'associate-ar-edit' ar.id m_id %}" title="Edit Bill">
+                                <i class="fas fa-pen text-center"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>    
+            </div>
+            <h6 class="card-title bg-primary text-white text-center">Incidental Expenses (unbilled)</h6>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                            <thead class="table-primary text-center">
+                                <tr>
+                                <th style="width:10%;">Tran Date</th>
+                                <th style="width:10%;">Lawyer</th>
+                                <th style="width:40%;">Expense Particulars</th>
+                                <th style="width:10%;">Amount</th>
+                                <th style="width:10%;">Status</th>
+                                <th style="width:10%;">Charge</th>
+                               <th colspan="1" style="width:10%;"><a href="#"><i class="fas fa-circle text-center"></i>&nbsp;View</a></th>
+                            </tr>
+                            </thead>
+                            {% for expense in listofexpenses %}
+                            <tr>
+                               <td style="font-weight: bold;">{{ expense.tran_date | date:'m/d/Y' }}</td>
+                               <td style="font-weight: bold;">{{ expense.lawyer }}</td>
+                               <td style="font-weight: bold;">{{ expense.expense_detail }}</td>
+                               <td style="font-weight: bold; text-align: right;">{{ expense.expense_actual_amt }}</td>
+                               <td style="font-weight: bold;">{{ expense.status }}</td>
+                               <td style="font-weight: bold;">{{ expense.chargetoclient }}</td>
+                               <td>
+                                   <a class="btn btn-primary btn-sm" href="#" title="Edit Client">
+                                      <i class="fas fa-pen"></i>
+                                   </a>
+                               </td>
+                            </tr>
+                            {% endfor %}
+                </table>
+        
+            </div>
+
+        </div>    
+    </div>
+</div>
+
+{% endblock content%}
+
+

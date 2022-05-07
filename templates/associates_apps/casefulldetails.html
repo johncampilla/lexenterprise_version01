@@ -1,0 +1,112 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Matters {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <!-- <div class="card border-secondary">     -->
+        <div class="row">
+            <div class="card-body">
+                <div class="col-lg-8">
+                    <div class="card-title bg-primary text-white text-center"> Matter Information Details </div>
+                    <div class="card border-secondary">
+                        <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;text-align: left;">Client Name</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.folder.client.client_name }}   
+                        </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;text-align: left;">Folder</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.folder }}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;text-align: left;">Matter Title</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.matter_title }}   
+                            </div>
+
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;text-align: left;">Client Ref#</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.clientrefno }}   
+                            </div>   
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;text-align: left;">Reference No.</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.referenceno }}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;text-align: left;">Case/Matter#</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.matterno }}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;text-align: left;">Filing Date</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.filing_date }}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;text-align: left;">Case Type</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.case_type }}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;text-align: left;">App Type</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.apptype}}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;text-align: left;">Nature</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.nature}}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px; text-align: left;">Contact Nos.</span>                                     <label type="text" class="form-control" >
+                                {{client.mobile}}   
+                           </div>
+                           <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px; text-align: left;">Status</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.status }}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px; text-align: left;">Appearance</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.appearance }}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px; text-align: left;">Lawyer </span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.handling_lawyer }}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;">Contact</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.matter_contact_person}}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px; text-align: left">Other Lawyers</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.lawyers_involve}}   
+                            </div>
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 125px;">Remarks</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.remarks}}   
+                            </div>                            
+                        </div>
+                    <div>
+                        <a class="text-white small" href="" style="font-style: italic;">&nbsp;Full Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+

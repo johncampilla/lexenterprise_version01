@@ -1,0 +1,199 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Matters {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <table class="table table-sm table-borderless small table table-primary table-hover my-2 bg-white">
+                <tbody>
+                    <tr>
+                        <th scope="row">Client</th>
+                        <td class="font-weight-bold">{{ matter.folder.client.client_name }} </td>
+                        <th scope="row">Matter Title</th>
+                        <td class="font-weight-bold"> {{ matter.matter_title }} </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date Filed</th>
+                        <td class="font-weight-bold">{{ matter.filing_date }} </td>
+                        <th scope="row">Filed At</th>
+                        <td class="font-weight-bold">{{ matter.filed_at }} </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Lawyer</th>
+                        <td class="font-weight-bold">{{ matter.handling_lawyer }}</td>
+                        <th scope="row">Nature</th>
+                        <td class="font-weight-bold">{{ matter.nature }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Due Date</th>
+                        <td class="font-weight-bold">{{ duedates.duedate }}</td>
+                        <th scope="row">Particulars</th>
+                        <td class="font-weight-bold">{{ duedates.particulars }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total Bill Amount</th>
+                        <td class="font-weight-bold" align="Left">{{ Total_bill_amt }}</td>
+                        <th scope="row">Total Paid Amount</th>
+                        <td class="font-weight-bold" align="Left">{{ Total_pay_amt }}</td>
+                        <th scope="row">Total Unpaid</th>
+                        <td class="font-weight-bold" align="Left">{{ Unpaid }}</td>
+                    </tr>    
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                    <thead class="text-center">
+                    <tr class="table-active table-primary bg-white text-dark">
+                        <th scope="col">Task Code</th>
+                        <th scope="col">Task Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for task_summary in task_summary %}
+                        <tr>
+                            <td class="text-center">{{ task_summary.task_code__task_description }}</td>
+                            <td class="text-center">{{ task_summary.task_count }}</td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>                 
+           </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                    <thead class="text-center">
+                    <tr class="table-active table-primary bg-white text-dark">
+                        <th scope="col">Activity Date</th>
+                        <th scope="col">Tran Type</th>
+                        <th scope="col">Lawyer </th>
+                        <th scope="col">Activity</th>
+                        <th class="text-center" scope="col"><a class="text-dark" href="#"> Add Task</a></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in activities %}
+                        <tr>
+                            <td>{{ task.tran_date }}</td>
+                            <td>{{ task.tran_type }}</td>
+                            <td>{{ task.lawyer.access_code }}</td>
+                            <td>{{ task.task }}</td>
+                            <td class="text-right">
+                                    <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+
+                                    <span class="icon text-white-20">
+                                        <i class="far fa-edit"></i>
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>                 
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                    <thead class="text-center">
+                    <tr class="table-active table-primary bg-white text-dark">
+                        <th scope="col">Due Date</th>
+                        <th scope="col">Due Code</th>
+                        <th scope="col">Particulars </th>
+                        <th scope="col">Date Complied</th>
+                        <th scope="col">Assign To</th>
+                        <th class="text-center" scope="col"><a class="text-dark" href="#"> Add Due Date</a></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for due in duedatelist %}
+                        <tr>
+                            <td>{{ due.duedate }}</td>
+                            <td>{{ due.duecode }}</td>
+                            <td>{{ due.particulars }}</td>
+                            <td>{{ due.date_complied }}</td>
+                            <td>{{ due.date_assignto }}</td>
+                            <td class="text-right">
+                                <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                    <span class="icon text-white-20">
+                                        <i class="far fa-edit"></i>
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>                 
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                    <thead class="text-center">
+                    <tr class="table-active table-primary bg-white text-dark">
+                        <th scope="col">Bill Date</th>
+                        <th scope="col">Bill Number</th>
+                        <th scope="col">PF</th>
+                        <th scope="col">Filing Fee</th>
+                        <th scope="col">Expens</th>
+                        <th scope="col">Bill Amount </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for ar in ardetails %}
+                        <tr>
+                            <td class="text-center">{{ ar.bill_date }}</td>
+                            <td class="text-center">{{ ar.bill_number }}</td>
+                            <td align="Right">{{ ar.pf_amount }}</td>
+                            <td align="Right">{{ ar.ofees_amount }}</td>
+                            <td align="Right">{{ ar.ope_amount }}</td>
+                            <td align="Right">{{ ar.bill_amount }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>                 
+           </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                    <thead class="text-center">
+                    <tr class="table-active table-primary bg-white text-dark">
+                        <th scope="col">Payment Date</th>
+                        <th scope="col">Bill Number</th>
+                        <th scope="col">Bill Date</th>
+                        <th scope="col">Payment Reference</th>
+                        <th scope="col">Amount Paid</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for paid in payments %}
+                        <tr>
+                            <td class="text-center">{{ paid.payment_date }}</td>
+                            <td class="text-center">{{ paid.bill_number }}</td>
+                            <td align="Right">{{ paid.bill_number.bill_date }}</td>
+                            <td align="Right">{{ paid.payment_reference }}</td>
+                            <td align="Right">{{ paid.pay_amount }}</td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>                 
+           </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+

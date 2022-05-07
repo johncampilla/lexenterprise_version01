@@ -1,0 +1,33 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="border bg-white p-3 bg-gradient-primary text-white">
+                <h3>New Engagement</h3>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <a class= 'btn btn-success' href="{% url 'admin-matter-list' %}">Return</a>
+                    <a class= 'btn btn-success' href="{% url 'admin-IPmatter-details' %}">Other IP Matters</a>
+
+                    <input class='btn btn-success' type="submit" value="Save Record">
+
+                </form>
+
+            </div>
+
+        </div> 
+    </div>
+</div>
+
+{% endblock %}

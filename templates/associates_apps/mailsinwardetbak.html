@@ -1,0 +1,89 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    {% include 'base/clientinfoheader.html' %}
+
+    <div class="card">
+        <!-- <div class="card-body"> -->
+            <div class="card text-white">
+                <div class="row mt-2">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;"> Matter</span>
+                                    {{form.matter}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Mail Type</span>
+                                    {{form.mail_type}}
+                                </div>
+
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Date Receipt</span>
+                                    {{form.tran_date}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Doc Date</span>
+                                    {{form.doc_date}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Task Code</span>
+                                    {{form.task_code}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Tran Type</span>
+                                    {{form.tran_type}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Mailing Date</span>
+                                    {{form.mailing_date}}
+                                </div>
+
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">IPO Examiner</span>
+                                    {{form.examiner}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Sender</span>
+                                    {{form.contact_person}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Compute Due</span>
+                                    {{form.duecode}}
+                                </div>
+
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Particulars</span>
+                                    {{form.task}}
+                                </div>
+                            </div>
+
+                        </div>
+                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'associate-mails_inward' %}">Return</a>
+                        <input class='btn btn-outline-primary btn-sm mb-3 mt-2' type="submit" value="Save Record">
+                    </form>
+                </div>
+            </div>
+        <!-- </div> -->
+    </div>
+</div>
+
+{% endblock content%}
+
+

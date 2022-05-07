@@ -1,0 +1,26 @@
+{% extends 'base/main.html' %}
+{% block title %} LogIn System {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+
+    </div>
+
+    <div class="container bg-light">
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <div class="border p-3 bg-gradient-primary">
+                    <div class="alert alert-danger">
+                        <h4> Has been logged out</h4>
+                        <a href="{% url 'user-login' %}">Login</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

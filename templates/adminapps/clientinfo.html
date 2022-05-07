@@ -1,0 +1,220 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row mt-2">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        Client Information
+                    </div>
+                    <table class="table table-sm table-borderless small table table-primary table-hover my-2">
+                        <tbody>
+                            <tr>
+                                    <th scope="row">Client</th>
+                                    <td>{{ client.client_name }}</td>
+                            </tr>
+                            <tr>
+                                    <th scope="row">Industry</th>
+                                    <td>{{ client.industry }}</td>
+                            </tr>
+                            <tr>
+                                    <th scope="row">Location</th>
+                                    <td>{{ client.address }}</td>
+                            </tr>
+                            <tr>
+                                    <th scope="row">Contact</th>
+                                    <td>{{ client.main_contact }}</td>
+                            </tr>
+                            <tr>
+                                    <th scope="row">Email</th>
+                                    <td>{{ client.email }}</td>
+                            </tr>
+                            <tr>
+                                    <th scope="row">Mobile</th>
+                                    <td>{{ client.mobile }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Account Name</th>
+                                <td>{{ client.main_contact }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Date Acquired</th>
+                                <td>{{ client.date_acquired }}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div class="div">
+                        <a class="btn btn-success" href="{% url 'admin-client-update' client.id %}">Modify</a>
+                        <a class="btn btn-success" href="{% url 'admin-client-list' %}">Client List</a>    
+                        <a class="btn btn-success" href="{% url 'admin-folder-list' %}">Folder List</a>    
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                             Contact Persons
+                        </div>
+                        <table class="table table-hover table-sm table-bordered small table table-dark table-striped ">
+                            <thead>
+                                <tr class="table-active table-primary bg-white text-dark">
+                                    <th scope="col"> Contact Person </th>
+                                    <th scope="col"> Phone  </th>
+                                    <th class="text-center bg-primary" scope="col"><a class="text-white-20" href="#">Add Contact </a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for contacts in contacts %}
+                                <tr>
+                                    <td>{{ contacts.contact_person }}</td>
+                                    <td>{{ contacts.phone }}</td>
+                                    <td class="text-center">
+                                        <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                               <span class="icon text-white-20">
+                                                    <i class="fas fa-info-circle"></i>
+                                                </span>
+                                        </a>
+                                    </td>
+    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        Case Folders
+                    </div>    
+                    <table class="table table-hover table-sm table-bordered small table table-dark table-striped ">
+                        <thead class="text-center">
+                            <tr class="table-active table-primary bg-white text-dark">
+                                <th scope="col"> Description </th>
+                                <th scope="col"> Folder Type </th>
+                                <th scope="col"> Lawyer  </th>
+                                <th scope="col"> Remarks </th>
+                                <th scope="col"> Action </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for casefolder in casefolders %}
+                            <tr>
+                                <td>{{ casefolder.folder_description }}</td>
+                                <td>{{ casefolder.folder_type }}</td>
+                                <td>{{ casefolder.Supervisinglawyer }}</td>
+                                <td>{{ casefolder.remarks }}</td>
+                                <td class="text-center">
+                                    <a href="{% url 'admin-folder-information' casefolder.id %}" class="btn btn-info btn-sm btn-icon-split" >
+                                           <span class="icon text-white-20">
+                                                <i class="fas fa-info-circle"></i>
+                                            </span>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <tr>
+                                <td># Of Folders :  {{ no_of_folders }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>       
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            Due Dates
+                        </div>  
+                        <table class="table table-hover table-sm table-bordered small table table-dark table-striped ">
+                            <thead>
+                                <tr class="table-active table-primary bg-white text-dark">
+                                    <th scope="col"> Due Date </th>
+                                    <th scope="col"> Matter Title </th>
+                                    <th scope="col"> Particulars </th>
+                                    <th scope="col"> Date Complied  </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for duedate in duedates %}
+                                <tr>
+                                    <td>{{ duedate.duedate }}</td>
+                                    <td>{{ duedate.matter.matter_title }}</td>
+                                    <td align="Center">{{ duedate.particulars }}</td>
+                                    <td align="Center">{{ duedate.date_complied }}</td>
+                                    <td class="text-center">                  
+                                        <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                            <span class="icon text-white-20">
+                                                <i class="fas fa-info-circle"></i>
+                                            </span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            Accounts Receivables
+                        </div>  
+                        <table class="table table-hover table-sm table-bordered small table table-dark table-striped ">
+                            <thead>
+                                <tr class="table-active table-primary bg-white text-dark">
+                                    <th scope="col"> Ref# </th>
+                                    <th scope="col"> Matter </th>
+                                    <th scope="col"> Bill Number </th>
+                                    <th scope="col"> Bill Date  </th>
+                                    <th scope="col"> Currency </th>
+                                    <th scope="col"> Amount </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for arbills in arbills %}
+                                <tr>
+                                    <td>{{ arbills.matter.referenceno }}</td>
+                                    <td>{{ arbills.matter.matter_title }}</td>
+                                    <td align="Center">{{ arbills.bill_number }}</td>
+                                    <td align="Center">{{ arbills.bill_date }}</td>
+                                    <td align="Center">{{ arbills.currency }}</td>
+                                    <td align="Right">{{ arbills.bill_amount }}</td>
+                                    <td class="text-center">                  
+                                        <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                            <span class="icon text-white-20">
+                                                <i class="fas fa-info-circle"></i>
+                                            </span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>Total Amount</td>
+                                    <td align="Right">{{ total_amount }}</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Create Button & get username -->
+    <div class="d-flex justify-content-between mt-2 mb-1">
+        <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp; Print</a>
+        <span>
+            Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
+        </span>
+    </div>
+
+     <!-- input search + buttons search and reset -->
+     <!-- Table -->
+     <table class="table-hover table-bordered table-sm small table">
+     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+             <thead class="table-primary text-center">
+                 <tr>
+                    <th style="width:67%;">Client Name</th>
+                    <th style="width:10%;">Bill Number</th>
+                    <th style="width:10%;">Bill Date</th>
+                    <th style="width:10%;">Bill Amount</th>
+                    <th style="width:3%;">Action</th>
+                 </tr>
+             </thead>
+             {% for client in result %}
+             <tr>
+                <td style="font-weight: bold; text-align: left;">{{ client.matter }}</td>
+                <td style="font-weight: bold; text-align: center;">{{ client.bill_number }}</td>
+                <td style="font-weight: bold; text-align: center;">{{ client.bill_date | date:'m/d/Y' }}</td>
+                <td style="font-weight: bold; text-align: right;">{{ client.bill_amount }}</td>
+                <td>
+                    <a class="btn btn-info btn-sm btn-icon-split" href="{% url 'associate-mybilling-details' client.matter.folder.client.id client.matter.id client.id %}" title="View Client">
+                        <span class="icon text-white-20">
+                            <i class="fas fa-pen"></i>
+                        </span>                         
+                    </a>
+                </td>
+            </tr>
+             {% endfor %}
+             <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="font-weight: bold; text-align: right;">{{ TBillAmt }}</td>
+                <td>
+                </td>
+             </tr>
+             
+     </table>
+
+</div>
+
+{% endblock %}
+
+
+

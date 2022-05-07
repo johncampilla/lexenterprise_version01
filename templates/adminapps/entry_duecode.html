@@ -1,0 +1,102 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Country Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <!-- <div class="card-body"> -->
+        <h5 class="card-title">Reference :Due Date Parameters</h5>
+            <div class="card text-white">
+                <div class="row mt-2">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Folder Type</span>
+                                    {{form.folder_type}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">App Type</span>
+                                    {{form.apptype}}
+                                </div>
+
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Particulars</span>
+                                    {{form.Description}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Due Code</span>
+                                    {{form.DueCode}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Basis Of Compute</span>
+                                    {{form.basisofcompute}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Field Basis</span>
+                                    {{form.fieldbsis}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;"># of Terms</span>
+                                    {{form.terms}}
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <a class= 'btn btn-outline-primary btn-sm mb-1' href="{% url 'admin-matter-list' %}">Return</a>
+                            <input class='btn btn-outline-primary btn-sm mb-1' type="submit" value="Save Record">
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table class="table-hover table-bordered table-sm mt-1" style="font-size:  14px;">
+                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                <thead class="table-primary text-center">
+                            <tr">
+                               <th>Folder</th>
+                               <th>Application</th>
+                               <th>Due Code</th>
+                               <th>Particulars</th>
+                               <th>Field Basis</th>
+                               <th>Basis Of Compute</th>
+                               <th>Terms</th>
+                               <th colspan="2" style="width:3%;">Action</th>
+                            </tr>
+                </thead>
+                {% for duecode in duecodes %}
+                <tr>
+                    <td style="font-weight: bold;">{{ duecode.folder_type }}</td>
+                    <td style="font-weight: bold;">{{ duecode.apptype }}</td>
+                    <td style="font-weight: bold;">{{ duecode.DueCode }}</td>
+                    <td style="font-weight: bold;">{{ duecode.Description }}</td>
+                    <td style="font-weight: bold;">{{ duecode.fieldbsis }}</td>
+                    <td style="font-weight: bold;">{{ duecode.basisofcompute }}</td>
+                    <td style="font-weight: bold;">{{ duecode.terms }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="{% url 'admin-edit-duecode' duecode.id %}" title="Edit Folder">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    </td>
+            
+                    <td>
+                        <a class="btn btn-info btn-sm btn-icon-split" href="#" title="Delete Matter">
+                            <span class="icon text-white-20">
+                                <i class="fas fa-trash"></i>
+                            </span>                         
+                        </a>
+                            </td>
+                </tr>
+                {% endfor %}
+            </table>           
+        <!-- </div> -->
+    </div>
+    
+</div>
+{% endblock %}

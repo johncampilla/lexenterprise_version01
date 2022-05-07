@@ -1,0 +1,41 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Country Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    {{ apptype }}
+
+    <div>
+        <table class="table-hover table-bordered table-sm small table">
+            <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+            <thead class="table-primary text-center">
+                <tr>
+                    <th style="width:10%;">Due Code</th>
+                    <th style="width:15%;">Due Date</th>
+                    <th style="width:10%;">Particulars</th>
+                    <th style="width:10%;">Matter</th>
+                    <th colspan="1" style="width:10%;"><a href="#"><i class="fas fa-plus text-center"></i>&nbsp;Activity</a></th>
+                </tr>
+            </thead>
+            {% for dues in duelist %}
+                <tr>
+                    <!-- <td style="font-weight: bold;">{{ dues.tran_date | date:'m/d/Y' }}</td> -->
+                    <td style="font-weight: bold;">{{ dues.duecode }}</td>
+                    <td style="font-weight: bold;">{{ dues.duedate }}</td>
+                    <td style="font-weight: bold;">{{ dues.particulars }}</td>
+                    <td style="font-weight: bold;">{{ dues.matter }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="#" title="Edit Activity">
+                               <i class="fas fa-pen"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>    
+    </div>
+
+{% endblock %}

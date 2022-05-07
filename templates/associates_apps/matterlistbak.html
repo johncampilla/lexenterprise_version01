@@ -1,0 +1,108 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Matters {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <nav class="navbar navbar-light bg-light">
+                    <form class="form-inline">
+                      <input class="form-control mr-sm-2" name = "q" type="search" placeholder="Search" aria-label="Search">
+                      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                  </nav>        
+            </div>
+            <div class="col-md-6 my-2">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-end">
+                      {% if page.has_previous %}
+                         <li class="page-item"><a class="page-link" href="{% url 'associate-matter-list' %}?page={{ page.previous_page_number }}">Previous</a></li>
+                      {% endif%}
+                      {% for num_page in page.paginator.page_range %}
+                      {% if page.number == num_page %}
+                        <li class="page-item active">
+                            <a class="page-link" href="{% url 'associate-matter-list' %}?page={{ num_page }}">{{ num_page }}</a>
+                        </li>
+                      {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{% url 'associate-matter-list' %}?page={{ num_page }}">{{ num_page }}</a>
+                        </li>
+                      {% endif %}
+                      {% endfor  %}
+                      <li class="page-item">
+                          {% if page.has_next %}
+                          <a class="page-link" href="{% url 'associate-matter-list' %}?page={{ page.next_page_number }}">Next</a>
+                          {% endif %}
+
+                        </li>
+                    </ul>
+                  </nav>
+            </div>
+        </div>
+        
+        <div class="row my-1">
+            <div class="col">
+                    <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                        <thead class="text-center">
+                        <tr class="table-active table-primary bg-white text-dark">
+                            <th scope="col">Client</th>
+                            <th scope="col">Reference #</th>
+                            <th scope="col">Matter Title</th>
+                            <th scope="col">Date Filed</th>
+                            <th scope="col">Appearance</th>
+                            <th class="text-center" scope="col"><a class="text-dark" href="#"></a></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for matter in page %}
+                            <tr>
+                                <td>{{ matter.folder.client }}</td>
+                                <td>{{ matter.referenceno }}</td>
+                                <td>{{ matter.matter_title }}</td>
+                                <td>{{ matter.filing_date }}</td>
+                                <td>{{ matter.appearance }}</td>
+                                <td class="text-center">
+                                    <a href="{% url 'associate-view_portfolio' matter.id %}" class="btn btn-info btn-sm btn-icon-split" >
+                                        <span class="icon text-white-20">
+                                            <i class="fas fa-info-circle"></i>
+                                        </span>
+                                        <span class="text">View</span>
+                                    </a>
+                                </td>
+                                
+                                <!-- <td class="text-center">
+                                    <div class="dropdown">
+                                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          Action
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                          <a class="dropdown-item" href="{% url 'associate-view_portfolio' matter.id %}">Edit</a>
+                                          <a class="dropdown-item" href="#">Delete</a>
+                                        </div>
+                                    </div>
+                                </td>                                 -->
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>     
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p>Page: {{ page.number }}/{{ page.paginator.num_pages }}</p>
+                        </div>
+                        <div class="col-md-8 justify-content-end">
+                            <p>Total No. Of Matters : {{ noofmatters }}</p>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+

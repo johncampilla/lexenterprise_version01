@@ -1,0 +1,108 @@
+{% extends 'base/managementmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row my-1 mt-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header bg-primary text-white text-center">
+                    New Clients - Current Month
+                </div>
+                <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                    <thead class="text-center">
+                    <tr class="table-active table-primary bg-white text-dark">
+                        <th scope="col">Date Acquired</th>
+                        <th scope="col">Client</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Contact</th>
+                        <th scope="col">Address</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                        <tr>
+                            <td>{{ client.date_acquired }}</td>
+                            <td>{{ client.client_name }}</td>
+                            <td>{{ client.email }}</td>
+                            <td>{{ client.mobile }}</td>
+                            <td>{{ client.main_contact }}</td>
+                            <td>{{ client.address }}</td>
+                            <td class="text-center">
+                                <!-- <a href="#" class="btn btn-info btn-sm btn-icon-split" > -->
+                                <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                    <span class="icon text-white-20">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td> Total Clients :   {{ clientcount}}</td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+
+
+
+                        </tr>
+
+                    </tbody>
+                </table>   
+            </div> 
+
+        </div>
+    </div>
+    <div class="row my-1 mt-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    Client's New Matters - Current Month
+                </div>
+                <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                    <thead class="text-center">
+                    <tr class="table-active table-primary bg-white text-dark">
+                        <th scope="col">Client</th>
+                        <th scope="col">Number Of Matters</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for clientsummary in clientsummary %}
+                        <tr>
+                            <td>{{ clientsummary.folder__client__client_name }}</td>
+                            <td class="text-center">{{ clientsummary.NoOfMatter }}</td>
+                            <td class="text-center">
+                                <!-- <a href="#" class="btn btn-info btn-sm btn-icon-split" > -->
+                                <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                    <span class="icon text-white-20">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td> Total number of mattters :   {{ total_count_matters }}</td>
+                        </tr>
+
+                    </tbody>
+                </table>   
+            </div> 
+
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}

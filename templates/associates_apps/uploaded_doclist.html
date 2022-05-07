@@ -1,0 +1,48 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Matters {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        {% include 'base/caseinfoheader.html' %}
+        <div class="row my-1">
+            <div class="col">
+                <table class="table-hover table-bordered table-sm small table">
+                    <thead class="text-center">
+                        <tr class="table-active table-primary bg-white text-dark">
+                            <th style="width:10%;">Activity Date</th>
+                            <th style="width:10%;">Document Date</th>
+                            <th style="width:70%;">Document</th>
+                            <th class="text-center" style="width:10%;" scope="col"><i class="fas fa-plus"></i><a class="text-dark" href="{% url 'associate-newdocs' tdetail.id matter.id %}"> Upload Document</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {% for docs in uploaded_docs %}
+                            <tr>
+                                <td>{{ docs.Task_Detail.tran_date }}</td>
+                                <td>{{ docs.DocDate }}</td>
+                                <td>{{ docs.DocsPDF }}</td>
+                                <td class="text-center">
+                                    <a href="{% url 'associate-viewfiled_document' docs.id matter.id tdetail.id %}" class="btn btn-info btn-sm btn-icon-split" >
+                                        <span class="icon text-white-20">
+                                            <i class="fa fa-eye"></i>
+                                        </span>
+                                    </a>
+                                </td>
+                                </tr>
+                            {% endfor %}
+                    </tbody>
+                </table> 
+                <div>
+                    <a href="{% url 'associate-modify_task' t_id m_id %}" class="btn btn-outline-primary btn-sm">Return</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+

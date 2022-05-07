@@ -1,0 +1,142 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card text-white bg-primary">
+        {% include 'base/caseinfoheader1.html' %}
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="card text-white">
+                <div class="row">
+                    <form method="POST">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->                    
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;"> Matter</span>
+                                    {{form.matter}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Activity Date</span>
+                                    {{form.tran_date}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                    {{form.lawyer}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Service Code</span>
+                                    {{form.bill_service}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Service</span>
+                                    {{form.particulars}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Spent In Hrs</span>
+                                    {{form.spentinhrs}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Spent In Mins</span>
+                                    {{form.spentinmin}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">PF Amount</span>
+                                    {{form.amount}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Prepared By</span>
+                                    {{form.prepared_by}}
+                                </div>
+
+                            </div>
+                        </div>                        
+                        <div>
+                            <a class= 'btn btn-outline-primary btn-sm mb-3' href="{% url 'associate-matter-review' matter.id %}#">Return</a>
+                            <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+                        </div>
+                    
+                    </form>                    
+                </div>
+            </div>
+            <h6 class="card-title bg-primary text-white text-center">Billing Summary</h6>
+
+            <table class="table-hover table-bordered table-sm small table">
+                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                <thead class="table-primary text-center">
+                            <tr>
+                            <th style="width:10%;">Tran Date</th>
+                            <th style="width:10%;">Lawyer</th>
+                            <th style="width:45%;">Services Rendered</th>
+                            <th style="width:10%;">Spent In Hrs</th>
+                            <th style="width:10%;">Spent In Min</th>
+                            <th style="width:10%;">PF Amount</th>
+                           <th colspan="2" style="width:5%;">Action</th>
+                            </tr>
+                </thead>
+                {% for pf in listofservices %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ pf.tran_date | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;">{{ pf.lawyer }}</td>
+                        <td style="font-weight: bold;">{{ pf.particulars }}</td>
+                        <td style="font-weight: bold;">{{ pf.spentinhrs }}</td>
+                        <td style="font-weight: bold;">{{ pf.spentinmin }}</td>
+                        <td style="font-weight: bold; text-align: right;">{{ pf.amount }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="#" title="Edit Client">
+                                  <i class="fas fa-pen"></i>
+                            </a>
+                        </td>
+                        <td>
+                          <a class="btn btn-primary btn-sm" href= "#">
+                                  <i class="fas fa-trash"></i>
+                          </a>
+                       </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="font-weight: bold; text-align: right;">{{ TPF_amt }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="#" title="Edit Client">
+                              <i class="fas fa-pen"></i>
+                        </a>
+                    </td>
+                    <td>
+                      <a class="btn btn-info btn-sm btn-icon-split" href= "#">
+                          <span class="icon text-white-20">
+                              <i class="fas fa-trash"></i>
+                          </span>                         
+                      </a>
+                   </td>
+                </tr>
+
+            </table>    
+        </div>
+       
+    </div>
+    <!-- Create Button & get username -->
+
+     <!-- input search + buttons search and reset -->
+     <!-- <form>
+        <div class="input-group input-group-sm mb-1 mt-2">
+            <input name="q" type="text" class="form-control" placeholder="Search for...">
+            <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+            <a href="#" class="btn btn-dark" style="margin: left 2px;"><i class="fas fa-sync-alt"></i></a>
+        </div>
+     </form> -->
+     <!-- Table -->
+     <!-- Pagination-->
+</div>
+{% endblock %}

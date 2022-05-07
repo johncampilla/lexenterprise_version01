@@ -1,0 +1,89 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Matters {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="div">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        Matter Profile
+                    </div>
+                    <table class="table table-sm table-borderless small table table-primary table-hover my-2">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Client</th>
+                                <td>{{ matter.folder.client.client_name }} </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Folder</th>
+                                <td>{{ matter.folder }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Matter Title</th>
+                                <td>{{ matter.matter_title }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="border bg-white p-3 bg-gradient-primary text-white">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <a class= 'btn btn-success' href="{% url 'associate-view_portfolio' matter.id %}">Return</a>
+                    <input class='btn btn-success' type="submit" value="Save">
+
+                </form>
+            </div>
+        </div> 
+        <div class="col-md-6">
+            <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                <tr class="table-active table-primary bg-white text-dark text-center">
+                        <th scope="col">Activity Date</th>
+                        <th scope="col">Tran Type</th>
+                        <th scope="col">Lawyer </th>
+                        <th scope="col">Activity</th>
+                </tr>
+                <tbody>
+                    {% for task in activities %}
+                    <tr>                        
+                        <td>{{ task.tran_date }}</td>
+                        <td>{{ task.tran_type }}</td>
+                        <td>{{ task.lawyer.access_code }}</td>
+                        <td>{{ task.task }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>    
+            <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                <tr class="table-active table-primary bg-white text-dark text-center">
+                    <th scope="col">Due Date</th>
+                    <th scope="col">Due Code</th>
+                    <th scope="col">Particulars </th>
+                    <th scope="col">Date Complied</th>
+                    <th scope="col">Assign To</th>
+                </tr>
+                <tbody>
+                    {% for due in duedatelist %}
+                    <tr>
+                        <td>{{ due.duedate }}</td>
+                        <td>{{ due.duecode }}</td>
+                        <td>{{ due.particulars }}</td>
+                        <td>{{ due.date_complied }}</td>
+                        <td>{{ due.date_assignto }}</td>
+                    </tr>                    
+                    {% endfor %}
+                </tbody>
+            </table>                                 
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+

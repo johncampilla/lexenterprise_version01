@@ -1,0 +1,57 @@
+{% extends 'base/main.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'base/adminnavbar.html' %}
+
+    <div class="row mt-1">
+        <div class="col-md-4">
+            <div class="border bg-white p-3">
+                <h3>Edit Details </h3>
+                <a class= 'btn btn-secondary' href="{% url 'admin-matter-list' %}">Return</a>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <a class= 'btn btn-secondary' href="{% url 'admin-matter-list' %}">Cancel</a>
+                    <input class='btn btn-secondary' type="submit" value="Save Changes">
+                </form>
+            </div>
+        </div> 
+        <div class="col-md-8">
+            <div class="border bg-white p-3">
+                <table class="table table-hover table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Lawyer</th>
+                        <th scope="col">Task</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <td>{{ task.id }}</td>
+                            <td>{{ task.tran_date }}</td>
+                            <td>{{ task.tran_type }}</td>
+                            <td>{{ task.lawyer }}</td>
+                            <td>{{ task.task }}</td>
+                            <td>
+                               <!-- <a class= 'btn btn-secondary' href="{% url 'admin-view-docs' task.id %}">View Document</a> -->
+                               <a class= 'bi bi-file-pdf-fill' href="{% url 'admin-view-docs' task.id %}">Docs</a>
+                               <!-- <i class="bi bi-file-pdf-fill"></i> -->
+                               <!-- <i class="bi bi-file-pdf-fill"></i> -->
+                            </td>
+                        {% endfor %}
+                    </tbody>
+                  </table>     
+           
+            </div>
+        </div>
+
+    </div>
+
+{% endblock%}

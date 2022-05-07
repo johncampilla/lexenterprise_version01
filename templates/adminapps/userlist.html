@@ -1,0 +1,91 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">  
+        <div class="d-flex justify-content-between mt-3">
+            <a href="{% url 'admin-user-add' %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp; Add User Profile</a>
+            <span>
+                Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
+            </span>
+        </div>
+    
+         <!-- input search + buttons search and reset -->
+        <form>
+            <div class="input-group input-group-sm mb-1 mt-2">
+                <input name="q" type="text" class="form-control" placeholder="Search for...">
+                <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+                <a href="{% url 'admin-user-list' %}" class="btn btn-dark" style="margin: left 2px;"><i class="fas fa-sync-alt"></i></a>
+            </div>
+         </form>
+         <!-- Table -->
+         <table class="table-hover table-bordered table-sm" style="font-size:  14px;">
+         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                <thead class="table-primary text-center">
+                     <tr>
+                        <th scope="col">User Name</th>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Remarks</th>
+                        <th colspan="2" style="width:3%;">Action</th>
+                     </tr>
+                </thead>
+                {% for user in users %}
+                <tr>
+                        <td style="font-weight: bold;">{{ user.userid.username }}</td>
+                        <td style="font-weight: bold;">{{ user.rank }}</td>
+                        <td style="font-weight: bold;">{{ user.mobile }}</td>
+                        <td style="font-weight: bold;">{{ user.address }}</td>
+                        <td style="font-weight: bold;">{{ user.remarks }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="#" title="Edit User Profile">
+                            <i class="fas fa-pen"></i>
+                            </a>
+                        </td>
+                        <td>
+                        <a class="btn btn-info btn-sm btn-icon-split" href= "#" title="Delete User Profile">
+                            <span class="icon text-white-20">
+                                <i class="fas fa-trash"></i>
+                            </span>                         
+                        </a>
+                        </td>
+                </tr>
+                {% endfor %}
+         </table>
+         <!-- Pagination-->
+         <nav class="mt-1">
+             {% if clients.has_other_pages %}
+             <ul class="pagination justify-center-left">
+                {% if clients.has_previous %}
+                    <a href="?page=1" class="btn btn-outline-primary mb-4" style="width: 60px; border-radius: 1px; border: 1px solid #d1d1d1;">First</a>
+                    <li class="page-item"><a class="page-link" href="?page={{ clients.previous_page_number }}"><i class="fas fa-angle-double-left"></i></a></li>
+                {% else %}
+                    <li class="page-item disabled"></li>
+                {% endif %}
+    
+                {% for i in clients.paginator.page_range %}
+                    {% if clients.number == i %}
+                    <li class="page-item active"><span class="page-link">{{ i }}<span class="sr-only"></span></span></li>                
+                    {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if clients.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ clients.next_page_number }}"><i class="fas fa-angle-double-right"></i></a></li>
+                    <a href="?page={{ clients.paginator.num_pages}}" class="btn btn-outline-primary mb-4" style="width: 60px; border-radius: 1px; border: 1px solid #d1d1d1; border-left: none;">Last</a>
+                {% else %}
+                    <li class="page-item disabled"></li>
+                {% endif %}
+                </ul>
+             {% endif %}
+         </nav>      
+    </div>
+
+{% endblock %}
+
+
+

@@ -1,0 +1,93 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Create Button & get username -->
+    <div class="d-flex justify-content-between mt-1">
+        <a href="{% url 'admin-new-client' %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp; Add Client</a>
+        <span>
+            Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
+        </span>
+    </div>
+
+     <!-- input search + buttons search and reset -->
+     <form>
+        <div class="input-group input-group-sm mb-1 mt-2">
+            <input name="q" type="text" class="form-control" placeholder="Search for...">
+            <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+            <a href="{% url 'admin-client-list' %}" class="btn btn-dark" style="margin: left 2px;"><i class="fas fa-sync-alt"></i></a>
+        </div>
+     </form>
+     <!-- Table -->
+     <table class="table-hover table-bordered table-sm small table">
+     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+             <thead class="table-primary text-center">
+                 <tr>
+                 <th scope="col">Category</th>
+                 <th scope="col">Client</th>
+                 <th scope="col">Email</th>
+                 <th scope="col">Mobile</th>
+                 <th scope="col">Industry</th>
+                 <th scope="col">Address</th>
+                 <th scope="col">Country</th>
+                <th colspan="2" style="width:3%;">Action</th>
+                 </tr>
+             </thead>
+             {% for client in clients %}
+             <tr>
+                <td style="font-weight: bold;">{{ client.category }}</td>
+                <td style="font-weight: bold;">{{ client.client_name }}</td>
+                <td style="font-weight: bold;">{{ client.email }}</td>
+                <td style="font-weight: bold;">{{ client.mobile }}</td>
+                <td style="font-weight: bold;">{{ client.industry }}</td>
+                <td style="font-weight: bold;">{{ client.address }}</td>
+                <td style="font-weight: bold;">{{ client.country }}</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="#" title="Edit Client">
+                       <i class="fas fa-pen"></i>
+                    </a>
+                </td>
+                <td>
+                   <a class="btn btn-info btn-sm btn-icon-split" href= "{% url 'admin-client-delete' client.id %}" title="Delete Client">
+                       <span class="icon text-white-20">
+                           <i class="fas fa-trash"></i>
+                       </span>                         
+                   </a>
+                </td>
+             </tr>
+             {% endfor %}
+     </table>
+     <!-- Pagination-->
+     <nav class="mt-1">
+         {% if clients.has_other_pages %}
+         <ul class="pagination justify-center-left">
+            {% if clients.has_previous %}
+                <a href="?page=1" class="btn btn-outline-primary mb-4" style="width: 60px; border-radius: 1px; border: 1px solid #d1d1d1;">First</a>
+                <li class="page-item"><a class="page-link" href="?page={{ clients.previous_page_number }}"><i class="fas fa-angle-double-left"></i></a></li>
+            {% else %}
+                <li class="page-item disabled"></li>
+            {% endif %}
+
+            {% for i in clients.paginator.page_range %}
+                {% if clients.number == i %}
+                <li class="page-item active"><span class="page-link">{{ i }}<span class="sr-only"></span></span></li>                
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if clients.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ clients.next_page_number }}"><i class="fas fa-angle-double-right"></i></a></li>
+                <a href="?page={{ clients.paginator.num_pages}}" class="btn btn-outline-primary mb-4" style="width: 60px; border-radius: 1px; border: 1px solid #d1d1d1; border-left: none;">Last</a>
+            {% else %}
+                <li class="page-item disabled"></li>
+            {% endif %}
+            </ul>
+         {% endif %}
+     </nav>
+</div>
+{% endblock %}

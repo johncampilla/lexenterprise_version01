@@ -1,0 +1,118 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Matters {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="d-flex justify-content-between mt-2 mb-1">
+            <div class="col-lg-3">
+                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp; Activity </a>
+                <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp; Due Date &nbsp;</a>    
+            </div>
+            <span>
+                Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
+            </span>
+        </div>
+    
+        <div class="card border-secondary">
+            <div class="card-body">
+                <h5 class="card-title">Matter Details</h5>
+                <div class="card text-white">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Folder</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.folder }}   
+                            </div>  
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Reference No</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.referenceno }}   
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Lawyer</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.handling_lawyer.lawyer_name }}   
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Date Filed</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.filing_date}}   
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Filing At</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.filed_at}}   
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Matter Type</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.case_type}}   
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Nature</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.nature}}   
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Appearance</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.appearance}}   
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Case Type</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.clientrefno}}   
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Case Type</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.case_type}}   
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="input-group input-group-sm">
+                                <span class="btn btn-sm border-secondary bg-light" style="width: 110px;">Matter Title</span> 
+                                <label type="text" class="form-control" >
+                                {{ matter.matter_title}}   
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>            
+    
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+
+

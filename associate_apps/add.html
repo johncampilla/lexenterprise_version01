@@ -1,0 +1,77 @@
+<!-- Modal -->
+<div class="modal fade" {% block modal-id %} id="addModal" {% endblock modal-id %} tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addModalLabel">{% block modal-title %} <i class="fas fa-plus"></i>&nbsp;&nbsp; Add Client {% endblock modal-title %}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form method="POST" {% block action %} action="/add_client" {% endblock action %} autocomplete="off">
+            {% csrf_token %}
+            <div class="modal-body">
+                <!-- ------- Block ID root ------- -->
+           
+                {% block Value-id %}  {% endblock Value-id %}
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="client_name" maxlength="60" placeholder="Client Name" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="industry" maxlength="60" placeholder="Nature Of Business" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="category" maxlength="60" placeholder="Category" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="address" maxlength="60" placeholder="Full Address" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="country" maxlength="60" placeholder="Country Name" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="email" maxlength="60" placeholder="E-mail" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="mobile" maxlength="60" placeholder="Mobile Phone Number" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="main_contact" maxlength="60" placeholder="Main Contact" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="entity_type" maxlength="60" placeholder="Entity Type" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="date_acquired" maxlength="60" placeholder="Date Acquired" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="status" maxlength="60" placeholder="Client Status" required>
+                </div>
+                <div class="input-group mb-3"> 
+                    <span class="btn border-secondary bg-light"><i class="fas fa-user-alt"></i></span>
+                    <input type="text" class="form-control" name="referredby" maxlength="60" placeholder="Referred By" required>
+                </div>
+
+
+
+            
+            </div>
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+</div>

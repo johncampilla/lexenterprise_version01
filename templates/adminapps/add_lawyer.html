@@ -1,0 +1,109 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        <!-- <div class="card-body"> -->
+            <div class="card text-white">
+                <div class="row mt-2">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;"> User ID</span>
+                                    {{form.lawyerID}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Lawyer</span>
+                                    {{form.lawyer_name}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Initials</span>
+                                    {{form.access_code}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Mobile#</span>
+                                    {{form.phone}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Houly Rate</span>
+                                    {{form.hourlyrate}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">IBP Chapter</span>
+                                    {{form.IBPChapter}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">IBP Roll #</span>
+                                    {{form.IBPRollNo}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">IBP Lifetime #</span>
+                                    {{form.IBPLifetimeNo}}
+                                </div>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Specialization</span>
+                                {{form.Specialization}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Remarks</span>
+                                {{form.remarks}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Picture</span>
+                                {{form.profile_pic}}
+                            </div>
+                        </div>
+                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'admin-lawyer-list' %}">Return</a>
+                        <input class='btn btn-outline-primary btn-sm mb-3 mt-2' type="submit" value="Save Record">
+                    </form>
+                   
+                </div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th scope="col">Lawyer</th>
+                            <th scope="col">Lawyer Name</th>
+                            <th scope="col">Access Code</th>
+                            <th scope="col">Mobile</th>
+                            <th scope="col">Specialization</th>
+                            <th scope="col">Remarks</th>
+                            <th colspan="2" style="width:3%;">Action</th>
+                        </tr>
+                    </thead>
+                    <!-- 'userid', 'address', 'rank', 'mobile', 'image', 'remarks' -->
+
+                    {% for users in userlist %}
+                        <tr>
+                           <td style="font-weight: bold;">{{ users.lawyerID }}</td>
+                           <td style="font-weight: bold;">{{ users.lawyer_name }}</td>
+                           <td style="font-weight: bold;">{{ users.access_code }}</td>
+                           <td style="font-weight: bold;">{{ users.phone }}</td>
+                           <td style="font-weight: bold;">{{ users.Specialization }}</td>
+                           <td style="font-weight: bold;">{{ users.remarks }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        <!-- </div> -->
+    </div>
+</div>
+
+{% endblock content%}
+
+

@@ -1,0 +1,50 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Create Button & get username -->
+    <div class="d-flex justify-content-between mt-2 mb-1">
+        <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp; Print</a>
+        <span>
+            Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
+        </span>
+    </div>
+
+     <!-- input search + buttons search and reset -->
+     <!-- Table -->
+     <table class="table-hover table-bordered table-sm small table">
+     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+             <thead class="table-primary text-center">
+                 <tr>
+                    <th style="width:5%;">Folder ID</th>
+                    <th style="width:87%;">Folder Type</th>
+                    <th style="width:5%;">Number of Matters</th>
+                    <th style="width:3%;">Action</th>
+                 </tr>
+             </thead>
+             {% for folder in result %}
+             <tr>
+                <td style="font-weight: bold; text-align: center;">{{ folder.folder__folder_type__id }}</td>
+                <td style="font-weight: bold;">{{ folder.folder__folder_type__folder }}</td>
+                <td style="font-weight: bold; text-align: center;">{{ folder.NoOfMatters }}</td>
+                <td>
+                    <a class="btn btn-info btn-sm btn-icon-split" href="{% url 'associates-view-myfolder-det' folder.folder__folder_type__id %}" title="View Client">
+                        <span class="icon text-white-20">
+                            <i class="fas fa-pen"></i>
+                        </span>                         
+                    </a>
+                </td>
+            </tr>
+             {% endfor %}
+     </table>
+
+</div>
+
+{% endblock %}
+
+
+

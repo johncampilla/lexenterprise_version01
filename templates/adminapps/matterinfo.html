@@ -1,0 +1,362 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row mt-2">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        Matter Profile
+                    </div>
+                    <table class="table table-sm table-borderless small table table-primary table-hover my-2">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Client</th>
+                                <td>{{ matter.folder.client.client_name }} </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Address</th>
+                                <td>{{ matter.folder.client.address }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Email</th>
+                                <td>{{ matter.folder.client.email }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Mobile</th>
+                                <td>{{ matter.folder.client.mobile }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Folder</th>
+                                <td>{{ matter.folder }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Description</th>
+                                <td>{{ matter.folder.folder_description }}</td>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Date Filed</th>
+                                <td>{{ matter.filing_date }} </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Filed At</th>
+                                <td>{{ matter.filed_at }} </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Case Type</th>
+                                <td>{{ matter.case_type }} </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Nature</th>
+                                <td>{{ matter.nature }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lawyer</th>
+                                <td>{{ matter.handling_lawyer }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Subject Matter</th>
+                                <td>{{ matter.matter_title }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Appearance</th>
+                                <td>{{ matter.appearance }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Remarks</th>
+                                <td>{{ matter.remarks }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="card-header bg-primary text-white">
+                        Other Matter Details 
+                    </div>
+                    <table class="table table-sm table-borderless small table table-primary table-hover my-2">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Applicant:</th>
+                                <td>{{ matter_otherinfo.applicant }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Status:</th>
+                                <td>{{ matter_otherinfo.status }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Certificate No:</th>
+                                <td>{{ matter_otherinfo.certificate_no }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Date Issued:</th>
+                                <td>{{ matter_otherinfo.registration_date }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Publicatio Reference:</th>
+                                <td>{{ matter_otherinfo.publication_reference }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Date Of Published:</th>
+                                <td>{{ matter_otherinfo.publication_date }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">IPC Number:</th>
+                                <td>{{ matter_otherinfo.ipc_appno }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Priority Number:</th>
+                                <td>{{ matter_otherinfo.priority_number }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Priority Date:</th>
+                                <td>{{ matter_otherinfo.priority_date }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Priority Filing:</th>
+                                <td>{{ matter_otherinfo.priority_country_filing }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Priority Filing:</th>
+                                <td>{{ matter_otherinfo.priority_country_filing }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">PCT Application No.:</th>
+                                <td>{{ matter_otherinfo.pct_appno }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">PCT Application Date:</th>
+                                <td>{{ matter_otherinfo.pct_appdate }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">PCT Publication:</th>
+                                <td>{{ matter_otherinfo.pct_publication }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">PCT Publication Date:</th>
+                                <td>{{ matter_otherinfo.pct_pubdate }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Language Inter Appln:</th>
+                                <td>{{ matter_otherinfo.lng_interappln }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Language Inter Publn:</th>
+                                <td>{{ matter_otherinfo.lng_interpubln }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">PCT Priority Date:</th>
+                                <td>{{ matter_otherinfo.date_Of_PCTPriority }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Reason Of Withdrawn:</th>
+                                <td>{{ matter_otherinfo.reason_withdrawn }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Copyright Reference:</th>
+                                <td>{{ matter_otherinfo.copyright_number }}</td>
+                            </tr>
+
+                        </tbody>
+                    </table>               
+
+                    <div>
+                        <a class="btn btn-success" href="{% url 'admin-update-matter' matter.id %} ">Modify</a>
+                        <!-- <a class="btn btn-success" href="#">Other Information</a> -->
+                        <a class="btn btn-success" href="{% url 'admin-folder-list' %}">Folder List</a>
+                        <a class="btn btn-success" href="{% url 'admin-matter-list' %}">Matter List</a>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        Activity Details
+                    </div>
+                    <table class="table table-hover table-sm table-bordered small table table-dark table-striped ">
+                        <thead>
+                            <tr class="table-active table-primary bg-white text-dark text-center">
+                                <th scope="col"> Prepared By </th>
+                                <th scope="col"> Lawyer </th>
+                                <th scope="col"> Activity Date  </th>
+                                <th scope="col"> Activity </th>
+                                <th class="text-center bg-primary" scope="col"><a class="text-white-20" href="{% url 'admin-new-task' matter.id %}">New Task </a></th>
+    
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for activities in activities %}
+                            <tr>
+                                <td align="Center">{{ activities.preparedby }}</td>
+                                <td align="Center">{{ activities.lawyer }}</td>
+                                <td align="Center">{{ activities.tran_date }}</td>
+                                <td>{{ activities.task }}</td>
+                                <td class="text-center">
+                                    <a href="{% url 'admin-modify-task' activities.id matter.id %}" class="btn btn-info btn-sm btn-icon-split" >
+                                        <span class="icon text-white-20">
+                                            <i class="fas fa-info-circle"></i>
+                                        </span>
+                                        <!-- <span class="text">Information</span> -->
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            Due Dates
+                        </div>
+                        <table class="table table-hover table-sm table-bordered small table table-dark table-striped ">
+                            <thead>
+                                <tr class="table-active table-primary bg-white text-dark text-center">
+                                    <th scope="col"> Due Date </th>
+                                    <th scope="col"> Due Code </th>
+                                    <th scope="col"> Particulars </th>
+                                    <th scope="col"> Date Complied  </th>
+                                    <th scope="col"> Date Updated  </th>
+                                    <th class="text-center bg-primary" scope="col"><a class="text-white-20" href="{% url 'admin-new-duedate' %}">New Due Date </a></th>
+        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for duedate in duedate %}
+                                <tr>
+                                    <td align="Center">{{ duedate.duedate }}</td>
+                                    <td align="Center">{{ duedate.duecode }}</td>
+                                    <td align="Center">{{ duedate.particulars }}</td>
+                                    <td align="Center">{{ duedate.date_complied }}</td>
+                                    <td align="Center">{{ duedate.date_updated }}</td>
+                                    <td class="text-center">
+                                        <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                            <span class="icon text-white-20">
+                                                <i class="fas fa-info-circle"></i>
+                                            </span>
+                                            <!-- <span class="text">Information</span> -->
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                            
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            Accounts Receivables
+                        </div>
+                        <table class="table table-hover table-sm table-bordered small table table-dark table-striped ">
+                            <thead>
+                                <tr class="table-active table-primary bg-white text-dark text-center">
+                                    <th scope="col"> Payment Tag </th>
+                                    <th scope="col"> Bill Number </th>
+                                    <th scope="col"> Bill Date  </th>
+                                    <th scope="col"> Currency </th>
+                                    <th scope="col"> Bill Amount </th>
+                                    <th scope="col"> PF </th>
+                                    <th scope="col"> Filing Fee </th>
+                                    <th scope="col"> Expense </th>
+                                    <th class="text-center bg-primary" scope="col"><a class="text-white-20" href="{% url 'admin-new-billARentry' %}">New Bill </a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bills in bills %}
+                                <tr>
+                                    <td align="Center">{{ bills.bill_date }}</td>
+                                    <td align="Center">{{ bills.payment_tag }}</td>
+                                    <td align="Center">{{ bills.bill_number }}</td>
+                                    <td align="Center">{{ bills.currency }}</td>
+                                    <td align="Right">{{ bills.bill_amount }}</td>
+                                    <td align="Right">{{ bills.pf_amount }}</td>
+                                    <td align="Right">{{ bills.ofees_amount }}</td>
+                                    <td align="Right">{{ bills.ope_amount }}</td>
+                                    <td class="text-center">
+                                        <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                            <span class="icon text-white-20">
+                                                <i class="fas fa-info-circle"></i>
+                                            </span>
+                                            <!-- <span class="text">Information</span> -->
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td Totals</td>
+                                    <td align="Right">{{ Tbill_amt }}</td>
+                                    <td align="Right">{{ Tpf_amt }}</td>
+                                    <td align="Right">{{ Tofees_amt }}</td>
+                                    <td align="Right">{{ Tope_amt }}</td>
+                                    <td class="text-center">
+                                        <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                            <span class="icon text-white-20">
+                                                <i class="fas fa-info-circle"></i>
+                                            </span>
+                                            <!-- <span class="text">Information</span> -->
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            Payments
+                        </div>
+                        <table class="table table-hover table-sm table-bordered small table table-dark table-striped ">
+                            <thead>
+                                <tr class="table-active table-primary bg-white text-dark text-center">
+                                    <th scope="col"> Payment Date </th>
+                                    <th scope="col"> Payment For </th>
+                                    <th scope="col"> Bill Number </th>
+                                    <th scope="col"> Bill Date  </th>
+                                    <th scope="col"> Payment Reference  </th>
+                                    <th scope="col"> Amount Paid </th>
+                                    <th class="text-center bg-primary" scope="col"><a class="text-white-20" href="#">New Bill </a></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in payments %}
+                                <tr>
+                                    <td align="Center">{{ payment.payment_date }}</td>
+                                    <td align="Center">{{ payment.payment_for }}</td>
+                                    <td align="Center">{{ payment.bill_number.bill_number }}</td>
+                                    <td align="Center">{{ payment.bill_number.bill_date }}</td>
+                                    <td align="Center">{{ payment.payment_reference }}</td>
+                                    <td align="Right">{{ payment.pay_amount }}</td>
+                                    <td class="text-center">
+                                        <a href="#" class="btn btn-info btn-sm btn-icon-split" >
+                                            <span class="icon text-white-20">
+                                                <i class="fas fa-info-circle"></i>
+                                            </span>
+                                            <!-- <span class="text">Information</span> -->
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

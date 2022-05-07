@@ -1,0 +1,103 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Client Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+        <h5 class="card-title">Fill Entry Form (Client Profile)</h5>
+            <div class="card text-white bg-primary">
+                <div class="row mt-2">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;"> Client</span>
+                                    {{form.client_name}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Address</span>
+                                    {{form.address}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Country</span>
+                                    {{form.country}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">E-mail</span>
+                                    {{form.email}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Mobile</span>
+                                    {{form.mobile}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Contact Person</span>
+                                    {{form.main_contact}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Date Acquired</span>
+                                    {{form.date_acquired}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Category</span>
+                                    {{form.category}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Entity Type</span>
+                                    {{form.entity_type}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Industry</span>
+                                    {{form.industry}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Refered By</span>
+                                    {{form.referredby}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Status</span>
+                                    {{form.status}}
+                                </div>
+                            </div>
+                        </div>
+                        <a class= 'btn btn-success btn-sm mb-3 mt-2' href="{% url 'admin-matter-list' %}">Return</a>
+                        <input class='btn btn-success btn-sm mb-3 mt-2' type="submit" value="Save Record">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="row mt-5">
+        <div class="col-md-6 offset-md-3">
+            <div class="border bg-white p-3 bg-gradient-primary text-white">
+                <h5 class="text-center">Client Form Details</h5>
+                <hr>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <a class= 'btn btn-success' href="{% url 'admin-client-information' sid %}">Return</a>
+                    <input class='btn btn-success' type="submit" value="Save Record">
+
+                </form>
+
+            </div>
+
+        </div> 
+    </div> -->
+</div>
+
+{% endblock %}

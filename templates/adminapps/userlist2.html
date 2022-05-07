@@ -1,0 +1,60 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+    Dashboard
+{% endblock %}
+{% block content %}
+    <div class="container">        
+        <div class="row my-1">
+            <div class="col">
+                    <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
+                        <thead class="text-center">
+                        <tr class="table-active table-primary bg-white text-dark">
+                            <th scope="col">User Name</th>
+                            <th scope="col">Rank</th>
+                            <th scope="col">Mobile</th>
+                            <th scope="col">Address</th>
+                            <th scope="col">Remarks</th>
+                            <th class="text-center" scope="col"><a class="text-dark" href="">Add User Profile</a></th>
+                            <!-- <th class="text-center" scope="col"><a class="text-dark" href="{% url 'admin-new-matter' %}">Create Matter</a></th> -->
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.userid.username }}</td>
+                                <td>{{ user.rank }}</td>
+                                <td>{{ user.mobile }}</td>
+                                <td>{{ user.address }}</td>
+                                <td>{{ user.remarks }}</td>
+                                <td class="text-center">
+                                    <a href=" " class="btn btn-info btn-sm btn-icon-split" >
+                                        <span class="icon text-white-20">
+                                            <i class="fas fa-info-circle"></i>
+                                        </span>
+                                        <span class="text">View</span>
+                                    </a>
+                                </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>     
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p>Page: {{ page.number }}/{{ page.paginator.num_pages }}</p>
+                        </div>
+                        <div class="col-md-8 justify-content-end">
+                            <p>Total No. Of Records : {{ noofmatters }}</p>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+

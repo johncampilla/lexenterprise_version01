@@ -73,8 +73,22 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{% url 'associate-matter-list' %}">Matters</a>
-                        <a class="collapse-item" href="{% url 'associate-mails_inward' %}">Mails Inward</a>
-                        <a class="collapse-item" href="{% url 'associate-billing_list' %}">Billings & Payments</a>
+                        <a class="collapse-item" href="{% url 'associate-mails_inward' %}">Mails Recieved</a>
+                        <a class="collapse-item" href="{% url 'associate-billing_list' %}">Bills</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseADM" aria-expanded="true"
+                    aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Administer</span>
+                </a>
+                <div id="collapseADM" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{% url 'associate-matter-list' %}">My Unbilled Services</a>
+                        <a class="collapse-item" href="{% url 'associate-mails_inward' %}">My Open Due Dates</a>
+                        <a class="collapse-item" href="{% url 'associate-billing_list' %}">My Unpaid Bills</a>
                     </div>
                 </div>
             </li>
@@ -83,7 +97,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fas fa-fw fa-cog"></i>
                     <span>Message</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
@@ -97,7 +111,7 @@
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities1"
                     aria-expanded="true" aria-controls="collapseUtilities1">
-                    <i class="fas fa-fw fa-wrench"></i>
+                    <i class="fas fa-fw fa-cog"></i>
                     <span>Other Information</span>
                 </a>
                 <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities1"

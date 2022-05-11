@@ -162,7 +162,8 @@ urlpatterns = [
     path('associates/mybills/', associates.mybillinglist, name='associate-mybilling-list'),
     path('associates/mybillsDetails/<int:c_id>/<int:m_id>/<int:ar_id>/', associates.mybillingdetail, name='associate-mybilling-details'),
 
-    path('associates/myfolders/', associates.myfolderlist, name='associate-myfolder-list'),    
+    path('associates/myfolders/', associates.myfolderlist, name='associate-myfolder-list'),  
+    path('associates/myunbilled/', associates.myunbilledactivity, name='associate-myunbilled-activity'),  
     path('associates/myclients/details/<int:pk>/', associates.myclientdetail, name='associates-view-myclient-det'),
     path('associates/myfolders/details/<int:pk>/', associates.myfolderdetail, name='associates-view-myfolder-det'),
     path('associates/client/fdetails/<int:pk>/', associates.clientfulldetail, name='client-full-details'),

@@ -2,6 +2,7 @@ from math import degrees
 from os import makedirs, times_result
 from pydoc import describe
 from typing import Text
+from unittest.mock import DEFAULT
 from django.db import models
 from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.enums import Choices
@@ -495,6 +496,11 @@ class task_detail(models.Model):
         ('Personal', 'Personal')
     }
 
+    BILLSTATUS = {
+        ('Billed', 'Billed'),
+        ('Unbilled', 'Unbilled')
+    }
+
     matter = models.ForeignKey(Matters, on_delete=models.CASCADE, null=True)
     tran_date = models.DateField(null=False)
     doc_type = models.CharField(
@@ -521,6 +527,7 @@ class task_detail(models.Model):
     contact_person = models.CharField(max_length=50, blank=True)
     duecode = models.ForeignKey(
         DueCode, on_delete=models.PROTECT, blank=True, null=True)
+    billstatus = models.CharField(max_length=15, choices=BILLSTATUS, blank=True, null=True, default='Unbilled')
     datemodified = models.DateTimeField(auto_now=True)
     datecreated = models.DateTimeField(auto_now_add=True)
 
@@ -643,6 +650,7 @@ class AccountsReceivable(models.Model):
 
 class Bills(models.Model):
     bill_number = models.ForeignKey(AccountsReceivable, on_delete=PROTECT)
+    task = models.ForeignKey(task_detail, on_delete=models.PROTECT, blank=True, null=True)
     bill_code = models.CharField(max_length=10, blank=True)
     lawyer = models.ForeignKey(
         Lawyer_Data, on_delete=models.PROTECT, blank=True, null=True)
@@ -660,7 +668,8 @@ class Bills(models.Model):
         verbose_name_plural = 'Bill Details'
 
     def __str__(self):
-        return f'{self.bill_number} - {self.bill_number.matter.folder.client}'
+#        return f'{self.bill_number} - {self.bill_number.matter.folder.client}'
+        return f'{self.bill_number}'
 
 
 class OFees(models.Model):

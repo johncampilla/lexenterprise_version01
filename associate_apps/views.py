@@ -3,6 +3,7 @@
 from pickletools import read_uint1
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from pandas import notnull
 
 from adminapps.models import *
 from django.core.paginator import Paginator
@@ -54,6 +55,8 @@ def main(request):
         Task_Detail__lawyer__lawyerID__userid=access_code).order_by('-DocDate')
     countalert = alertmessages.count()
     multiple_q = Q(matter__handling_lawyer__lawyerID__userid=access_code)
+    recent_billables = TempBills.objects.filter(
+        multiple_q, tran_date__year=today.year, tran_date__month=today.month).order_by('-tran_date')
 
     recenttask = task_detail.objects.filter(
         multiple_q, tran_date__year=today.year, tran_date__month=today.month).order_by('-tran_date')
@@ -66,6 +69,7 @@ def main(request):
         'duedates': duedates,
         'recenttask': recenttask,
         'recentdocs': recentdocs,
+        'recent_billables': recent_billables,
         'username': username,
         'matterlist': matterlist,
         'number_of_task': number_of_task,
@@ -641,13 +645,63 @@ def remove_duedate(request, pk, m_id):
 
 
 def add_task(request, pk):
+    def perform_billable_services():
+
+        def save_to_tempPF():
+            #            print("Pumasok sa saving of PF")
+
+            tempbills = TempBills.objects.filter(
+                matter_id=matter_id, tran_date=tran_date, bill_service_id=bill_id)
+            if tempbills.exists():
+                pass
+            else:
+                # if prate > 0:
+                #     pesoamount = (PF_amount * prate)
+                # else:
+                #     prate = 0
+                #     pesoamount = 0
+
+                tempbills = TempBills(
+                    matter_id=matter_id,
+                    tran_date=tran_date,
+                    bill_service_id=bill_id,
+                    lawyer_id=lawyer,
+                    particulars=bill_description,
+                    amount=PF_amount,
+                    # pesorate=prate,
+                    currency=currency)
+                tempbills.save()
+
+        tran_type = request.POST["tran_type"]
+        task_code = request.POST["task_code"]
+        tran_date = request.POST["tran_date"]
+        if tran_type is None:
+            pass
+        else:
+            result = ActivityCodes.objects.filter(id=task_code)
+            matter_id = matter.id
+            apptype = matter.apptype_id
+            lawyer = matter.handling_lawyer_id
+            for activitycode in result:
+                #                print("pumasok sa result")
+                bill_description = activitycode.bill_description
+                bill_id = activitycode.id
+                PF_amount = activitycode.amount
+                prate = activitycode.pesorate
+                currency = activitycode.currency
+#                print(bill_description, bill_id, PF_amount, pesorate)
+                save_to_tempPF()
+
     matter = Matters.objects.get(id=pk)
     codes = IPTaskCodes.objects.all()
+    tasks = task_detail.objects.filter(matter__id=pk)
     if request.method == "POST":
         # Get the posted form
         form = TaskEntryForm(request.POST)
         if form.is_valid():
             form.save()
+            perform_billable_services()
+
             return redirect('associate-matter-review', pk)
         else:
             return redirect('associate-matter-review', pk)
@@ -659,6 +713,7 @@ def add_task(request, pk):
         'matter': matter,
         'm_id': pk,
         'codes': codes,
+        'tasks': tasks,
     }
     return render(request, 'associates_apps/add_new_task.html', context)
 
@@ -686,6 +741,53 @@ def add_new_task(request, pk, m_id):
 
 
 def modify_task(request, pk, m_id):
+    def perform_billable_services():
+
+        def save_to_tempPF():
+            #            print("Pumasok sa saving of PF")
+
+            tempbills = TempBills.objects.filter(
+                matter_id=matter_id, tran_date=tran_date, bill_service_id=bill_id)
+            if tempbills.exists():
+                pass
+            else:
+                # if prate > 0:
+                #     pesoamount = (PF_amount * prate)
+                # else:
+                #     prate = 0
+                #     pesoamount = 0
+
+                tempbills = TempBills(
+                    matter_id=matter_id,
+                    tran_date=tran_date,
+                    bill_service_id=bill_id,
+                    lawyer_id=lawyer,
+                    particulars=bill_description,
+                    amount=PF_amount,
+                    # pesorate=prate,
+                    currency=currency)
+                tempbills.save()
+
+        tran_type = request.POST["tran_type"]
+        task_code = request.POST["task_code"]
+        tran_date = request.POST["tran_date"]
+        if tran_type is None:
+            pass
+        else:
+            result = ActivityCodes.objects.filter(id=task_code)
+            matter_id = matter.id
+            apptype = matter.apptype_id
+            lawyer = matter.handling_lawyer_id
+            for activitycode in result:
+                #                print("pumasok sa result")
+                bill_description = activitycode.bill_description
+                bill_id = activitycode.id
+                PF_amount = activitycode.amount
+                prate = activitycode.pesorate
+                currency = activitycode.currency
+#                print(bill_description, bill_id, PF_amount, pesorate)
+                save_to_tempPF()
+
     task = task_detail.objects.get(id=pk)
     matter = Matters.objects.get(id=m_id)
     c_id = matter.folder.client.id
@@ -697,6 +799,7 @@ def modify_task(request, pk, m_id):
         task_form = TaskEntryForm(request.POST, instance=task)
         if task_form.is_valid():
             task_form.save()
+            perform_billable_services()
 #            return redirect('associate-matter-review', m_id)
         else:
             task_form = TaskEntryForm(instance=task)
@@ -1355,9 +1458,24 @@ def myunbilledactivity(request):
     context = {
         'result': result,
     }
-    print(result)
 
     return render(request, 'associates_apps/myunbilledactivity.html', context)
+
+
+def unbilledactivitydetails(request):
+    pass
+    access_code = request.user.user_profile.userid
+    username = request.user.username
+    unbilled_activities = task_detail.objects.filter(
+        matter__handling_lawyer__lawyerID__userid=access_code, tran_type="Billable")
+    # result = task_detail.objects.values('matter__id','matter__matter_title').annotate(NoOfActivities=Count('task_code')).filter(matter__handling_lawyer__lawyerID__userid=access_code, tran_type="Billable").order_by('-NoOfActivities')
+    print(unbilled_activities)
+
+    context = {
+        'unbilled': unbilled_activities,
+    }
+
+    return render(request, 'associates_apps/unbilledactivitydetails.html', context)
 
 
 def myfolderlist(request):

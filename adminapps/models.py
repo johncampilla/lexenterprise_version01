@@ -1,3 +1,4 @@
+from locale import currency
 from math import degrees
 from os import makedirs, times_result
 from pydoc import describe
@@ -29,7 +30,13 @@ class NatureOfBusiness(models.Model):
 class Currency(models.Model):
     currency = models.CharField(max_length=20)
     description = models.CharField(max_length=100)
-    local_rate = models.DecimalField(max_digits=3, decimal_places=2)
+    local_rate = models.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        verbose_name_plural = 'Currencies'
+
+    def __str__(self):
+        return f'{self.currency}'
 
 
 class Courts(models.Model):
@@ -58,7 +65,7 @@ class Lawyer_Data(models.Model):
     access_code = models.CharField(max_length=5)
     phone = models.CharField(max_length=100)
     hourlyrate = models.DecimalField(
-        max_digits=7, decimal_places=2, blank=True, null=True)
+        max_digits=10, decimal_places=2, blank=True, null=True)
     IBPRollNo = models.CharField(max_length=40, blank=True, null=True)
     IBPChapter = models.CharField(max_length=35, blank=True, null=True)
     IBPLifetimeNo = models.CharField(max_length=35, blank=True, null=True)
@@ -455,12 +462,37 @@ class Order_Activity(models.Model):
 class ActivityCodes(models.Model):
     foldertype = models.ForeignKey(FolderType, on_delete=models.CASCADE)
     ActivityCode = models.CharField(max_length=15, blank=True)
+    seqorder = models.IntegerField(blank=True, null=True)
     Activity = models.CharField(max_length=250)
+    bill_description = models.CharField(max_length=250, blank=True, null=True)
     amount = models.DecimalField(
-        max_digits=7, decimal_places=2, null=True, blank=True)
+        max_digits=10, decimal_places=2, null=True, blank=True)
+    currency = models.ForeignKey(
+        Currency, on_delete=models.CASCADE, null=True, blank=True)
+    pesorate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True)
+    pesoamount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return f'{self.Activity} - {self.ActivityCode} - {self.amount}'
+
+
+class FilingCodes(models.Model):
+    activitycode = models.ForeignKey(ActivityCodes, on_delete=models.CASCADE)
+    seqorder = models.IntegerField(blank=True, null=True)
+    filing_description = models.CharField(max_length=200, blank=False)
+    amount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True)
+    currency = models.ForeignKey(
+        Currency, on_delete=models.CASCADE, null=True, blank=True)
+    pesorate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True)
+    pesoamount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.filing_description} - {self.activitycode} - {self.amount}'
 
 
 class IPTaskCodes(models.Model):
@@ -527,7 +559,8 @@ class task_detail(models.Model):
     contact_person = models.CharField(max_length=50, blank=True)
     duecode = models.ForeignKey(
         DueCode, on_delete=models.PROTECT, blank=True, null=True)
-    billstatus = models.CharField(max_length=15, choices=BILLSTATUS, blank=True, null=True, default='Unbilled')
+    billstatus = models.CharField(
+        max_length=15, choices=BILLSTATUS, blank=True, null=True, default='Unbilled')
     datemodified = models.DateTimeField(auto_now=True)
     datecreated = models.DateTimeField(auto_now_add=True)
 
@@ -630,10 +663,18 @@ class AccountsReceivable(models.Model):
     lawyer = models.ForeignKey(
         Lawyer_Data, on_delete=models.PROTECT, blank=True, null=True)
     currency = models.CharField(max_length=15, null=True, blank=True)
-    bill_amount = models.DecimalField(max_digits=7, decimal_places=2)
-    pf_amount = models.DecimalField(max_digits=7, decimal_places=2)
-    ofees_amount = models.DecimalField(max_digits=7, decimal_places=2)
-    ope_amount = models.DecimalField(max_digits=7, decimal_places=2)
+    pesorate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True)
+    bill_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    pf_amount = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True)
+    ofees_amount = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True)
+    ope_amount = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True)
+    pesoamount = models.DecimalField(
+        max_digits=10, decimal_places=2, blank=True, null=True)
+
     payment_tag = models.CharField(
         max_length=5, choices=PAYMENTTAG, null=True, blank=True)
     DocPDFs = models.FileField(upload_to='Bills/', blank=True)
@@ -650,7 +691,8 @@ class AccountsReceivable(models.Model):
 
 class Bills(models.Model):
     bill_number = models.ForeignKey(AccountsReceivable, on_delete=PROTECT)
-    task = models.ForeignKey(task_detail, on_delete=models.PROTECT, blank=True, null=True)
+    task = models.ForeignKey(
+        task_detail, on_delete=models.PROTECT, blank=True, null=True)
     bill_code = models.CharField(max_length=10, blank=True)
     lawyer = models.ForeignKey(
         Lawyer_Data, on_delete=models.PROTECT, blank=True, null=True)
@@ -659,7 +701,12 @@ class Bills(models.Model):
         null=True, blank=True, max_digits=5, decimal_places=3)
     spentinmin = models.DecimalField(
         null=True, blank=True, max_digits=5, decimal_places=3)
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=15, null=True, blank=True)
+    pesorate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True)
+    pesoamount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     prepared_by = models.CharField(max_length=60)
@@ -668,7 +715,7 @@ class Bills(models.Model):
         verbose_name_plural = 'Bill Details'
 
     def __str__(self):
-#        return f'{self.bill_number} - {self.bill_number.matter.folder.client}'
+        #        return f'{self.bill_number} - {self.bill_number.matter.folder.client}'
         return f'{self.bill_number}'
 
 
@@ -677,7 +724,12 @@ class OFees(models.Model):
     tran_date = models.DateField(null=True, blank=True)
     fee_code = models.CharField(max_length=10, blank=True)
     fee_particulars = CharField(max_length=200, blank=True)
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=15, null=True, blank=True)
+    pesorate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True)
+    pesoamount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     prepared_by = models.CharField(max_length=60)
@@ -694,7 +746,12 @@ class OPE(models.Model):
     tran_date = models.DateField(null=True, blank=True)
     ope_code = models.CharField(max_length=10, blank=True)
     expense_details = CharField(max_length=200, blank=True)
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=15, null=True, blank=True)
+    pesorate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True)
+    pesoamount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     prepared_by = models.CharField(max_length=60)
@@ -720,17 +777,22 @@ class Payments(models.Model):
     )
     bill_number = models.ForeignKey(AccountsReceivable, on_delete=PROTECT)
     payment_date = models.DateField(null=True, blank=True)
-    pay_amount = models.DecimalField(max_digits=7, decimal_places=2)
+    pay_amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_for = models.CharField(max_length=10, choices=PAYMENTFOR)
     or_number = models.CharField(max_length=15, blank=True)
     or_date = models.DateField(null=True, blank=True)
-    or_amount = models.DecimalField(max_digits=7, decimal_places=2, default=0)
+    or_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     bank_details = models.CharField(max_length=150, blank=True)
     payment_reference = models.CharField(max_length=30, blank=True)
     reference_date = models.DateField(null=True, blank=True)
     Charge_details = models.CharField(max_length=30, blank=True)
     Charge_Amount = models.DecimalField(
-        max_digits=7, decimal_places=2, default=0)
+        max_digits=10, decimal_places=2, default=0)
+    currency = models.CharField(max_length=15, null=True, blank=True)
+    pesorate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True)
+    pesoamount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     prepared_by = models.CharField(max_length=60, blank=True)
@@ -759,7 +821,12 @@ class TempExpenses(models.Model):
         Lawyer_Data, on_delete=PROTECT, null=True, blank=True)
     expense_detail = models.CharField(max_length=250)
     expense_actual_amt = models.DecimalField(
-        max_digits=7, decimal_places=2, default=0)
+        max_digits=10, decimal_places=2, default=0)
+    currency = models.CharField(max_length=15, null=True, blank=True)
+    pesorate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True)
+    pesoamount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True)
     status = models.CharField(max_length=15, choices=EXPENSESTATUS, blank=True)
     chargetoclient = models.BooleanField(default=False, blank=True)
     DocPDFs = models.FileField(upload_to='Receipts/', blank=True)
@@ -789,7 +856,12 @@ class TempBills(models.Model):
         null=True, blank=True, max_digits=5, decimal_places=2)
     spentinmin = models.DecimalField(
         null=True, blank=True, max_digits=5, decimal_places=2)
-    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=15, null=True, blank=True)
+    pesorate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True)
+    pesoamount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True)
     status = models.CharField(max_length=15, choices=BILLSTATUS, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -819,7 +891,12 @@ class TempFilingFees(models.Model):
         Lawyer_Data, on_delete=PROTECT, null=True, blank=True)
     expense_detail = models.CharField(max_length=250)
     expense_actual_amt = models.DecimalField(
-        max_digits=7, decimal_places=2, default=0)
+        max_digits=10, decimal_places=2, default=0)
+    currency = models.CharField(max_length=15, null=True, blank=True)
+    pesorate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True)
+    pesoamount = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True)
     status = models.CharField(max_length=15, choices=FILINGSTATUS, blank=True)
     chargetoclient = models.BooleanField(default=False, blank=True)
     DocPDFs = models.FileField(upload_to='Receipts/', blank=True)

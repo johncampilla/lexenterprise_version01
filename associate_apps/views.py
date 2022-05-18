@@ -291,8 +291,11 @@ def matter_review(request, pk):
     matter = Matters.objects.get(id=pk)
     c_id = matter.folder.client.id
     client = Client_Data.objects.get(id=c_id)
-    expenses = TempExpenses.objects.filter(matter__id=pk)
     appduedates = AppDueDate.objects.filter(matter__id=pk)
+    tempbills = TempBills.objects.filter(matter__id=pk)
+    tempfilings = TempFilingFees.objects.filter(matter__id=pk)
+    expenses = TempExpenses.objects.filter(
+        Q(matter__id=pk), Q(status='O') | Q(status='P'))
     if request.method == 'POST':
         form = EntryMatterForm(request.POST, instance=matter)
         if form.is_valid():
@@ -353,7 +356,8 @@ def matter_review(request, pk):
         'form': form,
         'm_id': pk,
         'listofexpenses': expenses,
-
+        'tempbills': tempbills,
+        'tempfilings': tempfilings,
         'apptype': apptype,
         'duelist': appduedates,
 
@@ -648,8 +652,6 @@ def add_task(request, pk):
     def perform_billable_services():
 
         def save_to_tempPF():
-            #            print("Pumasok sa saving of PF")
-
             tempbills = TempBills.objects.filter(
                 matter_id=matter_id, tran_date=tran_date, bill_service_id=bill_id)
             if tempbills.exists():
@@ -672,6 +674,24 @@ def add_task(request, pk):
                     currency=currency)
                 tempbills.save()
 
+        def save_to_tempfiling():
+            tempfees = TempFilingFees.objects.filter(
+                matter_id=matter_id, tran_date=tran_date, filing=filing)
+            if tempfees.exists():
+                pass
+            else:
+                tempfees = TempFilingFees(
+                    matter_id=matter_id,
+                    tran_date=tran_date,
+                    filing=filing,
+                    lawyer_id=lawyer,
+                    expense_detail=bill_description,
+                    pesoamount=PF_amount,
+                    expense_actual_amt=PF_amount,
+                    # pesorate=prate,
+                    currency=currency)
+                tempfees.save()
+
         tran_type = request.POST["tran_type"]
         task_code = request.POST["task_code"]
         tran_date = request.POST["tran_date"]
@@ -691,6 +711,16 @@ def add_task(request, pk):
                 currency = activitycode.currency
 #                print(bill_description, bill_id, PF_amount, pesorate)
                 save_to_tempPF()
+
+            feeresult = FilingCodes.objects.filter(activitycode_id=task_code)
+            for filingfees in feeresult:
+                filing = filingfees.filing
+                bill_description = filingfees.filing_description
+                bill_id = filingfees.id
+                PF_amount = filingfees.amount
+                prate = filingfees.pesorate
+                currency = filingfees.currency
+                save_to_tempfiling()
 
     matter = Matters.objects.get(id=pk)
     codes = IPTaskCodes.objects.all()
@@ -1398,7 +1428,8 @@ def recent_taskviewdocs(request, pk, frm):
 
 
 def add_expensedetails(request, pk, t_id):
-    listofexpenses = TempExpenses.objects.filter(matter__id=pk)
+    listofexpenses = TempExpenses.objects.filter(
+        matter__id=pk, status='O')
     task = task_detail.objects.get(id=t_id)
     matter = Matters.objects.get(id=pk)
     if request.method == 'POST':

@@ -1161,20 +1161,19 @@ def entry_activitycodes(request):
         'codes': activitycodes,
     }
 
-    return render(request, 'adminapps/entry_activitycodes.html', context)
+    return render(request, 'adminapps/entry_activitycodes_1.html', context)
 
 
 def entry_filingfees(request, pk):
-    activitycode = ActivityCodes.objects.get(id=2)
-    print(activitycode.id)
-    filingfee = FilingCodes.objects.filter(activitycode__id=pk)
+    activitycode = ActivityCodes.objects.get(id=pk)
+    filingfee = FilingCodes.objects.filter(activitycode_id=pk)
     if request.method == "POST":
         form = FilingFeeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('filingfee-code, pk')
+            return redirect('filingfee-code', pk)
         else:
-            return redirect('filingfee-code, pk')
+            return redirect('filingfee-code', pk)
     else:
         form = FilingFeeForm()
 
@@ -1182,6 +1181,7 @@ def entry_filingfees(request, pk):
         'form': form,
         'activity': activitycode,
         'filingfee': filingfee,
+        'pk':pk,
     }
 
     return render(request, 'adminapps/entry_filingfeecodes.html', context)
@@ -1202,6 +1202,7 @@ def edittaskcode(request, pk):
         context = {
             'form': form,
             'codes': activities,
+            'selected': selected,
         }
     return render(request, 'adminapps/entry_activitycodes.html', context)
 

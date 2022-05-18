@@ -481,6 +481,7 @@ class ActivityCodes(models.Model):
 class FilingCodes(models.Model):
     activitycode = models.ForeignKey(ActivityCodes, on_delete=models.CASCADE)
     seqorder = models.IntegerField(blank=True, null=True)
+    filing = models.CharField(max_length=250, null=True, blank=True)
     filing_description = models.CharField(max_length=200, blank=False)
     amount = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True)
@@ -819,6 +820,9 @@ class TempExpenses(models.Model):
     tran_date = models.DateField(null=True, blank=True)
     lawyer = models.ForeignKey(
         Lawyer_Data, on_delete=PROTECT, null=True, blank=True)
+    bill_service = models.ForeignKey(
+        ActivityCodes, on_delete=PROTECT, null=True, blank=True)
+
     expense_detail = models.CharField(max_length=250)
     expense_actual_amt = models.DecimalField(
         max_digits=10, decimal_places=2, default=0)
@@ -887,8 +891,11 @@ class TempFilingFees(models.Model):
 
     matter = models.ForeignKey(Matters, on_delete=PROTECT, null=True)
     tran_date = models.DateField(null=True, blank=True)
+    bill_service = models.ForeignKey(
+        ActivityCodes, on_delete=PROTECT, null=True, blank=True)
     lawyer = models.ForeignKey(
         Lawyer_Data, on_delete=PROTECT, null=True, blank=True)
+    filing = models.CharField(max_length=250, null=True, blank=True)
     expense_detail = models.CharField(max_length=250)
     expense_actual_amt = models.DecimalField(
         max_digits=10, decimal_places=2, default=0)

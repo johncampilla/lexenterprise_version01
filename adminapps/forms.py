@@ -318,7 +318,7 @@ class NatureOfCaseForm(forms.ModelForm):
 class EntryExpensesForm(forms.ModelForm):
     class Meta:
         model = TempExpenses
-        fields = 'matter', 'tran_date', 'lawyer', 'expense_detail', 'expense_actual_amt', 'status', 'chargetoclient', 'DocPDFs'
+        fields = 'matter', 'bill_service', 'tran_date', 'lawyer', 'expense_detail', 'expense_actual_amt', 'status', 'chargetoclient', 'DocPDFs'
         widgets = {
             'tran_date': NumberInput(attrs={'type': 'date'}),
         }
@@ -495,7 +495,7 @@ class FilingFeeForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'filing_description': Textarea(attrs={'cols': 200, 'rows': 2}),
-            'bill_description': Textarea(attrs={'cols': 200, 'rows': 2}),
+            'filing': Textarea(attrs={'cols': 200, 'rows': 2}),
         }
 
 

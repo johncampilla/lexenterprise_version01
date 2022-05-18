@@ -11,7 +11,7 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
-        <h5 class="card-title">Reference : Appearance/Representation</h5>
+        <h5 class="card-title">Reference : Task Code</h5>
             <div class="card text-white">
                 <div class="row mt-2">
                     <form method="POST">
@@ -62,7 +62,13 @@
                             <a class= 'btn btn-outline-primary btn-sm mb-1' href="{% url 'admin-matter-list' %}">Return</a>
                             <input class='btn btn-outline-primary btn-sm mb-1' type="submit" value="Save Record">
 
-                            <a class='btn btn-outline-primary btn-sm mb-1' href="#">Filing Fees</a>
+                            {% if selected.pesoamount is Null %}                                
+
+                            {% else %}
+                                <a class='btn btn-outline-primary btn-sm mb-1' href="{% url 'filingfee-code' selected.id %}">Filing Fees</a>
+
+                            {% endif %}
+                            
 
                         </div>
                     </form>

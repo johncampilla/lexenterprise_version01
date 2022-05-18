@@ -119,6 +119,9 @@ urlpatterns = [
     #    path('sysadmin/folder/modifytask/<int:pk>/<int:m_id>/', main_view.modifytask, name='admin-modify-task'),
     path('sysadmin/matters/modifydocs/<int:pk>/',
          main_view.update_uploaded_docs, name='admin-uploaded-docs'),
+    path('sysadmin/ref/filingfees/<int:pk>/',
+         main_view.entry_filingfees, name='filingfee-code'),
+
 
 
     path('sysadmin/folder/newduedate/',
@@ -148,8 +151,6 @@ urlpatterns = [
          main_view.appearanceentry, name='appearance-code'),
     path('sysadmin/ref/activity/',
          main_view.entry_activitycodes, name='activity-code'),
-    path('sysadmin/ref/filingfees/<int:pk>/',
-         main_view.entry_filingfees, name='filingfee-code'),
 
     # lookup listings
     path('sysadmin/view/country/<int:pk>/',

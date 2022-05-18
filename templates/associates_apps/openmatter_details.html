@@ -155,74 +155,96 @@
                     {% endfor %}
                 </table>        
             </div> 
-
-            <!----------------- Infocard for the Accounts Receivable of the selected matter ---------->
-            <h6 class="card-title bg-primary text-white text-center">Billing Summary</h6>
+            <h6 class="card-title bg-primary text-white text-center">Unbilled Services Rendered </h6>
             <div>
                 <table class="table-hover table-bordered table-sm small table">
                     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
                     <thead class="table-primary text-center">
                         <tr>
-                            <th style="width:15%;">Payment Status</th>
-                            <th style="width:25%;">Bill Number</th>
-                            <th style="width:10%;">Bill Date</th>
-                            <th style="width:10%;">PF</th>
-                            <th style="width:10%;">Filing Fees</th>
-                            <th style="width:10%;">Misc Expenses</th>
-                            <th style="width:10%;">Bill Amount</th>
-                            <th style="width:10%;"><a href="{% url 'associate-ar-new' matter.id %}"><i class="fas fa-circle text-center"></i>&nbsp; View </a></th>
+                            <th style="width:5%;">Tran Date</th>
+                            <th style="width:60%;">Services Rendered</th>
+                            <th style="width:5%;">Spent In Hrs</th>
+                            <th style="width:5%;">Spent In Min</th>
+                            <th style="width:10%;">Amount</th>
+                            <th style="width:10%;">Peso Amount</th>
+                            <th style="width:5%;"><a href="#">Action</a></th>
                         </tr>
                     </thead>
-                    {% for ar in ardetails %}
-                        <tr>
-                            <td style="font-weight: bold;">{{ ar.payment_tag }}</td>
-                            <td style="font-weight: bold;">{{ ar.bill_number }}</td>
-                            <td style="font-weight: bold;">{{ ar.bill_date | date:'m/d/Y'}}</td>
-                            <td style="font-weight: bold; text-align: right;">{{ ar.pf_amount }}</td>
-                            <td style="font-weight: bold; text-align: right;">{{ ar.ofees_amount }}</td>
-                            <td style="font-weight: bold; text-align: right;">{{ ar.ope_amount }}</td>
-                            <td style="font-weight: bold; text-align: right;">{{ ar.bill_amount}}</td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" href= "{% url 'associate-ar-edit' ar.id m_id %}" title="Edit Bill">
+                    {% for tmpbills in tempbills %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ tmpbills.tran_date | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;">{{ tmpbills.particulars}}</td>
+                        <td style="font-weight: bold;">{{ tmpbills.spentinhrs}}</td>
+                        <td style="font-weight: bold;">{{ tmpbills.spentinmin}}</td>
+                        <td style="font-weight: bold; text-align: right;">{{ tmpbills.amount }}</td>
+                        <td style="font-weight: bold; text-align: right;">{{ tmpbills.pesoamount }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="#" title="Edit Bill">
                                 <i class="fas fa-pen text-center"></i>
-                                </a>
-                            </td>
-                        </tr>
+                            </a>
+                        </td>
+                    </tr>
                     {% endfor %}
-                </table>    
+                </table>
             </div>
-            <h6 class="card-title bg-primary text-white text-center">Incidental Expenses (unbilled)</h6>
+            <h6 class="card-title bg-primary text-white text-center">Unbilled Filing Fees</h6>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width:5%;">Tran Date</th>
+                            <th style="width:70%;">Filing Particulars</th>
+                            <th style="width:10%;">Amount</th>
+                            <th style="width:10%;">Peso Amount</th>
+                            <th style="width:5%;"><a href="#">Action</a></th>
+                        </tr>
+                    </thead>
+                    {% for tmpfees in tempfilings %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ tmpfees.tran_date | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;">{{ tmpfees.expense_detail}}</td>
+                        <td style="font-weight: bold; text-align: right;">{{ tmpfees.expense_actual_amt }}</td>
+                        <td style="font-weight: bold; text-align: right;">{{ tmpfees.pesoamount }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="#" title="Edit Bill">
+                                <i class="fas fa-pen text-center"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <h6 class="card-title bg-primary text-white text-center">Unbilled Incidental/OPE Expenses </h6>
             <div>
                 <table class="table-hover table-bordered table-sm small table">
                     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
                             <thead class="table-primary text-center">
                                 <tr>
-                                <th style="width:10%;">Tran Date</th>
-                                <th style="width:10%;">Lawyer</th>
-                                <th style="width:40%;">Expense Particulars</th>
-                                <th style="width:10%;">Amount</th>
-                                <th style="width:10%;">Status</th>
-                                <th style="width:10%;">Charge</th>
-                               <th colspan="1" style="width:10%;"><a href="#"><i class="fas fa-circle text-center"></i>&nbsp;View</a></th>
+                                <th style="width:5%;">Tran Date</th>
+                                <th style="width:35%;">Services Rendered</th>
+                                <th style="width:35%;">Expense Particulars</th>
+                                <th style="width:10%;">Expense (PhP)</th>
+                                <th style="width:10%;">Bill Amount</th>
+
+                               <th colspan="1" style="width:5%;"><a href="#">Action</a></th>
                             </tr>
                             </thead>
                             {% for expense in listofexpenses %}
                             <tr>
-                               <td style="font-weight: bold;">{{ expense.tran_date | date:'m/d/Y' }}</td>
-                               <td style="font-weight: bold;">{{ expense.lawyer }}</td>
-                               <td style="font-weight: bold;">{{ expense.expense_detail }}</td>
-                               <td style="font-weight: bold; text-align: right;">{{ expense.expense_actual_amt }}</td>
-                               <td style="font-weight: bold;">{{ expense.status }}</td>
-                               <td style="font-weight: bold;">{{ expense.chargetoclient }}</td>
-                               <td>
-                                   <a class="btn btn-primary btn-sm" href="#" title="Edit Client">
+                                <td style="font-weight: bold;">{{ expense.tran_date | date:'m/d/Y' }}</td>
+                                <td style="font-weight: bold;">{{ expense.bill_service }}</td>
+                                <td style="font-weight: bold;">{{ expense.expense_detail }}</td>
+                                <td style="font-weight: bold; text-align: right;">{{ expense.pesoamount }}</td>
+                                <td style="font-weight: bold; text-align: right;">{{ expense.expense_actual_amt }}</td>
+                                <td>
+                                   <a class="btn btn-primary btn-sm" href="#" title="Edit Expense">
                                       <i class="fas fa-pen"></i>
                                    </a>
-                               </td>
+                                </td>
                             </tr>
                             {% endfor %}
-                </table>
-        
+                </table>        
             </div>
 
         </div>    

@@ -19,6 +19,7 @@ from userprofile import views as user_view
 from adminapps import views as main_view
 from authentication import views as authenticate_view
 from managing_apps import views as management
+from supportstaff import views as supportstaff_view
 from associate_apps import views as associates
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -36,6 +37,9 @@ urlpatterns = [
     path('register/', user_view.register, name='user-register'),
     path('profile/', user_view.profile, name='user-profile'),
     path('profile/update', user_view.profile_update, name='user-update-profile'),
+
+    # for supportstaff
+    path('support/', supportstaff_view.main, name='supportstaff-home'),
 
     # for management urls
     path('management/', management.main, name='management-home'),
@@ -316,8 +320,13 @@ urlpatterns = [
          associates.recentactivities, name='recent-activity-review'),
     path('associates/recent_modify/activities/<int:pk>/<int:d_id>/',
          associates.recent_modify_task, name='recent-activity-modify'),
+    path('associates/recent_add/documents/<int:pk>/<int:m_id>/',
+         associates.newdocumentPDF, name='recent_adddocument'),
     path('associates/recent_addtask/<int:pk>/<int:m_id>/',
          associates.recentactivities_add_task, name='recent-add_task'),
+    path('associates/attach/<int:pk>/<int:m_id>/',
+         associates.attach_document, name='attach-document'),
+
     path('associates/recent_viewdocs/<int:pk>/<int:frm>/',
          associates.recent_taskviewdocs, name='recent-tasks-docs-review'),
 

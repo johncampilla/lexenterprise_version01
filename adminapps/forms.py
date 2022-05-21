@@ -62,9 +62,10 @@ class ClientEntryForm(forms.ModelForm):
 class FilingDocsEntry(forms.ModelForm):
     class Meta:
         model = FilingDocs
-        fields = 'Task_Detail', 'DocDate', 'DocsPDF'
+        fields = 'Task_Detail', 'DocDate', 'DocsPDF', 'Description'
         widgets = {
             'DocDate': NumberInput(attrs={'type': 'date'}),
+            'Description': Textarea(attrs={'class': 'form-control', 'cols': 200, 'rows': 2}),
         }
 
 
@@ -318,9 +319,10 @@ class NatureOfCaseForm(forms.ModelForm):
 class EntryExpensesForm(forms.ModelForm):
     class Meta:
         model = TempExpenses
-        fields = 'matter', 'bill_service', 'tran_date', 'lawyer', 'expense_detail', 'expense_actual_amt', 'status', 'chargetoclient', 'DocPDFs'
+        fields = 'matter', 'tran_date', 'lawyer', 'exp_preparedby', 'expense_detail', 'expense_actual_amt', 'currency', 'pesorate', 'pesoamount', 'status', 'chargetoclient', 'DocPDFs'
         widgets = {
             'tran_date': NumberInput(attrs={'type': 'date'}),
+            'expense_detail': Textarea(attrs={'cols': 250, 'rows': 2})
         }
 
 

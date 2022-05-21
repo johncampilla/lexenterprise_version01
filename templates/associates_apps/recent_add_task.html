@@ -11,6 +11,22 @@
 
 <div class="container">
     {% include 'base/caseinfoheader.html' %}
+    <div class="card text-white bg-primary">
+        <div class="col-lg-6">
+            <table class="table table-sm table-borderless small table my-2 text-white">
+                <tbody>
+                    <tr>
+                        <th>Due Date</th>
+                        <td>{{ duedate.duedate}}</td>
+                    </tr>
+                    <tr>
+                        <th>Particulars</th>
+                        <td>{{ duedate.particulars}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="card">
         <!-- <div class="card-body"> -->
             <div class="card text-white mt-2">

@@ -15,7 +15,7 @@
             <h6 class="card-title bg-primary text-white text-center">{{task.tran_date}} - {{task.task}}</h6>
             <div class="card text-white">
                 <div class="row">
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <!-- {{ form | crispy }} -->                    
                         <div class="row">
@@ -29,17 +29,35 @@
                                     {{form.tran_date}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px;">Request</span>
+                                    <span class="input-group-text" style="width: 110px;">Lawyer</span>
                                     {{form.lawyer}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Request By</span>
+                                    {{form.exp_preparedby}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px;">Particulars</span>
                                     {{form.expense_detail}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px;">Exp Amount</span>
+                                    <span class="input-group-text" style="width: 110px;">Exp Amount In Peso</span>
+                                    {{form.pesoamount}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Currency</span>
+                                    {{form.currency}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Peso Rate</span>
+                                    {{form.pesorate}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Bill Amount</span>
                                     {{form.expense_actual_amt}}
                                 </div>
+
+
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px;">Status</span>
                                     {{form.status}}

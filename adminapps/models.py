@@ -618,6 +618,7 @@ class MailsIn_Matters(models.Model):
 class FilingDocs(models.Model):
     Task_Detail = models.ForeignKey(
         task_detail, on_delete=models.CASCADE, null=True)
+    Description = models.CharField(max_length=200, null=True, blank=True)
     DocDate = models.DateField(null=True, blank=True)
     DocsPDF = models.FileField(
         blank=True, null=True, upload_to="Documents/%Y/%m/%D/")
@@ -820,9 +821,7 @@ class TempExpenses(models.Model):
     tran_date = models.DateField(null=True, blank=True)
     lawyer = models.ForeignKey(
         Lawyer_Data, on_delete=PROTECT, null=True, blank=True)
-    bill_service = models.ForeignKey(
-        ActivityCodes, on_delete=PROTECT, null=True, blank=True)
-
+    exp_preparedby = models.CharField(max_length=35, blank=True, null=True)
     expense_detail = models.CharField(max_length=250)
     expense_actual_amt = models.DecimalField(
         max_digits=10, decimal_places=2, default=0)

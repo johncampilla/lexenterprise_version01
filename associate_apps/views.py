@@ -1,5 +1,6 @@
 #from asyncio.windows_events import NULL
 #from os import CLD_CONTINUED
+from asyncio.windows_events import NULL
 from pickletools import read_uint1
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -50,7 +51,7 @@ def main(request):
     matterlist = Matters.objects.filter(created_at__year=today.year, created_at__month=today.month,
                                         handling_lawyer__lawyerID__userid=access_code).order_by('-filing_date')
     duedates = AppDueDate.objects.filter(duedate__year=today.year, duedate__month=today.month,
-                                         matter__handling_lawyer__lawyerID__userid=access_code).order_by('duedate')
+                                         matter__handling_lawyer__lawyerID__userid=access_code, date_complied__isnull=True).order_by('duedate')
     recentdocs = FilingDocs.objects.filter(
         Task_Detail__lawyer__lawyerID__userid=access_code).order_by('-DocDate')
     countalert = alertmessages.count()
@@ -291,7 +292,7 @@ def matter_review(request, pk):
     matter = Matters.objects.get(id=pk)
     c_id = matter.folder.client.id
     client = Client_Data.objects.get(id=c_id)
-    appduedates = AppDueDate.objects.filter(matter__id=pk)
+    appduedates = AppDueDate.objects.filter(matter__id=pk).order_by('-duedate')
     tempbills = TempBills.objects.filter(matter__id=pk)
     tempfilings = TempFilingFees.objects.filter(matter__id=pk)
     expenses = TempExpenses.objects.filter(
@@ -310,11 +311,15 @@ def matter_review(request, pk):
     else:
         form = EntryMatterForm(instance=matter)
 
-    activities = task_detail.objects.filter(matter__id=pk)
-    duedatelist = AppDueDate.objects.filter(matter__id=pk)
-    ardetails = AccountsReceivable.objects.filter(matter__id=pk)
-    payments = Payments.objects.filter(bill_number__matter__id=pk)
-    filingdocs = FilingDocs.objects.filter(Task_Detail__matter__id=pk)
+    activities = task_detail.objects.filter(
+        matter__id=pk).order_by('-tran_date')
+    duedatelist = AppDueDate.objects.filter(matter__id=pk).order_by('-duedate')
+    ardetails = AccountsReceivable.objects.filter(
+        matter__id=pk).order_by('-bill_date')
+    payments = Payments.objects.filter(
+        bill_number__matter__id=pk).order_by('-payment_date')
+    filingdocs = FilingDocs.objects.filter(
+        Task_Detail__matter__id=pk).order_by('-DocDate')
     #apptype = matter.apptype_id
     apptype = matter.apptype.apptype
     #duelist = DueCode.objects.all()
@@ -650,7 +655,6 @@ def remove_duedate(request, pk, m_id):
 
 def add_task(request, pk):
     def perform_billable_services():
-
         def save_to_tempPF():
             tempbills = TempBills.objects.filter(
                 matter_id=matter_id, tran_date=tran_date, bill_service_id=bill_id)
@@ -683,6 +687,7 @@ def add_task(request, pk):
                 tempfees = TempFilingFees(
                     matter_id=matter_id,
                     tran_date=tran_date,
+                    bill_id=filingfees.activitycode.id,
                     filing=filing,
                     lawyer_id=lawyer,
                     expense_detail=bill_description,
@@ -716,7 +721,7 @@ def add_task(request, pk):
             for filingfees in feeresult:
                 filing = filingfees.filing
                 bill_description = filingfees.filing_description
-                bill_id = filingfees.id
+                bill_id = filingfees.activitycode.id
                 PF_amount = filingfees.amount
                 prate = filingfees.pesorate
                 currency = filingfees.currency
@@ -772,9 +777,7 @@ def add_new_task(request, pk, m_id):
 
 def modify_task(request, pk, m_id):
     def perform_billable_services():
-
         def save_to_tempPF():
-            #            print("Pumasok sa saving of PF")
 
             tempbills = TempBills.objects.filter(
                 matter_id=matter_id, tran_date=tran_date, bill_service_id=bill_id)
@@ -798,6 +801,25 @@ def modify_task(request, pk, m_id):
                     currency=currency)
                 tempbills.save()
 
+        def save_to_tempfiling():
+            tempfees = TempFilingFees.objects.filter(
+                matter_id=matter_id, tran_date=tran_date, filing=filing)
+            if tempfees.exists():
+                pass
+            else:
+                tempfees = TempFilingFees(
+                    matter_id=matter_id,
+                    tran_date=tran_date,
+                    bill_service_id=bill_id,
+                    filing=filing,
+                    lawyer_id=lawyer,
+                    expense_detail=bill_description,
+                    pesoamount=PF_amount,
+                    expense_actual_amt=PF_amount,
+                    # pesorate=prate,
+                    currency=currency)
+                tempfees.save()
+
         tran_type = request.POST["tran_type"]
         task_code = request.POST["task_code"]
         tran_date = request.POST["tran_date"]
@@ -815,15 +837,30 @@ def modify_task(request, pk, m_id):
                 PF_amount = activitycode.amount
                 prate = activitycode.pesorate
                 currency = activitycode.currency
-#                print(bill_description, bill_id, PF_amount, pesorate)
                 save_to_tempPF()
+
+            feeresult = FilingCodes.objects.filter(activitycode_id=task_code)
+            for filingfees in feeresult:
+                filing = filingfees.filing
+                bill_description = filingfees.filing_description
+                bill_id = filingfees.activitycode.id
+                PF_amount = filingfees.amount
+                prate = filingfees.pesorate
+                currency = filingfees.currency
+                save_to_tempfiling()
 
     task = task_detail.objects.get(id=pk)
     matter = Matters.objects.get(id=m_id)
     c_id = matter.folder.client.id
     client = Client_Data.objects.get(id=c_id)
     docs = FilingDocs.objects.filter(Task_Detail__id=pk)
-    duedates = AppDueDate.objects.filter(matter__id=m_id)
+    duedates = AppDueDate.objects.filter(matter__id=m_id).order_by('-duedate')
+    tmpbills = TempBills.objects.filter(
+        matter_id=m_id, tran_date=task.tran_date, bill_service_id=task.task_code_id)
+    tmpfees = TempFilingFees.objects.filter(
+        matter_id=m_id, tran_date=task.tran_date, bill_service_id=task.task_code_id)
+    print(m_id, task.tran_date, task.task_code_id)
+    tmpexp = TempExpenses.objects.filter(matter_id=m_id)
 
     if request.method == 'POST':
         task_form = TaskEntryForm(request.POST, instance=task)
@@ -843,7 +880,10 @@ def modify_task(request, pk, m_id):
         'matter': matter,
         'docs': docs,
         'duedates': duedates,
-        'client': client
+        'client': client,
+        'tmpbills': tmpbills,
+        'tmpfees': tmpfees,
+        'tmpexp': tmpexp,
     }
     return render(request, 'associates_apps/modify_task.html', context)
 
@@ -851,7 +891,6 @@ def modify_task(request, pk, m_id):
 def recent_modify_task(request, pk, d_id):
     task = task_detail.objects.get(id=pk)
     m_id = task.matter.id
-    print(m_id)
     matter = Matters.objects.get(id=m_id)
     docs = FilingDocs.objects.filter(Task_Detail__id=pk)
     duedates = AppDueDate.objects.filter(matter__id=m_id)
@@ -874,6 +913,7 @@ def recent_modify_task(request, pk, d_id):
         'matter': matter,
         'docs': docs,
         'duedates': duedates,
+        'task': task,
     }
     return render(request, 'associates_apps/recent_modify_task.html', context)
 
@@ -931,6 +971,33 @@ def newdocs(request, pk, m_id, frm):
         return render(request, 'associates_apps/add_new_docs.html', context)
     elif frm == 1:
         return render(request, 'associates_apps/add_new_docs_mailsin.html', context)
+
+
+def newdocumentPDF(request, pk, m_id):
+    matter = Matters.objects.get(id=m_id)
+    task = task_detail.objects.get(id=pk)
+    docs = FilingDocs.objects.filter(Task_Detail__id=pk)
+    if request.method == "POST":
+        # Get the posted form
+        form = FilingDocsEntry(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('recent_adddocument', pk, m_id)
+        else:
+            return redirect('recent_adddocument', pk, m_id)
+    else:
+        form = FilingDocsEntry()
+
+    context = {
+        'form': form,
+        'matter': matter,
+        'task': task,
+        'pk': pk,
+        'm_id': m_id,
+        't_id': pk,
+        'docs': docs,
+    }
+    return render(request, 'associates_apps/add_new_docs.html', context)
 
 
 def upload_new_docs(request, pk, m_id):
@@ -1320,14 +1387,20 @@ def recentviewdocs(request, pk):
 def recentviewduedates(request, pk):
     duedate = AppDueDate.objects.get(id=pk)
     matterid = duedate.matter.id
-    activity = task_detail.objects.filter(matter__id=matterid)
+    activity = task_detail.objects.filter(
+        matter__id=matterid).order_by('-tran_date')
     matter = Matters.objects.get(id=matterid)
     ARBills = AccountsReceivable.objects.filter(
-        matter__id=matterid, payment_tag="UN")
+        matter__id=matterid, payment_tag="UN").order_by('bill_date')
     Total_bill_amount = AccountsReceivable.objects.filter(
         matter__id=matterid, payment_tag="UN").aggregate(Sum('bill_amount'))
     Unpaid_amt = Total_bill_amount["bill_amount__sum"]
-
+    tmpbills = TempBills.objects.filter(
+        matter_id=matterid).order_by('-tran_date')
+    tmpfees = TempFilingFees.objects.filter(
+        matter_id=matterid).order_by('-tran_date')
+    tmpexp = TempExpenses.objects.filter(
+        matter_id=matterid).order_by('-tran_date')
     if request.method == 'POST':
         form = DueDateEntryForm(request.POST, instance=duedate)
         if form.is_valid():
@@ -1345,6 +1418,9 @@ def recentviewduedates(request, pk):
         'ARBills': ARBills,
         'total_unpaid': Unpaid_amt,
         'due_id': pk,
+        'tmpbills': tmpbills,
+        'tmpfees': tmpfees,
+        'tmpexp': tmpexp,
 
     }
     return render(request, 'associates_apps/recentduedateview.html', context)
@@ -1356,6 +1432,7 @@ def recentactivities(request, pk):
     matter = Matters.objects.get(id=m_id)
     #activities = task_detail.objects.filter(matter__id=m_id)
     listofdocs = FilingDocs.objects.filter(Task_Detail__id=pk)
+    print(listofdocs)
     duedates = AppDueDate.objects.filter(matter__id=m_id)
     unpaidbills = AccountsReceivable.objects.filter(matter__id=m_id)
     form = TaskEntryForm(instance=task)
@@ -1372,15 +1449,43 @@ def recentactivities(request, pk):
     return render(request, 'associates_apps/recenttaskview.html', context)
 
 
+def attach_document(request, pk, m_id):
+    duedate = AppDueDate.objects.get(id=pk)
+    matter = Matters.objects.get(id=m_id)
+    if request.method == "POST":
+        # Get the posted form
+        form = FilingDocsEntry(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            duedate.date_complied = request.POST["DocDate"]
+            duedate.save()
+            return redirect('attach-document', pk, m_id)
+        else:
+            return redirect('recent-add_task', pk, m_id)
+    else:
+        form = FilingDocsEntry()
+
+    context = {
+        'form': form,
+        'matter': matter,
+        'd_id': pk,
+        'duedate': duedate,
+    }
+    return render(request, 'associates_apps/attachdocument.html', context)
+
+
 def recentactivities_add_task(request, pk, m_id):
     matter = Matters.objects.get(id=m_id)
     codes = IPTaskCodes.objects.all()
+    duedate = AppDueDate.objects.get(id=pk)
     if request.method == "POST":
         # Get the posted form
         form = TaskEntryForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('recent-duedate-review', pk)
+            # duedate.date_complied = request.POST["tran_date"]
+            # duedate.save()
+            return redirect('attach-document', pk, m_id)
         else:
             return redirect('recent-add_task', pk, m_id)
     else:
@@ -1391,6 +1496,7 @@ def recentactivities_add_task(request, pk, m_id):
         'matter': matter,
         'd_id': pk,
         'codes': codes,
+        'duedate': duedate,
     }
     return render(request, 'associates_apps/recent_add_task.html', context)
 

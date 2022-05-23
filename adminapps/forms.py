@@ -88,7 +88,7 @@ class AlertUpdateStatusForm(forms.ModelForm):
 class UserEntryForm(forms.ModelForm):
     class Meta:
         model = User_Profile
-        fields = 'userid', 'address', 'rank', 'mobile', 'image', 'remarks'
+        fields = 'userid', 'address', 'rank', 'mobile', 'image', 'supporto', 'remarks'
         widgets = {
             'remarks': Textarea(attrs={'cols': 200, 'rows': 3}),
         }

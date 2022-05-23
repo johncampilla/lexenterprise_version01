@@ -636,6 +636,24 @@ COMPUTEBASEDON = {
 }
 
 
+class inboxmessage(models.Model):
+    STATUS = {
+        ('READ', 'READ'),
+        ('OPEN', 'OPEN'),
+    }
+    messageto = models.ForeignKey(User_Profile, on_delete=models.CASCADE)
+    messagefrom = models.CharField(max_length=60, null=True, blank=True)
+    subject = models.CharField(max_length=100, null=True, blank=True)
+    message = models.CharField(max_length=250, null=True, blank=True)
+    status = models.CharField(max_length=15, null=True,
+                              blank=True, choices=STATUS)
+    see_matter = models.ForeignKey(
+        Matters, on_delete=models.PROTECT, null=True, blank=True)
+    updatedby = models.CharField(max_length=60)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
 class Alert_Messages(models.Model):
     messageto = models.ForeignKey(
         User, on_delete=PROTECT, null=True, blank=True)

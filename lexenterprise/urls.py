@@ -40,6 +40,11 @@ urlpatterns = [
 
     # for supportstaff
     path('support/', supportstaff_view.main, name='supportstaff-home'),
+    path('support/matters', supportstaff_view.matterlist,
+         name='supportstaff-matterlist'),
+    path('support/matters/review/<int:pk>/', supportstaff_view.matter_review,
+         name='supportstaff-matter_review'),
+
 
     # for management urls
     path('management/', management.main, name='management-home'),

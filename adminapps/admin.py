@@ -82,6 +82,7 @@ admin.site.register(MailsIn_Matters)
 admin.site.register(IPOExaminer)
 admin.site.register(DocumentCode)
 admin.site.register(Currency)
+admin.site.register(inboxmessage)
 
 
 # Register your models here.

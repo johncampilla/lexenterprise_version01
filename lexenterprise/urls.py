@@ -44,6 +44,12 @@ urlpatterns = [
          name='supportstaff-matterlist'),
     path('support/matters/review/<int:pk>/', supportstaff_view.matter_review,
          name='supportstaff-matter_review'),
+    path('support/message/view/<int:pk>/', supportstaff_view.open_message,
+         name='supportstaff-open_message'),
+    path('support/message/reply/<int:pk>/', supportstaff_view.reply_message,
+         name='supportstaff-reply_message'),
+    path('support/message/mymessages/', supportstaff_view.my_messages,
+         name='supportstaff-my_messages'),
 
 
     # for management urls

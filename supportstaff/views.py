@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from adminapps.models import *
 from datetime import date, datetime, timedelta
 from django.core.paginator import Paginator
 from dateutil.relativedelta import relativedelta
-from adminapps.forms import EntryMatterForm
+from adminapps.forms import EntryMatterForm, InboxMessageForm
 from django.db.models import Q, Sum, Count
 
 # Create your views here.
@@ -89,13 +89,16 @@ def main(request):
 
     duedates = AppDueDate.objects.filter(
         multiple_q, duedate__gte=duedate1, duedate__lte=duedate2, date_complied__isnull=True).order_by('-duedate')
-    print(duedates)
+
+    messages = inboxmessage.objects.filter(
+        messageto__userid=access_code, status='OPEN')
 
     context = {
         'alertmessages': alertmessages,
         'noofalerts': countalert,
         'username': username,
         'duedates': duedates,
+        'messages': messages,
     }
 
     return render(request, 'supportstaff/index.html', context)
@@ -294,3 +297,72 @@ def matter_review(request, pk):
     }
 
     return render(request, 'supportstaff/openmatter_details.html', context)
+
+
+def open_message(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    if request.method == 'POST':
+        form = InboxMessageForm(request.POST, instance=message)
+    else:
+        form = InboxMessageForm(instance=message)
+
+    context = {
+        'form': form,
+        'replyid': pk,
+    }
+
+    return render(request, 'supportstaff/readmessage.html', context)
+
+
+def reply_message(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    if request.method == 'POST':
+        form = InboxMessageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('supportstaff-home')
+        else:
+            form = InboxMessageForm()
+    else:
+        form = InboxMessageForm()
+
+    context = {
+        'form': form,
+    }
+
+    return render(request, 'supportstaff/newmessage.html', context)
+
+
+def my_messages(request):
+    myuserid = request.user.user_profile.userid
+    access_code = request.user.user_profile.access_code
+
+    if 'q' in request.GET:
+        q = request.GET['q']
+        #clients = Client_Data.objects.filter(client_name__icontains=q)
+        multiple_q = Q(Q(messagefrom__icontains=q) | Q(subject__icontains=q) | Q(
+            messagebox__icontains=q) | Q(status__icontains=q) | Q(see_matter__matter_title__icontains=q))
+        receivedmessages = inboxmessage.objects.filter(
+            multiple_q, messageto__userid=myuserid).order_by('-messagedate')
+        sentmessages = inboxmessage.objects.filter(
+            multiple_q, messagefrom=access_code).order_by('-messagedate')
+
+    else:
+        receivedmessages = inboxmessage.objects.filter(
+            messageto__userid=myuserid).order_by('-messagedate')
+        sentmessages = inboxmessage.objects.filter(
+            messagefrom=access_code).order_by('-messagedate')
+
+    # receivedmessages = inboxmessage.objects.filter(messageto__userid=myuserid)
+    # sentmessages = inboxmessage.objects.filter(messagefrom=access_code)
+    print(receivedmessages)
+    print(sentmessages)
+
+    context = {
+        'myuserid': myuserid,
+        'access_code': access_code,
+        'receivedmessages': receivedmessages,
+        'sentmessages': sentmessages,
+    }
+
+    return render(request, 'supportstaff/mymessages.html', context)

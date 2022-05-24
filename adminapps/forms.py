@@ -94,6 +94,17 @@ class UserEntryForm(forms.ModelForm):
         }
 
 
+class InboxMessageForm(forms.ModelForm):
+    class Meta:
+        model = inboxmessage
+        fields = 'messageto', 'messagedate', 'messagefrom', 'subject', 'messagebox', 'status', 'see_matter', 'updatedby'
+        widgets = {
+            'messagebox': Textarea(attrs={'cols': 200, 'rows': 3}),
+            'messagedate': NumberInput(attrs={'type': 'date'}),
+
+        }
+
+
 class LawyerEntryForm(forms.ModelForm):
     class Meta:
         model = Lawyer_Data

@@ -25,6 +25,7 @@ class User_Profile(models.Model):
     userid = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     address = models.CharField(max_length=200, null=True)
     rank = models.CharField(max_length=30, choices=RANK, null=True)
+    access_code = models.CharField(max_length=5, null=True, blank=True)
     supporto = models.CharField(max_length=60, null=True, blank=True)
     mobile = models.CharField(max_length=60, null=True)
     image = models.ImageField(upload_to='Profile_Images/', blank=True)

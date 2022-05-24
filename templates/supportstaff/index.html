@@ -25,7 +25,7 @@
                 <li>
                         <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Misc Expenses</a>
                         <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Activities</a>
-                        <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Messages</a>
+                        <a href="{% url 'supportstaff-my_messages' %}" class="btn btn-outline-primary btn-sm mt-3">My Messages</a>
                         <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Lawyers</a>
                     
                 </li>
@@ -131,29 +131,28 @@
         <!-- To put table content -->
             <div class="card">
                 <div class="row my-1">
-                        <div class="col">
-                            <h6 class="card-title bg-primary text-white text-center">Attention: Upcoming Due Dates</h6>
-                            <table class="table-hover table-bordered table-sm small table">
-                                <thead class="table-primary text-center">
-                                    <tr>
-                                        <th style="width:35%;">Matter Title</th>
-                                        <th style="width:10%;">Lawyer</th>
-                                        <th style="width:10%;">Due Date</th>
-                                        <th style="width:40%;">Partculars</th>
-                                        <th style="width:5%;">Action</th>
-                                    </tr>
-                
-                                </thead>
+                    <div class="col">
+                        <h6 class="card-title bg-primary text-white text-center">Attention: Unread Messages</h6>
+                        <table class="table-hover table-bordered table-sm small table">
+                            <thead class="table-primary text-center">
+                                <tr>
+                                    <th style="width:10%;">Date</th>
+                                    <th style="width:10%;">From</th>
+                                    <th style="width:20%;">Subject</th>
+                                    <th style="width:55%;">Message</th>
+                                    <th style="width:5%;">Action</th>
+                                </tr>
+                            </thead>
                                 <tbody>
-                                    {% for dues in duedates %}
+                                    {% for msg in messages %}
                                     <tr>
-                                        <td style="font-weight: bold;">{{ dues.matter.matter_title }}</td>
-                                        <td style="font-weight: bold;">{{ dues.matter.handling_lawyer.access_code }}</td>
-                                        <td style="font-weight: bold;">{{ dues.duedate | date:'m/d/Y' }}</td>
-                                        <td style="font-weight: bold;">{{ dues.particulars }}</td>
+                                        <td style="font-weight: bold;">{{ msg.messagedate | date:'m/d/Y' }}</td>
+                                        <td style="font-weight: bold;">{{ msg.messagefrom }}</td>
+                                        <td style="font-weight: bold;">{{ msg.subject }}</td>
+                                        <td style="font-weight: bold;">{{ msg.messagebox }}</td>
                                         <td>
-                                            <a class="btn btn-primary btn-sm" href="#"
-                                                title="Open Matter">
+                                            <a class="btn btn-primary btn-sm" href="{% url 'supportstaff-open_message' msg.id %}"
+                                                title="Open Message">
                                                 <i class="fas fa-pen"></i>
                                             </a>
                                         </td>
@@ -161,8 +160,40 @@
                 
                                     {% endfor %}
                                 </tbody>
-                            </table>
-                        </div>
+                        </table>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col">
+                        <h6 class="card-title bg-primary text-white text-center">Attention: Upcoming Due Dates</h6>
+                        <table class="table-hover table-bordered table-sm small table">
+                            <thead class="table-primary text-center">
+                                <tr>
+                                    <th style="width:35%;">Matter Title</th>
+                                    <th style="width:10%;">Lawyer</th>
+                                    <th style="width:10%;">Due Date</th>
+                                    <th style="width:40%;">Partculars</th>
+                                    <th style="width:5%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for dues in duedates %}
+                                <tr>
+                                    <td style="font-weight: bold;">{{ dues.matter.matter_title }}</td>
+                                    <td style="font-weight: bold;">{{ dues.matter.handling_lawyer.access_code }}</td>
+                                    <td style="font-weight: bold;">{{ dues.duedate | date:'m/d/Y' }}</td>
+                                    <td style="font-weight: bold;">{{ dues.particulars }}</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" href="#" title="Open Matter">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 
             </div>

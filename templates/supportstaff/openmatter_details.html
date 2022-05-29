@@ -109,7 +109,7 @@
                             <th style="width:10%;">Doc Type</th>
                             <th style="width:10%;">Tran Type</th>
                             <th style="width:45%;">Activity</th>
-                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_new_task' m_id %}"><i class="fas fa-plus text-center"></i>&nbsp;Activity</a></th>
+                            <th colspan="1" style="width:10%;"><a href="{% url 'supportstaff-add_new_task' m_id %}"><i class="fas fa-plus text-center"></i>&nbsp;Activity</a></th>
                         </tr>
                     </thead>
                     {% for task in tasks %}
@@ -138,7 +138,7 @@
                             <th style="width:10%;">Due Date</th>
                             <th style="width:70%;">Particulars</th>
                             <th style="width:10%;">Date Complied</th>
-                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_duedate' m_id %}"><i class="fas fa-plus text-center"></i>&nbsp;Due Date</a></th>
+                            <th colspan="1" style="width:10%;"><a href="{% url 'supportstaff-add_duedate' m_id %}"><i class="fas fa-plus text-center"></i>&nbsp;Due Date</a></th>
                         </tr>
                     </thead>
                     {% for duedate in duedatelist %}

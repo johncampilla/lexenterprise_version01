@@ -50,6 +50,23 @@ urlpatterns = [
          name='supportstaff-reply_message'),
     path('support/message/mymessages/', supportstaff_view.my_messages,
          name='supportstaff-my_messages'),
+    path('support/message/inward/', supportstaff_view.mails_inward,
+         name='supportstaff-mails_inward'),
+    path('support/message/inward/add/', supportstaff_view.mails_inward_new,
+         name='supportstaff-mails_new'),
+    path('support/inward/update/<int:pk>/<int:m_id>/',
+         supportstaff_view.mails_inward_update, name='supportstaff-mailsinward_update'),
+    path('support/matters/createtask/<int:pk>/',
+         supportstaff_view.add_task, name='supportstaff-add_new_task'),
+    path('support/task/addactivy/',
+         supportstaff_view.add_activity, name='superstaff-add_activity'),
+    path('support/recent/activities/<int:pk>/',
+         supportstaff_view.recentactivities, name='superstaff-activity-review'),
+
+
+
+
+
 
 
     # for management urls

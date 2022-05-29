@@ -195,6 +195,71 @@
                         </table>
                     </div>
                 </div>
+                <div class="row my-1">
+                    <div class="col">
+                        <h6 class="card-title bg-primary text-white text-center">Attention: Recent Activities</h6>
+                        <table class="table-hover table-bordered table-sm small table">
+                            <thead class="table-primary text-center">
+                                <tr>
+                                    <th style="width:10%;">Date</th>
+                                    <th style="width:35%;">Matter Title</th>
+                                    <th style="width:10%;">Lawyer</th>
+                                    <th style="width:10%;">Prepared By</th>
+                                    <th style="width:20%;">Activity</th>
+                                    <th style="width:5%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for task in recenttask %}
+                                <tr>
+                                    <td style="font-weight: bold;">{{ task.tran_date | date:'m/d/Y' }}</td>
+                                    <td style="font-weight: bold;">{{ task.matter.matter_title }}</td>
+                                    <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
+                                    <td style="font-weight: bold;">{{ task.preparedby.access_code }}</td>
+                                    <td style="font-weight: bold;">{{ task.task }}</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" href="{% url 'superstaff-activity-review' task.id %}" title="Open Matter">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row my-1">
+                    <div class="col">
+                        <h6 class="card-title bg-primary text-white text-center">Attention: Recent Uploaded Documents</h6>
+                        <table class="table-hover table-bordered table-sm small table">
+                            <thead class="table-primary text-center">
+                                <tr>
+                                    <th style="width:10%;">Doc Date</th>
+                                    <th style="width:65%;">Activity</th>
+                                    <th style="width:20%;">Description</th>
+                                    <th style="width:5%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for docs in recentdocs %}
+                                <tr>
+                                    <td style="font-weight: bold;">{{ docs.DocDate | date:'m/d/Y' }}</td>
+                                    <td style="font-weight: bold;">{{ docs.Task_Detail }}</td>
+                                    <td style="font-weight: bold;">{{ docs.description }}</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" href="#"
+                                            title="Open Document">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 
             </div>
 

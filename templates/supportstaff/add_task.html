@@ -1,0 +1,46 @@
+{% extends 'base/supportstaffmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+    Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        <!-- <div class="card-body"> -->
+            <div class="card text-dark small">
+                <div class="row mt-2">
+                    <form method="POST">
+                    {% csrf_token %}
+                            <label> Client Name: </label>
+                            <input type="text" name='clientname' placeholder="Enter Client Name">
+                            <br>
+                            <label> Address </label>
+                            <input type="text" name="address" placeholder="Enter Client Address">
+                            <select>
+                                {% for matter in matter %}
+                                    <option>
+                                        {{ matter.matter_title }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <a href="#" class="btn btn-outline-primary btn-sm mb-3">Return</a>
+                            <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+
+
+                    <!-- {{ form | crispy }} -->
+                    
+
+                    </form>
+                </div>
+
+    </div>
+</div>
+
+{% endblock content%}
+
+

@@ -158,7 +158,8 @@ class CaseFolder(models.Model):
     #     ('Special Project', 'Special Project')
     # )
 
-    client = models.ForeignKey(Client_Data, on_delete=CASCADE, null=True)
+    client = models.ForeignKey(
+        Client_Data, on_delete=CASCADE, null=True)
     folder_description = models.CharField(max_length=200)
     folder_type = models.ForeignKey(
         FolderType, on_delete=models.CASCADE, null=True)

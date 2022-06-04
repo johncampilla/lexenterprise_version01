@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 
 {% block content %}
@@ -12,65 +12,56 @@
 <div class="container">
     <div class="card mt-3">
         <!-- <div class="card-body"> -->
-            <div class="card text-dark small">
-                <div class="row mt-2">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <!-- {{ form | crispy }} -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="input-group input-group-sm mb-1">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" style="width: 110px; font-weight: bold;">Reply To:</span>
-                                    </div>
-                                    <input type="text" value={{messageto}} name=messageto class="form-control" readonly>
+        <div class="card text-dark small">
+            <div class="row mt-2">
+                <form method="POST">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group input-group-sm mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Reply
+                                        To:</span>
                                 </div>
+                                <input type="text" value="{{messageto}}" name=messageto class="form-control" readonly>
+                            </div>
 
-                                <div class="input-group input-group-sm mb-1">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" style="width: 110px; font-weight: bold;">From:</span>
-                                    </div>
-                                    <input type="text" value={{messagefrom}} name="messagefrom" class="form-control" readonly>
+                            <div class="input-group input-group-sm mb-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">From:</span>
                                 </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <label class="input-group-text" style="width: 110px; font-weight: bold;" for="inputGroupSelect01">Matter</label>
-                                    <select class="form-select" id="inputGroupSelect01">
-                                        <option selected>Choose...</option>
-                                        {% for matter in matter %}
-                                        <option>
-                                            {{ matter.matter_title }}
-                                        </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Date</span>
-                                    {{form.messagedate}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Subject</span>
-                                    {{form.subject}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Message</span>
-                                    {{form.messagebox}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Specific Matter</span>
-                                    {{form.see_matter}}
-                                </div>
+                                <input type="text" value="{{messagefrom}}" name="messagefrom" class="form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Date</span>
+                                <input type="text" value="{{messagedate}}" name="messagedate" class="form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Subject</span>
+                                {{form.subject}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Message</span>
+                                {{form.messagebox}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Specific
+                                    Matter</span>
+                                {{form.see_matter}}
                             </div>
                         </div>
-                        <a class='btn btn-outline-primary btn-sm mb-3' href="{% url 'supportstaff-home' %}">Return</a>
-                        <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
-                    </form>
-                </div>
+                    </div>
+                    <a class='btn btn-outline-primary btn-sm mb-3' href="{% url 'supportstaff-home' %}">Return</a>
+                    <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+                </form>
             </div>
+        </div>
         <!-- </div> -->
     </div>
-      
+
 </div>
 
 {% endblock content%}
-
-

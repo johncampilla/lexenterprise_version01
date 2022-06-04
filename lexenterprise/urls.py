@@ -62,10 +62,16 @@ urlpatterns = [
          supportstaff_view.add_activity, name='superstaff-add_activity'),
     path('support/recent/activities/<int:pk>/',
          supportstaff_view.recentactivities, name='superstaff-activity-review'),
-
-
-
-
+    path('support/recent/duedate/<int:pk>/',
+         supportstaff_view.recentviewduedates, name='superstaff-duedate-review'),
+    path('support/recent_addtask/<int:pk>/<int:m_id>/',
+         supportstaff_view.recentactivities_add_task, name='superstaff-add_task'),
+    path('support/recent_modify/activities/<int:pk>/<int:d_id>/',
+         supportstaff_view.recent_modify_task, name='superstaff-activity-modify'),
+    path('support/recent_add/documents/<int:pk>/<int:m_id>/',
+         supportstaff_view.newdocumentPDF, name='superstaff-recent_adddocument'),
+    path('support/attach/<int:pk>/<int:m_id>/',
+         supportstaff_view.attach_document, name='superstaff-attach-document'),
 
 
 
@@ -236,8 +242,15 @@ urlpatterns = [
          name='associate-new_alertmessage'),
     path('associates/alertmessages/edit/<int:pk>/',
          associates.edit_alertmessage, name='associate-edit_alertmessage'),
+
+    path('associates/alertmessages/remove/<int:pk>/',
+         associates.remove_alertmessage, name='associate-remove_alertmessage'),
+
     path('associates/alertmessages/status/<int:pk>/',
          associates.edit_statusmessage, name='associate-edit_statusmessage'),
+    path('associates/inboxmessages/list/',
+         associates.list_messages, name='associate-list_messages'),
+
 
     path('associates/ar/new/<int:m_id>/',
          associates.arentry, name='associate-ar-new'),

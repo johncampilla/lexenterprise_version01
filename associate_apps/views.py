@@ -4,7 +4,7 @@ from asyncio.windows_events import NULL
 from pickletools import read_uint1
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from pandas import notnull
+from pandas import notnull, set_eng_float_format
 
 from adminapps.models import *
 from django.core.paginator import Paginator
@@ -47,7 +47,11 @@ if prev_month == 0:
 def main(request):
     access_code = request.user.user_profile.userid
     username = request.user.username
-    alertmessages = Alert_Messages.objects.filter(messageto=access_code)
+#    alertmessages = Alert_Messages.objects.filter(messageto=access_code)
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="READ")
+
     matterlist = Matters.objects.filter(created_at__year=today.year, created_at__month=today.month,
                                         handling_lawyer__lawyerID__userid=access_code).order_by('-filing_date')
     duedates = AppDueDate.objects.filter(duedate__year=today.year, duedate__month=today.month,
@@ -162,22 +166,48 @@ def edit_statusmessage(request, pk):
     return render(request, 'associates_apps/editstatus_msg.html', context)
 
 
-def edit_alertmessage(request, pk):
-    message = Alert_Messages.objects.get(id=pk)
-    if request.method == 'POST':
-        form = AlertMessageForm(request.POST, instance=message)
-        if form.is_valid():
-            form.save()
-            return redirect('associate-view_sentmessages')
-        else:
-            form = AlertMessageForm(instance=message)
-    else:
-        form = AlertMessageForm(instance=message)
+def list_messages(request):
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="READ")
 
     context = {
-        'form': form,
+        'alertmessages': alertmessages,
+    }
+    return render(request, 'associates_apps/list_inboxmessages.html', context)
+
+
+def edit_alertmessage(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    messagefrom = message.messagefrom
+    messageto = message.messageto
+    a = message.messagedate
+    messagedate = a.strftime('%m/%d/%Y')
+    subject = message.subject
+    messagebox = message.messagebox
+    see_matter = message.see_matter
+
+    if request.method == 'POST':
+        message.status = "OPEN"
+        message.save()
+        return redirect('associate-view_sentmessages')
+
+    context = {
+        'messagefrom': messagefrom,
+        'messageto': messageto,
+        'messagedate': messagedate,
+        'subject': subject,
+        'messagebox': messagebox,
+        'see_matter': see_matter,
+
     }
     return render(request, 'associates_apps/edit_msg.html', context)
+
+
+def remove_alertmessage(request, pk):
+    selected = inboxmessage.objects.get(id=pk)
+    selected.delete()
+    return redirect('associate-list_messages')
 
 
 def new_alertmessage(request):

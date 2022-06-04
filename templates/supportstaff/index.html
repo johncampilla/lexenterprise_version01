@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 {% block content %}
 <div id="content-wrapper" class="d-flex flex-column">
@@ -19,17 +19,18 @@
             <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                 <i class="fa fa-bars"></i>
             </button>
-    
+
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
                 <li>
-                        <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Misc Expenses</a>
-                        <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Activities</a>
-                        <a href="{% url 'supportstaff-my_messages' %}" class="btn btn-outline-primary btn-sm mt-3">My Messages</a>
-                        <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Lawyers</a>
-                    
+                    <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Misc Expenses</a>
+                    <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Activities</a>
+                    <a href="{% url 'supportstaff-my_messages' %}" class="btn btn-outline-primary btn-sm mt-3">My
+                        Messages</a>
+                    <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Lawyers</a>
+
                 </li>
-    
+
                 <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                 <li class="nav-item dropdown no-arrow d-sm-none">
                     <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
@@ -42,8 +43,7 @@
                         <form class="form-inline mr-auto w-100 navbar-search">
                             <div class="input-group">
                                 <input type="text" class="form-control bg-light border-0 small"
-                                    placeholder="Search for..." aria-label="Search"
-                                    aria-describedby="basic-addon2">
+                                    placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-search fa-sm"></i>
@@ -53,7 +53,7 @@
                         </form>
                     </div>
                 </li>
-    
+
                 <!-- Nav Item - Alerts -->
                 <li class="nav-item dropdown no-arrow mx-1">
                     <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
@@ -69,32 +69,31 @@
                             Alerts Center
                         </h6>
                         {% for alert in alertmessages %}
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <div class="mr-3">
-                                    <div class="icon-circle bg-primary">
-                                        <i class="fas fa-file-alt text-white"></i>
-                                    </div>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-primary">
+                                    <i class="fas fa-file-alt text-white"></i>
                                 </div>
-                                <div>
-                                    <div class="small text-gray-500">{{ alert.date_alert }}</div>
-                                    <span class="font-weight-bold">{{ alert.message_alert}}</span>
-                                </div>
-                            </a>
+                            </div>
+                            <div>
+                                <div class="small text-gray-500">{{ alert.date_alert }}</div>
+                                <span class="font-weight-bold">{{ alert.message_alert}}</span>
+                            </div>
+                        </a>
                         {% endfor %}
                     </div>
                 </li>
-    
+
                 <!-- Nav Item - Messages -->
-    
+
                 <div class="topbar-divider d-none d-sm-block"></div>
-    
+
                 <!-- Nav Item - User Information -->
                 <li class="nav-item dropdown no-arrow">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                         <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ username }}</span>
-                        <img class="img-profile rounded-circle"
-                            src="{% static 'images/undraw_profile.svg' %}">
+                        <img class="img-profile rounded-circle" src="{% static 'images/undraw_profile.svg' %}">
                     </a>
                     <!-- Dropdown - User Information -->
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -118,17 +117,17 @@
                         </a>
                     </div>
                 </li>
-    
+
             </ul>
-    
+
         </nav>
-    
+
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
         <!-- <div class="container-fluid"> -->
         <div class="container">
-        <!-- To put table content -->
+            <!-- To put table content -->
             <div class="card">
                 <div class="row my-1">
                     <div class="col">
@@ -143,23 +142,23 @@
                                     <th style="width:5%;">Action</th>
                                 </tr>
                             </thead>
-                                <tbody>
-                                    {% for msg in messages %}
-                                    <tr>
-                                        <td style="font-weight: bold;">{{ msg.messagedate | date:'m/d/Y' }}</td>
-                                        <td style="font-weight: bold;">{{ msg.messagefrom }}</td>
-                                        <td style="font-weight: bold;">{{ msg.subject }}</td>
-                                        <td style="font-weight: bold;">{{ msg.messagebox }}</td>
-                                        <td>
-                                            <a class="btn btn-primary btn-sm" href="{% url 'supportstaff-open_message' msg.id %}"
-                                                title="Open Message">
-                                                <i class="fas fa-pen"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                
-                                    {% endfor %}
-                                </tbody>
+                            <tbody>
+                                {% for msg in messages %}
+                                <tr>
+                                    <td style="font-weight: bold;">{{ msg.messagedate | date:'m/d/Y' }}</td>
+                                    <td style="font-weight: bold;">{{ msg.messagefrom }}</td>
+                                    <td style="font-weight: bold;">{{ msg.subject }}</td>
+                                    <td style="font-weight: bold;">{{ msg.messagebox }}</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm"
+                                            href="{% url 'supportstaff-open_message' msg.id %}" title="Open Message">
+                                            <i class="fas fa-pen"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                                {% endfor %}
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -184,12 +183,13 @@
                                     <td style="font-weight: bold;">{{ dues.duedate | date:'m/d/Y' }}</td>
                                     <td style="font-weight: bold;">{{ dues.particulars }}</td>
                                     <td>
-                                        <a class="btn btn-primary btn-sm" href="#" title="Open Matter">
+                                        <a class="btn btn-primary btn-sm"
+                                            href="{% url 'superstaff-duedate-review' dues.id %}" title="Open Matter">
                                             <i class="fas fa-pen"></i>
                                         </a>
                                     </td>
                                 </tr>
-                
+
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -218,12 +218,13 @@
                                     <td style="font-weight: bold;">{{ task.preparedby.access_code }}</td>
                                     <td style="font-weight: bold;">{{ task.task }}</td>
                                     <td>
-                                        <a class="btn btn-primary btn-sm" href="{% url 'superstaff-activity-review' task.id %}" title="Open Matter">
+                                        <a class="btn btn-primary btn-sm"
+                                            href="{% url 'superstaff-activity-review' task.id %}" title="Open Matter">
                                             <i class="fas fa-pen"></i>
                                         </a>
                                     </td>
                                 </tr>
-                
+
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -231,7 +232,8 @@
                 </div>
                 <div class="row my-1">
                     <div class="col">
-                        <h6 class="card-title bg-primary text-white text-center">Attention: Recent Uploaded Documents</h6>
+                        <h6 class="card-title bg-primary text-white text-center">Attention: Recent Uploaded Documents
+                        </h6>
                         <table class="table-hover table-bordered table-sm small table">
                             <thead class="table-primary text-center">
                                 <tr>
@@ -248,23 +250,22 @@
                                     <td style="font-weight: bold;">{{ docs.Task_Detail }}</td>
                                     <td style="font-weight: bold;">{{ docs.description }}</td>
                                     <td>
-                                        <a class="btn btn-primary btn-sm" href="#"
-                                            title="Open Document">
+                                        <a class="btn btn-primary btn-sm" href="#" title="Open Document">
                                             <i class="fas fa-pen"></i>
                                         </a>
                                     </td>
                                 </tr>
-                
+
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
-                
+
             </div>
 
         </div>
     </div>
-</div>    
+</div>
 
 {% endblock %}

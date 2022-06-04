@@ -72,11 +72,11 @@ class FilingDocsEntry(forms.ModelForm):
 
 class AlertMessageForm(forms.ModelForm):
     class Meta:
-        model = Alert_Messages
-        fields = 'messageto', 'date_alert', 'message_alert', 'status', 'sentby'
+        model = inboxmessage
+        fields = 'messageto', 'messagedate', 'messagefrom', 'subject', 'messagebox', 'status', 'see_matter', 'updatedby'
         widgets = {
-            'message_alert': Textarea(attrs={'cols': 200, 'rows': 3}),
-            'date_alert': NumberInput(attrs={'type': 'date'}),
+            'messagebox': Textarea(attrs={'cols': 200, 'rows': 10}),
+            'messagedate': NumberInput(attrs={'type': 'date'}),
         }
 
 
@@ -100,7 +100,18 @@ class InboxMessageForm(forms.ModelForm):
         model = inboxmessage
         fields = 'messageto', 'messagedate', 'messagefrom', 'subject', 'messagebox', 'status', 'see_matter', 'updatedby'
         widgets = {
-            'messagebox': Textarea(attrs={'cols': 200, 'rows': 3}),
+            'messagebox': Textarea(attrs={'cols': 200, 'rows': 10}),
+            'messagedate': NumberInput(attrs={'type': 'date'}),
+
+        }
+
+
+class InboxMessageEntryForm(forms.ModelForm):
+    class Meta:
+        model = inboxmessage
+        fields = 'subject', 'messagebox', 'see_matter'
+        widgets = {
+            'messagebox': Textarea(attrs={'cols': 200, 'rows': 10}),
             'messagedate': NumberInput(attrs={'type': 'date'}),
 
         }
@@ -123,11 +134,8 @@ class TaskEntryForm(forms.ModelForm):
     # }
     class Meta:
         model = task_detail
-#        fields = 'matter', 'tran_date', 'task_code', 'doc_type', 'tran_type','preparedby', 'lawyer', 'task'
-        fields = '__all__'
-        task_code = forms.ModelChoiceField(queryset=AppType.objects.all())
+        fields = 'tran_date', 'tran_type', 'doc_type', 'preparedby', 'lawyer', 'task', 'spentinhrs', 'spentinmin'
         widgets = {
-            'matter': forms.Select(attrs={'class': 'form-control'}),
             'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Activity Details..'}),
             'tran_date': NumberInput(attrs={'type': 'date'}),
             'doc_date': NumberInput(attrs={'type': 'date'}),
@@ -150,6 +158,23 @@ class TaskEntryForm(forms.ModelForm):
 #     class Meta:
 #         model = CaseFolder
 #         fields= '__all__'
+
+
+class TaskEditForm(forms.ModelForm):
+    # TRANTYPE = {
+    #     ('Billable', 'Billable'),
+    #     ('Non-Billable', 'Non-Billable'),
+    # }
+    class Meta:
+        model = task_detail
+        fields = 'matter', 'tran_date', 'task_code', 'tran_type', 'doc_type', 'preparedby', 'lawyer', 'task', 'spentinhrs', 'spentinmin'
+        widgets = {
+            'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Activity Details..'}),
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'doc_date': NumberInput(attrs={'type': 'date'}),
+            'mailing_date': NumberInput(attrs={'type': 'date'}),
+
+        }
 
 
 class TaskEntryForm1(forms.Form):

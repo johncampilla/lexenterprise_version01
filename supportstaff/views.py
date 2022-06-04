@@ -1,11 +1,14 @@
+from asyncio.windows_events import NULL
+from contextlib import nullcontext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from pandas import notnull
 from adminapps.models import *
 from datetime import date, datetime, timedelta
 from django.core.paginator import Paginator
 from dateutil.relativedelta import relativedelta
-from adminapps.forms import EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm
+from adminapps.forms import InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry
 from django.db.models import Q, Sum, Count
 
 # Create your views here.
@@ -311,24 +314,35 @@ def open_message(request, pk):
 def reply_message(request, pk):
     message = inboxmessage.objects.get(id=pk)
     messageto = message.messagefrom
+    userprofile = User_Profile.objects.get(access_code=messageto)
+    messageto_id = userprofile.id
     messagefrom = message.messageto
     userid = request.user.user_profile.userid
+    a = date.today()
+    messagedate = a.strftime('%m/%d/%Y')
+    dateconvert = datetime.strptime(messagedate, "%m/%d/%Y").strftime('%Y-%m-%d')
     matter = Matters.objects.all()
-    print(messagefrom, userid)
     if request.method == 'POST':
-        form = InboxMessageForm(request.POST)
+        form = InboxMessageEntryForm(request.POST)
         if form.is_valid():
-            form.save()
+            print("pumasok", messageto_id)
+            inbox_rec = form.save(commit=False)
+            inbox_rec.messageto_id = messageto_id
+            inbox_rec.messagefrom = messagefrom
+            inbox_rec.messagedate = dateconvert
+            inbox_rec.status = "OPEN"
+            inbox_rec.save()
             return redirect('supportstaff-home')
         else:
-            form = InboxMessageForm()
+            form = InboxMessageEntryForm()
     else:
-        form = InboxMessageForm()
+        form = InboxMessageEntryForm()
 
     context = {
         'form': form,
         'messagefrom': messagefrom,
         'messageto': messageto,
+        'messagedate': messagedate,
         'matter': matter,
     }
 
@@ -739,3 +753,171 @@ def recentactivities(request, pk):
 
     }
     return render(request, 'supportstaff/recenttaskview.html', context)
+
+
+def recentviewduedates(request, pk):
+    duedate = AppDueDate.objects.get(id=pk)
+    matterid = duedate.matter.id
+    activity = task_detail.objects.filter(
+        matter__id=matterid).order_by('-tran_date')
+    matter = Matters.objects.get(id=matterid)
+    ARBills = AccountsReceivable.objects.filter(
+        matter__id=matterid, payment_tag="UN").order_by('bill_date')
+    Total_bill_amount = AccountsReceivable.objects.filter(
+        matter__id=matterid, payment_tag="UN").aggregate(Sum('bill_amount'))
+    Unpaid_amt = Total_bill_amount["bill_amount__sum"]
+    tmpbills = TempBills.objects.filter(
+        matter_id=matterid).order_by('-tran_date')
+    tmpfees = TempFilingFees.objects.filter(
+        matter_id=matterid).order_by('-tran_date')
+    tmpexp = TempExpenses.objects.filter(
+        matter_id=matterid).order_by('-tran_date')
+    if request.method == 'POST':
+        form = DueDateEntryForm(request.POST, instance=duedate)
+        if form.is_valid():
+            form.save()
+            return redirect('associate-home')
+        else:
+            form = DueDateEntryForm(instance=duedate)
+    else:
+        form = DueDateEntryForm(instance=duedate)
+
+    context = {
+        'form': form,
+        'matter': matter,
+        'activity': activity,
+        'ARBills': ARBills,
+        'total_unpaid': Unpaid_amt,
+        'due_id': pk,
+        'tmpbills': tmpbills,
+        'tmpfees': tmpfees,
+        'tmpexp': tmpexp,
+
+    }
+    return render(request, 'supportstaff/recentduedateview.html', context)
+
+
+def recentactivities_add_task(request, pk, m_id):
+    matter = Matters.objects.get(id=m_id)
+    matter_title = matter.matter_title
+    foldertype = matter.folder.folder_type.id
+    codes = ActivityCodes.objects.filter(foldertype_id=foldertype)
+    duedate = AppDueDate.objects.get(id=pk)
+    users = User_Profile.objects.all()
+    lawyers = Lawyer_Data.objects.all()
+    userid = request.user.user_profile.userid
+    supporto = matter.handling_lawyer.access_code
+    if request.method == "POST":
+        form = TaskEntryForm(request.POST)
+        if form.is_valid():
+            print("pumasok valid")
+            #            form.save()
+            task_rec = form.save(commit=False)
+            task_rec.matter_id = m_id
+            task_rec.task_code_id = request.POST['task_code']
+            task_rec.save()
+            return redirect('superstaff-attach-document', pk, m_id)
+        else:
+            return redirect('superstaff-add_task', pk, m_id)
+    else:
+        form = TaskEntryForm()
+
+    context = {
+        'form': form,
+        'matter': matter,
+        'matter_title': matter_title,
+        'd_id': pk,
+        'codes': codes,
+        'duedate': duedate,
+        'users': users,
+        'lawyers': lawyers,
+        'userid': userid,
+        'supporto': supporto,
+    }
+    return render(request, 'supportstaff/recent_add_task.html', context)
+
+
+def recent_modify_task(request, pk, d_id):
+    task = task_detail.objects.get(id=pk)
+    m_id = task.matter.id
+    matter = Matters.objects.get(id=m_id)
+    docs = FilingDocs.objects.filter(Task_Detail__id=pk)
+    duedates = AppDueDate.objects.filter(matter__id=m_id)
+
+    if request.method == 'POST':
+        task_form = TaskEditForm(request.POST, instance=task)
+        if task_form.is_valid():
+            task_form.save()
+            return redirect('supportstaff-home')
+        else:
+            task_form = TaskEditForm(instance=task)
+    else:
+        task_form = TaskEditForm(instance=task)
+
+    context = {
+        'form': task_form,
+        'pk': pk,
+        'm_id': m_id,
+        'd_id': d_id,
+        'matter': matter,
+        'docs': docs,
+        'duedates': duedates,
+        'task': task,
+    }
+    return render(request, 'supportstaff/recent_modify_task.html', context)
+
+
+def newdocumentPDF(request, pk, m_id):
+    matter = Matters.objects.get(id=m_id)
+    task = task_detail.objects.get(id=pk)
+    docs = FilingDocs.objects.filter(Task_Detail__id=pk)
+    print("pk=", pk)
+    if request.method == "POST":
+        # Get the posted form
+
+        form = FilingDocsEntry(request.POST, request.FILES)
+        if form.is_valid():
+            docs_rec = form.save(commit=False)
+            docs_rec.Task_Detail_id = pk
+            docs_rec.save()
+            return redirect('recent_adddocument', pk, m_id)
+        else:
+            return redirect('recent_adddocument', pk, m_id)
+    else:
+        form = FilingDocsEntry()
+
+    context = {
+        'form': form,
+        'matter': matter,
+        'task': task,
+        'pk': pk,
+        'm_id': m_id,
+        't_id': pk,
+        'docs': docs,
+    }
+    return render(request, 'supportstaff/add_new_docs.html', context)
+
+
+def attach_document(request, pk, m_id):
+    duedate = AppDueDate.objects.get(id=pk)
+    matter = Matters.objects.get(id=m_id)
+    if request.method == "POST":
+        # Get the posted form
+        form = FilingDocsEntry(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            duedate.date_complied = request.POST["DocDate"]
+            duedate.save()
+            return redirect('attach-document', pk, m_id)
+        else:
+            return redirect('recent-add_task', pk, m_id)
+    else:
+        form = FilingDocsEntry()
+
+    context = {
+        'form': form,
+        'matter': matter,
+        'd_id': pk,
+        'duedate': duedate,
+    }
+    return render(request, 'supportstaff/attachdocument.html', context)

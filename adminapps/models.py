@@ -476,7 +476,7 @@ class ActivityCodes(models.Model):
         max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.Activity} - {self.ActivityCode} - {self.amount}'
+        return f'{self.Activity} - {self.ActivityCode}'
 
 
 class FilingCodes(models.Model):
@@ -618,7 +618,7 @@ class MailsIn_Matters(models.Model):
 
 class FilingDocs(models.Model):
     Task_Detail = models.ForeignKey(
-        task_detail, on_delete=models.CASCADE, null=True)
+        task_detail, on_delete=models.CASCADE, null=True, blank=True)
     Description = models.CharField(max_length=200, null=True, blank=True)
     DocDate = models.DateField(null=True, blank=True)
     DocsPDF = models.FileField(
@@ -654,6 +654,27 @@ class inboxmessage(models.Model):
     updatedby = models.CharField(max_length=60, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'Inbox Messages'
+
+    def __str__(self):
+        return f'{self.messagedate} - {self.subject}'
+
+
+class messageattachment(models.Model):
+    message = models.ForeignKey(inboxmessage, on_delete=models.PROTECT)
+    description = models.CharField(max_length=150, blank=True, null=True)
+    DocsPDF = models.FileField(
+        blank=True, null=True, upload_to="Documents/%Y/%m/%D/")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'Inbox Messages Attachments'
+
+    def __str__(self):
+        return f'{self.message.messagedate} - {self.self.message.subject}'
 
 
 class Alert_Messages(models.Model):

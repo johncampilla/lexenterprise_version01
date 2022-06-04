@@ -28,7 +28,10 @@ def main(request):
     ###### Determines the user portal to be displayed ########
     access_code = request.user.user_profile.userid
     user_id = User.id
-    alertmessages = Alert_Messages.objects.filter(messageto=access_code)
+    user_message_id = request.user.user_profile.id
+#    alertmessages = Alert_Messages.objects.filter(messageto=access_code)
+    alertmessages = inboxmessage.objects.filter(messageto_id=user_message_id)
+    print(alertmessages)
     countalert = alertmessages.count()
     srank = request.user.user_profile.rank
     username = request.user.username
@@ -40,7 +43,7 @@ def main(request):
     }
 
     if User.is_staff and User.is_superuser:
-        if srank == 'MANAGING PARTNER':
+        if srank == 'MANAGING PARTNER' or srank == 'PARTNER':
             return redirect('management-home')
         elif srank == 'SYSTEM ADMIN':
             return render(request, 'adminapps/index.html', context)
@@ -280,19 +283,59 @@ def cliententry(request):
 @login_required
 def folderentry(request, pk):
     client = Client_Data.objects.get(id=pk)
+    foldertype = FolderType.objects.all()
+    supervisinglawyers = Lawyer_Data.objects.all()
+
     if request.method == 'POST':
-        form = EntryFolderForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('admin-client-update', pk)
-        else:
-            return redirect('admin-new-folder')
-    else:
-        form = EntryFolderForm()
+        folder_description = request.POST.get('folder_description')
+        folder_type = request.POST.get('folder_type')
+        Supervisinglawyer = request.POST.get('Supervisinglawyer')
+        print("pumasok dito", Supervisinglawyer)
+
+        remarks = request.POST.get('remarks')
+        folder_rec = CaseFolder(
+            client_id=client.id,
+            folder_description=folder_description,
+            folder_type_id=folder_type,
+            Supervisinglawyer_id=Supervisinglawyer,
+            remarks=remarks)
+        folder_rec.save()
+        return redirect('admin-client-update', pk)
+        redirect()
+
+        # tran_date = request.POST.get('tran_date')
+        # tran_type = request.POST.get('tran_type')
+        # doc_type = request.POST.get('doc_type')
+        # preparedby = request.POST.get('preparedby')
+        # task_code = request.POST.get('task_code')
+        # activity = request.POST.get('task_activity')
+        # lawyer = request.POST.get('lawyer')
+        # task_desc = request.POST.get('task_activity')
+        # spentinmin = request.POST.get('spentinmin')
+        # spentinhrs = request.POST.get('spentinhrs')
+        # if spentinhrs is None:
+        #     spentinhrs = NULL
+        # if spentinmin is None:
+        #     spentinmin = NULL
+
+        # task_rec = task_detail(
+        #     matter_id=m_id,
+        #     tran_date=tran_date,
+        #     tran_type=tran_type,
+        #     doc_type=doc_type,
+        #     preparedby_id=preparedby,
+        #     lawyer_id=lawyer,
+        #     task_code_id=task_code,
+        #     task=task_desc,
+        #     spentinhrs=spentinhrs,
+        #     spentinmin=spentinmin
+        # )
+        # task_rec.save()
 
     context = {
-        'form': form,
         'client': client,
+        'foldertype': foldertype,
+        'supervisinglawyers': supervisinglawyers,
     }
     return render(request, 'adminapps/newentry_folder.html', context)
 
@@ -493,6 +536,7 @@ def client_information(request, pk):
     return render(request, 'adminapps/clientinfo.html', context)
 
 
+@login_required
 def client_modify(request, pk):
     client = Client_Data.objects.get(id=pk)
     listofmatters = Matters.objects.filter(folder__client__id=pk)
@@ -520,6 +564,7 @@ def client_modify(request, pk):
     return render(request, 'adminapps/admin_clientupdate.html', context)
 
 
+@login_required
 def client_update(request, pk):
     client = Client_Data.objects.get(id=pk)
     sid = pk
@@ -558,6 +603,7 @@ def client_update(request, pk):
 #     return render(request, 'adminapps/newentrymatter_details.html', context)
 
 
+@login_required
 def matter_update(request, pk):
     matter = Matters.objects.get(id=pk)
     tasks = task_detail.objects.filter(matter__id=pk).order_by('-tran_date')
@@ -598,6 +644,7 @@ def matter_update(request, pk):
         return render(request, 'adminapps/matterupdate.html', context)
 
 
+@login_required
 def matter_update_client(request, pk):
     matter = Matters.objects.get(id=pk)
     task = task_detail.objects.filter(id=pk)
@@ -649,25 +696,51 @@ def matter_update_folder(request, pk):
     return render(request, 'adminapps/matter_update_infolder.html', context)
 
 
+@login_required
 def matter_add_details(request, pk, fd):
     client = Client_Data.objects.get(id=pk)
     folder = CaseFolder.objects.get(id=fd)
+    apperance = Appearance.objects.all()
+    courts = Courts.objects.all()
+    status = Status.objects.all()
+    casetype = CaseType.objects.all()
+    apptype = AppType.objects.all()
+    nature = NatureOfCase.objects.all()
+    lawyer = Lawyer_Data.objects.all()
+
     if request.method == "POST":
-        form = EntryMatterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('admin-client-update', pk)
-        else:
-            return redirect('admin-new-matter')
-    else:
-        form = EntryMatterForm()
+        matters = Matters()
+        matters.folder_id = fd
+        matters.referenceno = request.POST.get('referenceno')
+        matters.clientrefno = request.POST.get('clientrefno')
+        matters.matterno = request.POST.get('matterno')
+        matters.filing_date = request.POST.get('filing_date')
+        matters.filed_at_id = request.POST.get('filed_at')
+        matters.case_type_id = request.POST.get('case_type')
+        matters.apptype_id = request.POST.get('apptype')
+        matters.nature_id = request.POST.get('nature')
+        matters.matter_title = request.POST.get('matter_title')
+        matters.status_id = request.POST.get('status')
+        matters.appearance_id = request.POST.get('appearance')
+        matters.handling_lawyer_id = request.POST.get('handling_lawyer')
+        matters.lawyers_involve = request.POST.get('lawyers_involve')
+        matters.opposing_counsel = request.POST.get('opposing_counsel')
+        matters.remarks = request.POST.get('remarks')
+        matters.save()
+        messages.success(request, "Matter added successfully")
+        return redirect('admin-client-update', pk)
 
     context = {
-        'form': form,
         'client': client,
-        'folder': folder
+        'folder': folder,
+        'appearance': apperance,
+        'courts': courts,
+        'status': status,
+        'casetype': casetype,
+        'apptype': apptype,
+        'nature': nature,
+        'lawyer': lawyer,
     }
-
     return render(request, 'adminapps/newentrymatter_details.html', context)
 
 

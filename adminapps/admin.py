@@ -83,6 +83,7 @@ admin.site.register(IPOExaminer)
 admin.site.register(DocumentCode)
 admin.site.register(Currency)
 admin.site.register(inboxmessage)
+admin.site.register(messageattachment)
 
 
 # Register your models here.

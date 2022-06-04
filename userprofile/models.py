@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 
 RANK = (
     ('MANAGING PARTNER', 'MANAGING PARTNER'),
-    ('SENIOR PARTNER', 'SENIOR PARTNER'),
-    ('JUNIOR PARTNER', 'JUNIOR PARTNER'),
+    ('PARTNER', 'PARTNER'),
     ('ASSOCIATES', 'ASSOCIATES'),
     ('SECRETARY', 'SECRETARY'),
     ('PARALEGAL', 'PARALEGAL'),
@@ -35,6 +34,6 @@ class User_Profile(models.Model):
         verbose_name_plural = 'User Profile'
 
     def __str__(self):
-        return f'{self.userid.username} - Profile'
+        return f'{self.userid.username}'
 
 # Create your models here.

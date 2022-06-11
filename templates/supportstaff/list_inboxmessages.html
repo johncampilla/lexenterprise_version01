@@ -1,0 +1,49 @@
+{% extends 'base/supportstaffmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <table class="table-hover table-bordered table-sm small table mt-5">
+        <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+        <thead class="table-primary text-center">
+            <tr>
+                <th style="width:15%;">Sender</th>
+                <th style="width:10%;">Message Date</th>
+                <th style="width:65%;">Message</th>
+                <th colspan="2" style="width:10%;">Action</th>
+            </tr>
+        </thead>
+        {% for message in alertmessages %}
+        <tr>
+            <td style="font-weight: bold;">{{ message.messagefrom }}</td>
+            <td style="font-weight: bold;">{{ message.messagedate | date:'m/d/Y'}}</td>
+            <td style="font-weight: bold;">{{ message.messagebox }}</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{% url 'superstaff-edit_alertmessage' message.id %}"
+                    title="Open Message">
+                    <i class="fas fa-pen"></i>
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-info btn-sm btn-icon-split"
+                    href="{% url 'superstaff-remove_alertmessage' message.id %}" title="Delete Client">
+                    <span class="icon text-white-20">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+</div>
+
+{% endblock content%}

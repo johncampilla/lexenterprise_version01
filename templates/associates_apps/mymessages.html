@@ -1,4 +1,4 @@
-{% extends 'base/supportstaffmenu.html' %}
+{% extends 'base/associatemenu.html' %}
 {% block title %} Clients {% endblock %}
 {% load crispy_forms_tags %}
 
@@ -9,7 +9,7 @@ Dashboard
 <div class="container">
     <!-- Create Button & get username -->
     <div class="d-flex justify-content-between mt-1">
-        <a href="{% url 'supportstaff-new_message' %}" class="btn btn-outline-primary btn-sm"><i
+        <a href="{% url 'associate-new_message' %}" class="btn btn-outline-primary btn-sm"><i
                 class="fas fa-plus"></i>&nbsp;&nbsp; New Message</a>
         <span>
             Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
@@ -21,7 +21,7 @@ Dashboard
         <div class="input-group input-group-sm mb-1 mt-2">
             <input name="q" type="text" class="form-control" placeholder="Search for...">
             <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
-            <a href="{% url 'supportstaff-my_messages' %}" class="btn btn-dark" style="margin: left 2px;"><i
+            <a href="{% url 'associate-my_messages' %}" class="btn btn-dark" style="margin: left 2px;"><i
                     class="fas fa-sync-alt"></i></a>
         </div>
     </form>
@@ -36,7 +36,7 @@ Dashboard
                 <th style="width:20%;">Subject</th>
                 <th style="width:50%;">Message</th>
                 <th style="width:5%;">Status</th>
-                <th style="width:5%;">Action</th>
+                <th colspan="2" style="width:5%;">Action</th>
             </tr>
         </thead>
         {% for items in receivedmessages %}
@@ -47,9 +47,15 @@ Dashboard
             <td style="font-weight: bold;">{{ items.messagebox }}</td>
             <td style="font-weight: bold;">{{ items.status }}</td>
             <td>
-                <a class="btn btn-primary btn-sm" href="{% url 'supportstaff-open_inboxmessage' items.id %}"
-                    title="Open Message">
+                <a class="btn btn-primary btn-sm" href="#" title="Open Message">
                     <i class="fas fa-pen"></i>
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-outline-primary btn-sm" href="#" title="Delete Client">
+                    <span class="icon text-white-20">
+                        <i class="fas fa-trash"></i>
+                    </span>
                 </a>
             </td>
         </tr>
@@ -65,7 +71,7 @@ Dashboard
                 <th style="width:20%;">Subject</th>
                 <th style="width:50%;">Message</th>
                 <th style="width:5%;">Status</th>
-                <th style="width:5%;">Action</th>
+                <th colspan="2" style="width:5%;">Action</th>
             </tr>
         </thead>
         {% for items in sentmessages %}
@@ -76,9 +82,15 @@ Dashboard
             <td style="font-weight: bold;">{{ items.messagebox }}</td>
             <td style="font-weight: bold;">{{ items.status }}</td>
             <td>
-                <a class="btn btn-primary btn-sm" href="{% url 'supportstaff-open_sentitems' items.id %}"
-                    title="Open Message">
+                <a class="btn btn-primary btn-sm" href="#" title="Open Message">
                     <i class="fas fa-pen"></i>
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-outline-primary btn-sm" href="#" title="Delete Client">
+                    <span class="icon text-white-20">
+                        <i class="fas fa-trash"></i>
+                    </span>
                 </a>
             </td>
         </tr>

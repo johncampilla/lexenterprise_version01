@@ -44,10 +44,16 @@ urlpatterns = [
          name='supportstaff-matterlist'),
     path('support/matters/review/<int:pk>/', supportstaff_view.matter_review,
          name='supportstaff-matter_review'),
+
     path('support/message/view/<int:pk>/', supportstaff_view.open_message,
-         name='supportstaff-open_message'),
+         name='supportstaff-open_inboxmessage'),
+
+    path('support/message/view_sentitems/<int:pk>/', supportstaff_view.open_sentitems,
+         name='supportstaff-open_sentitems'),
+
     path('support/message/reply/<int:pk>/', supportstaff_view.reply_message,
-         name='supportstaff-reply_message'),
+         name='supportstaff-reply_inboxmessage'),
+
     path('support/message/mymessages/', supportstaff_view.my_messages,
          name='supportstaff-my_messages'),
     path('support/message/inward/', supportstaff_view.mails_inward,
@@ -72,6 +78,18 @@ urlpatterns = [
          supportstaff_view.newdocumentPDF, name='superstaff-recent_adddocument'),
     path('support/attach/<int:pk>/<int:m_id>/',
          supportstaff_view.attach_document, name='superstaff-attach-document'),
+    path('support/inboxmessages/list/',
+         supportstaff_view.list_messages, name='superstaff-list_messages'),
+    path('support/alertmessages/edit/<int:pk>/',
+         supportstaff_view.edit_alertmessage, name='superstaff-edit_alertmessage'),
+    path('support/alertmessages/remove/<int:pk>/',
+         supportstaff_view.remove_alertmessage, name='superstaff-remove_alertmessage'),
+    path('support/alertmessages/new/',
+         supportstaff_view.new_message, name='supportstaff-new_message'),
+    path('support/alertmessages/newattachment/<int:pk>/',
+         supportstaff_view.new_attachment, name='supportstaff-new_attachment'),
+    path('support/alertmessages/viewattachment/<int:pk>/',
+         supportstaff_view.view_attachment, name='supportstaff-open_document'),
 
 
 
@@ -238,40 +256,32 @@ urlpatterns = [
     path('associates/', associates.main, name='associate-home'),
     path('associates/alertmessages/', associates.alert_messages,
          name='associate-alert_messages'),
-    path('associates/alertmessages/new/', associates.new_alertmessage,
-         name='associate-new_alertmessage'),
     path('associates/alertmessages/edit/<int:pk>/',
          associates.edit_alertmessage, name='associate-edit_alertmessage'),
-
+    path('associates/alertmessages/new/',
+         associates.new_message, name='associate-new_message'),
     path('associates/alertmessages/remove/<int:pk>/',
          associates.remove_alertmessage, name='associate-remove_alertmessage'),
-
     path('associates/alertmessages/status/<int:pk>/',
          associates.edit_statusmessage, name='associate-edit_statusmessage'),
     path('associates/inboxmessages/list/',
          associates.list_messages, name='associate-list_messages'),
-
-
+    path('associates/message/mymessages/', associates.my_messages,
+         name='associate-my_messages'),
     path('associates/ar/new/<int:m_id>/',
          associates.arentry, name='associate-ar-new'),
     path('associates/ar/edit/<int:pk>/<int:m_id>/',
          associates.modifyAR, name='associate-ar-edit'),
-
-
     path('associates/alertmessages/view/', associates.view_sentmessages,
          name='associate-view_sentmessages'),
-
-
     path('associates/mymatters/', associates.matterlist,
          name='associate-matter-list'),
     path('associates/myclients/', associates.myclientlist,
          name='associate-myclient-list'),
-
     path('associates/mybills/', associates.mybillinglist,
          name='associate-mybilling-list'),
     path('associates/mybillsDetails/<int:c_id>/<int:m_id>/<int:ar_id>/',
          associates.mybillingdetail, name='associate-mybilling-details'),
-
     path('associates/myfolders/', associates.myfolderlist,
          name='associate-myfolder-list'),
     path('associates/myunbilled/', associates.myunbilledactivity,

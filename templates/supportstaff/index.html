@@ -23,11 +23,10 @@ Dashboard
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
                 <li>
-                    <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Misc Expenses</a>
-                    <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Activities</a>
-                    <a href="{% url 'supportstaff-my_messages' %}" class="btn btn-outline-primary btn-sm mt-3">My
-                        Messages</a>
-                    <a href="#" class="btn btn-outline-primary btn-sm mt-3">My Lawyers</a>
+                    <a href="#" class="btn btn-outline-primary btn-sm mt-3">Add Activity</a>
+                    <a href="#" class="btn btn-outline-primary btn-sm mt-3">Add Expenses</a>
+                    <a href="{% url 'supportstaff-my_messages' %}"
+                        class="btn btn-outline-primary btn-sm mt-3">Messages</a>
 
                 </li>
 
@@ -69,15 +68,15 @@ Dashboard
                             Alerts Center
                         </h6>
                         {% for alert in alertmessages %}
-                        <a class="dropdown-item d-flex align-items-center" href="#">
+                        <a class="dropdown-item d-flex align-items-center" href="{% url 'superstaff-list_messages' %}">
                             <div class="mr-3">
                                 <div class="icon-circle bg-primary">
                                     <i class="fas fa-file-alt text-white"></i>
                                 </div>
                             </div>
                             <div>
-                                <div class="small text-gray-500">{{ alert.date_alert }}</div>
-                                <span class="font-weight-bold">{{ alert.message_alert}}</span>
+                                <div class="small text-gray-500">{{ alert.messagedate }} - {{ alert.messagefrom }}</div>
+                                <span class="font-weight-bold">{{ alert.subject}}</span>
                             </div>
                         </a>
                         {% endfor %}
@@ -129,6 +128,7 @@ Dashboard
         <div class="container">
             <!-- To put table content -->
             <div class="card">
+                {% if messages %}
                 <div class="row my-1">
                     <div class="col">
                         <h6 class="card-title bg-primary text-white text-center">Attention: Unread Messages</h6>
@@ -162,6 +162,8 @@ Dashboard
                         </table>
                     </div>
                 </div>
+                {% endif %}
+
                 <div class="row my-1">
                     <div class="col">
                         <h6 class="card-title bg-primary text-white text-center">Attention: Upcoming Due Dates</h6>

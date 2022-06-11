@@ -1,5 +1,6 @@
 from asyncio.windows_events import NULL
 from contextlib import nullcontext
+from queue import Empty
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
@@ -8,7 +9,7 @@ from adminapps.models import *
 from datetime import date, datetime, timedelta
 from django.core.paginator import Paginator
 from dateutil.relativedelta import relativedelta
-from adminapps.forms import InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry
+from adminapps.forms import InboxAttachmentEntryForm, InboxAttachmentViewForm, InboxMessageNewForm, InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry, ReviewMatterForm
 from django.db.models import Q, Sum, Count
 
 # Create your views here.
@@ -31,7 +32,9 @@ def main(request):
     print(duedate1, duedate2)
     access_code = request.user.user_profile.userid
     user_id = User.id
-    alertmessages = Alert_Messages.objects.filter(messageto=access_code)
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
     countalert = alertmessages.count()
     srank = request.user.user_profile.rank
     username = request.user.username
@@ -74,7 +77,11 @@ def main(request):
         multiple_q, duedate__gte=duedate1, duedate__lte=duedate2, date_complied__isnull=True).order_by('-duedate')
 
     messages = inboxmessage.objects.filter(
-        messageto__userid=access_code, status='OPEN')
+        messageto__userid=access_code, status='UNREAD')
+    if not messages:
+        sw = 1
+    else:
+        sw = 0
 
     recenttask = task_detail.objects.filter(
         multiple_q, tran_date__year=today.year, tran_date__month=today.month).order_by('-tran_date')
@@ -93,6 +100,7 @@ def main(request):
         'messages': messages,
         'recenttask': recenttask,
         'recentdocs': recentdocs,
+        'sw': sw,
     }
 
     return render(request, 'supportstaff/index.html', context)
@@ -214,6 +222,7 @@ def matter_review(request, pk):
                     computeduedate()
 
     matter = Matters.objects.get(id=pk)
+    nature = NatureOfCase.objects.filter(casetype_id=matter.case_type_id)
     c_id = matter.folder.client.id
     client = Client_Data.objects.get(id=c_id)
     appduedates = AppDueDate.objects.filter(matter__id=pk).order_by('-duedate')
@@ -222,7 +231,7 @@ def matter_review(request, pk):
     expenses = TempExpenses.objects.filter(
         Q(matter__id=pk), Q(status='O') | Q(status='P'))
     if request.method == 'POST':
-        form = EntryMatterForm(request.POST, instance=matter)
+        form = ReviewMatterForm(request.POST, instance=matter)
         if form.is_valid():
             form.save()
 #            apptype = request.POST["apptype"]
@@ -231,9 +240,9 @@ def matter_review(request, pk):
             validateduedates()
             return redirect('associate-matter-review', pk)
         else:
-            form = EntryMatterForm(instance=matter)
+            form = ReviewMatterForm(instance=matter)
     else:
-        form = EntryMatterForm(instance=matter)
+        form = ReviewMatterForm(instance=matter)
 
     activities = task_detail.objects.filter(
         matter__id=pk).order_by('-tran_date')
@@ -289,25 +298,165 @@ def matter_review(request, pk):
         'tempfilings': tempfilings,
         'apptype': apptype,
         'duelist': appduedates,
+        'nature': nature,
 
     }
 
     return render(request, 'supportstaff/openmatter_details.html', context)
 
 
-def open_message(request, pk):
+def new_attachment(request, pk):
     message = inboxmessage.objects.get(id=pk)
     if request.method == 'POST':
+        form = InboxAttachmentEntryForm(request.POST, request.FILES)
+        if form.is_valid():
+            attach_rec = form.save(commit=False)
+            attach_rec.message_id = pk
+            attach_rec.save()
+            return redirect('supportstaff-new_attachment', pk)
+        else:
+            return redirect('supportstaff-new_attachment', pk)
+    else:
+        form = form = InboxAttachmentEntryForm()
+
+    context = {
+        'form': form,
+        'message': message,
+    }
+
+    return render(request, 'supportstaff/new_attachment.html', context)
+
+
+def new_message(request):
+
+    user_message_id = request.user.user_profile.id
+    username = request.user.username
+    a = date.today()
+    messagedate = a.strftime('%m/%d/%Y')
+    dateconvert = datetime.strptime(
+        messagedate, "%m/%d/%Y").strftime('%Y-%m-%d')
+
+    if request.method == "POST":
+        form = InboxMessageNewForm(request.POST)
+        if form.is_valid():
+            inbox_rec = form.save(commit=False)
+            inbox_rec.messagefrom = username
+            inbox_rec.messagedate = dateconvert
+            inbox_rec.status = "UNREAD"
+            inbox_rec.save()
+            id = inbox_rec.id
+            return redirect('supportstaff-new_attachment', id)
+        else:
+            return redirect('supportstaff-new_message')
+    else:
+        form = InboxMessageNewForm()
+
+    context = {
+        'form': form,
+        'messagefrom_id': user_message_id,
+        'messagefrom': username,
+        'messagedate': messagedate,
+    }
+
+    return render(request, 'supportstaff/new_message.html', context)
+
+
+def open_message(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    attachments = messageattachment.objects.filter(message_id=pk)
+    message.status = "READ"
+    message.save()
+    if request.method == 'POST':
         form = InboxMessageForm(request.POST, instance=message)
+        return redirect('supportstaff-my_messages')
     else:
         form = InboxMessageForm(instance=message)
 
     context = {
         'form': form,
         'replyid': pk,
+        'attachments': attachments,
     }
 
     return render(request, 'supportstaff/readmessage.html', context)
+
+
+def open_sentitems(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    attachments = messageattachment.objects.filter(message_id=pk)
+    if request.method == 'POST':
+        form = InboxMessageForm(request.POST, instance=message)
+        return redirect('supportstaff-my_messages')
+    else:
+        form = InboxMessageForm(instance=message)
+
+    context = {
+        'form': form,
+        'replyid': pk,
+        'attachments': attachments,
+    }
+
+    return render(request, 'supportstaff/readsentitems.html', context)
+
+
+def view_attachment(request, pk):
+    viewattachment = messageattachment.objects.get(id=pk)
+    message = inboxmessage.objects.get(id=viewattachment.message_id)
+    if request.method == 'POST':
+        form = InboxAttachmentViewForm(
+            request.POST, request.FILES, instance=viewattachment)
+        if form.is_valid():
+            attachment_rec = form.save(commit=False)
+            attachment_rec.message_id = message.id
+            attachment_rec.save()
+        else:
+            form = InboxAttachmentViewForm(instance=viewattachment)
+    else:
+        form = InboxAttachmentViewForm(instance=viewattachment)
+
+    context = {
+        'form': form,
+        'message': message,
+    }
+
+    return render(request, 'supportstaff/viewattachment.html', context)
+
+
+def read_sentitems(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    messageto = message.messagefrom
+    userprofile = User_Profile.objects.get(access_code=messageto)
+    messageto_id = userprofile.id
+    messagefrom = message.messageto
+    userid = request.user.user_profile.userid
+    a = date.today()
+    messagedate = a.strftime('%m/%d/%Y')
+    dateconvert = datetime.strptime(
+        messagedate, "%m/%d/%Y").strftime('%Y-%m-%d')
+    matter = Matters.objects.all()
+    if request.method == 'POST':
+        form = InboxMessageEntryForm(request.POST)
+        if form.is_valid():
+            inbox_rec = form.save(commit=False)
+            inbox_rec.messageto_id = messageto_id
+            inbox_rec.messagefrom = messagefrom
+            inbox_rec.messagedate = dateconvert
+            inbox_rec.save()
+            return redirect('supportstaff-home')
+        else:
+            form = InboxMessageEntryForm()
+    else:
+        form = InboxMessageEntryForm()
+
+    context = {
+        'form': form,
+        'messagefrom': messagefrom,
+        'messageto': messageto,
+        'messagedate': messagedate,
+        'matter': matter,
+    }
+
+    return render(request, 'supportstaff/newmessage.html', context)
 
 
 @login_required
@@ -320,17 +469,17 @@ def reply_message(request, pk):
     userid = request.user.user_profile.userid
     a = date.today()
     messagedate = a.strftime('%m/%d/%Y')
-    dateconvert = datetime.strptime(messagedate, "%m/%d/%Y").strftime('%Y-%m-%d')
+    dateconvert = datetime.strptime(
+        messagedate, "%m/%d/%Y").strftime('%Y-%m-%d')
     matter = Matters.objects.all()
     if request.method == 'POST':
         form = InboxMessageEntryForm(request.POST)
         if form.is_valid():
-            print("pumasok", messageto_id)
             inbox_rec = form.save(commit=False)
             inbox_rec.messageto_id = messageto_id
             inbox_rec.messagefrom = messagefrom
             inbox_rec.messagedate = dateconvert
-            inbox_rec.status = "OPEN"
+            inbox_rec.status = "READ"
             inbox_rec.save()
             return redirect('supportstaff-home')
         else:
@@ -351,6 +500,7 @@ def reply_message(request, pk):
 
 @login_required
 def my_messages(request):
+
     myuserid = request.user.user_profile.userid
     access_code = request.user.user_profile.access_code
 
@@ -362,18 +512,16 @@ def my_messages(request):
         receivedmessages = inboxmessage.objects.filter(
             multiple_q, messageto__userid=myuserid).order_by('-messagedate')
         sentmessages = inboxmessage.objects.filter(
-            multiple_q, messagefrom=access_code).order_by('-messagedate')
+            multiple_q, messagefrom=myuserid).order_by('-messagedate')
 
     else:
         receivedmessages = inboxmessage.objects.filter(
             messageto__userid=myuserid).order_by('-messagedate')
         sentmessages = inboxmessage.objects.filter(
-            messagefrom=access_code).order_by('-messagedate')
+            messagefrom=myuserid).order_by('-messagedate')
 
     # receivedmessages = inboxmessage.objects.filter(messageto__userid=myuserid)
     # sentmessages = inboxmessage.objects.filter(messagefrom=access_code)
-    print(receivedmessages)
-    print(sentmessages)
 
     context = {
         'myuserid': myuserid,
@@ -921,3 +1069,48 @@ def attach_document(request, pk, m_id):
         'duedate': duedate,
     }
     return render(request, 'supportstaff/attachdocument.html', context)
+
+
+def list_messages(request):
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="READ")
+
+    context = {
+        'alertmessages': alertmessages,
+    }
+    return render(request, 'supportstaff/list_inboxmessages.html', context)
+
+
+def edit_alertmessage(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    message.status = "READ"
+    message.save()
+    messagefrom = message.messagefrom
+    messageto = message.messageto
+    a = message.messagedate
+    messagedate = a.strftime('%m/%d/%Y')
+    subject = message.subject
+    messagebox = message.messagebox
+    see_matter = message.see_matter
+
+    attachments = messageattachment.objects.filter(message_id=pk)
+
+    context = {
+        'messagefrom': messagefrom,
+        'messageto': messageto,
+        'messagedate': messagedate,
+        'subject': subject,
+        'messagebox': messagebox,
+        'see_matter': see_matter,
+        'attachments': attachments,
+
+
+    }
+    return render(request, 'supportstaff/edit_msg.html', context)
+
+
+def remove_alertmessage(request, pk):
+    selected = inboxmessage.objects.get(id=pk)
+    selected.delete()
+    return redirect('superstaff-list_messages')

@@ -4,6 +4,7 @@ from os import makedirs, times_result
 from pydoc import describe
 from typing import Text
 from unittest.mock import DEFAULT
+from urllib.parse import MAX_CACHE_SIZE
 from django.db import models
 from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.enums import Choices
@@ -41,6 +42,11 @@ class Currency(models.Model):
 
 class Courts(models.Model):
     court = models.CharField(max_length=60)
+    address = models.CharField(max_length=200, blank=True, null=True)
+    contact_person = models.CharField(max_length=150, blank=True, null=True)
+    contact_number = models.CharField(max_length=100, blank=True, null=True)
+    presiding_judge = models.CharField(max_length=150, blank=True, null=True)
+    remarks = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Courts"
@@ -197,13 +203,15 @@ class CaseType(models.Model):
 
 
 class NatureOfCase(models.Model):
+    casetype = models.ForeignKey(
+        CaseType, on_delete=models.PROTECT, null=True, blank=True)
     nature = models.CharField(max_length=100)
 
     class Meta:
         verbose_name_plural = 'Natures Of Cases'
 
     def __str__(self):
-        return f'{self.nature}'
+        return f'{self.nature} - {self.casetype}'
 
 
 class AppType(models.Model):
@@ -640,7 +648,7 @@ COMPUTEBASEDON = {
 class inboxmessage(models.Model):
     STATUS = {
         ('READ', 'READ'),
-        ('OPEN', 'OPEN'),
+        ('UNREAD', 'UNREAD'),
     }
     messageto = models.ForeignKey(User_Profile, on_delete=models.CASCADE)
     messagedate = models.DateField(null=True, blank=True)
@@ -648,7 +656,7 @@ class inboxmessage(models.Model):
     subject = models.CharField(max_length=100, null=True, blank=True)
     messagebox = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=15, null=True,
-                              blank=True, default='OPEN', choices=STATUS)
+                              blank=True, default='UNREAD', choices=STATUS)
     see_matter = models.ForeignKey(
         Matters, on_delete=models.PROTECT, null=True, blank=True)
     updatedby = models.CharField(max_length=60, blank=True, null=True)
@@ -672,9 +680,6 @@ class messageattachment(models.Model):
 
     class Meta:
         verbose_name_plural = 'Inbox Messages Attachments'
-
-    def __str__(self):
-        return f'{self.message.messagedate} - {self.self.message.subject}'
 
 
 class Alert_Messages(models.Model):

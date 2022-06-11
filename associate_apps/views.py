@@ -22,9 +22,10 @@ from userprofile.models import User_Profile
 from django.core.paginator import Paginator
 from datetime import date, datetime, timedelta
 from django.db.models import Q, Sum, Count
-from adminapps.forms import MailsInwardForm, EntryBillForm, EntryExpensesForm, Non_IPDetailForm, ClassOfGoodsEntry, IPDetailForm, AREntryForm, EntryMatterForm, DocumentEditForm, TaskEntryForm1, TaskEntryForm, FilingDocsEntry, AlertMessageForm, AlertUpdateStatusForm, DueDateEntryForm
+from adminapps.forms import InboxMessageNewForm, MailsInwardForm, EntryBillForm, EntryExpensesForm, Non_IPDetailForm, ClassOfGoodsEntry, IPDetailForm, AREntryForm, EntryMatterForm, DocumentEditForm, TaskEntryForm1, TaskEntryForm, FilingDocsEntry, AlertMessageForm, AlertUpdateStatusForm, DueDateEntryForm
 from django.core.exceptions import ObjectDoesNotExist
 from dateutil.relativedelta import relativedelta
+from django.contrib import messages
 import io
 
 
@@ -50,7 +51,8 @@ def main(request):
 #    alertmessages = Alert_Messages.objects.filter(messageto=access_code)
     user_message_id = request.user.user_profile.id
     alertmessages = inboxmessage.objects.filter(
-        messageto_id=user_message_id, status="READ")
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
 
     matterlist = Matters.objects.filter(created_at__year=today.year, created_at__month=today.month,
                                         handling_lawyer__lawyerID__userid=access_code).order_by('-filing_date')
@@ -58,7 +60,6 @@ def main(request):
                                          matter__handling_lawyer__lawyerID__userid=access_code, date_complied__isnull=True).order_by('duedate')
     recentdocs = FilingDocs.objects.filter(
         Task_Detail__lawyer__lawyerID__userid=access_code).order_by('-DocDate')
-    countalert = alertmessages.count()
     multiple_q = Q(matter__handling_lawyer__lawyerID__userid=access_code)
     recent_billables = TempBills.objects.filter(
         multiple_q, tran_date__year=today.year, tran_date__month=today.month).order_by('-tran_date')
@@ -169,7 +170,7 @@ def edit_statusmessage(request, pk):
 def list_messages(request):
     user_message_id = request.user.user_profile.id
     alertmessages = inboxmessage.objects.filter(
-        messageto_id=user_message_id, status="READ")
+        messageto_id=user_message_id, status="UNREAD")
 
     context = {
         'alertmessages': alertmessages,
@@ -179,6 +180,8 @@ def list_messages(request):
 
 def edit_alertmessage(request, pk):
     message = inboxmessage.objects.get(id=pk)
+    message.status = "READ"
+    message.save()
     messagefrom = message.messagefrom
     messageto = message.messageto
     a = message.messagedate
@@ -187,10 +190,7 @@ def edit_alertmessage(request, pk):
     messagebox = message.messagebox
     see_matter = message.see_matter
 
-    if request.method == 'POST':
-        message.status = "OPEN"
-        message.save()
-        return redirect('associate-view_sentmessages')
+    attachments = messageattachment.objects.filter(message_id=pk)
 
     context = {
         'messagefrom': messagefrom,
@@ -199,9 +199,44 @@ def edit_alertmessage(request, pk):
         'subject': subject,
         'messagebox': messagebox,
         'see_matter': see_matter,
+        'attachments': attachments,
+
 
     }
     return render(request, 'associates_apps/edit_msg.html', context)
+
+
+def my_messages(request):
+    myuserid = request.user.user_profile.userid
+    access_code = request.user.user_profile.access_code
+
+    if 'q' in request.GET:
+        q = request.GET['q']
+        #clients = Client_Data.objects.filter(client_name__icontains=q)
+        multiple_q = Q(Q(messagefrom__icontains=q) | Q(subject__icontains=q) | Q(
+            messagebox__icontains=q) | Q(status__icontains=q) | Q(see_matter__matter_title__icontains=q))
+        receivedmessages = inboxmessage.objects.filter(
+            multiple_q, messageto__userid=myuserid).order_by('-messagedate')
+        sentmessages = inboxmessage.objects.filter(
+            multiple_q, messagefrom=myuserid).order_by('-messagedate')
+
+    else:
+        receivedmessages = inboxmessage.objects.filter(
+            messageto__userid=myuserid).order_by('-messagedate')
+        sentmessages = inboxmessage.objects.filter(
+            messagefrom=myuserid).order_by('-messagedate')
+
+    # receivedmessages = inboxmessage.objects.filter(messageto__userid=myuserid)
+    # sentmessages = inboxmessage.objects.filter(messagefrom=access_code)
+
+    context = {
+        'myuserid': myuserid,
+        'access_code': access_code,
+        'receivedmessages': receivedmessages,
+        'sentmessages': sentmessages,
+    }
+
+    return render(request, 'associates_apps/mymessages.html', context)
 
 
 def remove_alertmessage(request, pk):
@@ -1796,3 +1831,37 @@ def matterfulldetail(request, pk):
         'matter': matter,
     }
     return render(request, 'associates_apps/casefulldetails.html', context)
+
+
+def new_message(request):
+
+    user_message_id = request.user.user_profile.id
+    username = request.user.username
+    a = date.today()
+    messagedate = a.strftime('%m/%d/%Y')
+    dateconvert = datetime.strptime(
+        messagedate, "%m/%d/%Y").strftime('%Y-%m-%d')
+
+    if request.method == "POST":
+        form = InboxMessageNewForm(request.POST)
+        if form.is_valid():
+            inbox_rec = form.save(commit=False)
+            inbox_rec.messagefrom = username
+            inbox_rec.messagedate = dateconvert
+            inbox_rec.status = "UNREAD"
+            inbox_rec.save()
+            messages.info(request, 'Your password has been changed successfully!')            
+            return redirect('associate-my_messages')
+        else:
+            return redirect('associate-new_message')
+    else:
+        form = InboxMessageNewForm()
+
+    context = {
+        'form': form,
+        'messagefrom_id': user_message_id,
+        'messagefrom': username,
+        'messagedate': messagedate,
+    }
+
+    return render(request, 'associates_apps/new_message.html', context)

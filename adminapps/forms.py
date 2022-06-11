@@ -106,10 +106,33 @@ class InboxMessageForm(forms.ModelForm):
         }
 
 
+class InboxAttachmentEntryForm(forms.ModelForm):
+    class Meta:
+        model = messageattachment
+        fields = 'description', 'DocsPDF'
+
+
+class InboxAttachmentViewForm(forms.ModelForm):
+    class Meta:
+        model = messageattachment
+        fields = 'description', 'DocsPDF'
+
+
 class InboxMessageEntryForm(forms.ModelForm):
     class Meta:
         model = inboxmessage
         fields = 'subject', 'messagebox', 'see_matter'
+        widgets = {
+            'messagebox': Textarea(attrs={'cols': 200, 'rows': 10}),
+            'messagedate': NumberInput(attrs={'type': 'date'}),
+
+        }
+
+
+class InboxMessageNewForm(forms.ModelForm):
+    class Meta:
+        model = inboxmessage
+        fields = 'messageto', 'subject', 'messagebox', 'see_matter'
         widgets = {
             'messagebox': Textarea(attrs={'cols': 200, 'rows': 10}),
             'messagedate': NumberInput(attrs={'type': 'date'}),
@@ -375,18 +398,6 @@ class EntryBillForm(forms.ModelForm):
 
 
 class EntryMatterForm(forms.ModelForm):
-    # folder = models.ForeignKey(CaseFolder, on_delete=CASCADE, null=True)
-    # referenceno = models.CharField(max_length=30, blank=True)
-    # filing_date = models.DateField(null=True, blank=True)
-    # filed_at = models.ForeignKey(EntityType, on_delete=models.CASCADE)
-    # case_type = models.ForeignKey(CaseType, on_delete=models.CASCADE)
-    # apptype = models.ForeignKey(AppType, on_delete=models.CASCADE)
-    # nature = models.ForeignKey(NatureOfCase, on_delete=CASCADE)
-    # matter_title = TextField(null=True)
-    # appearance = models.ForeignKey(Appearance, on_delete=models.CASCADE, null=True, blank=True)
-    # handling_lawyer = models.ForeignKey(Lawyer_Data, on_delete=CASCADE, blank=True)
-    # matter_contact_person = models.ForeignKey(Contact_Person, on_delete=models.PROTECT, null=True, blank=True)
-    # remarks=models.TextField(blank=True)
 
     class Meta:
         model = Matters
@@ -399,6 +410,18 @@ class EntryMatterForm(forms.ModelForm):
             'remarks': Textarea(attrs={'cols': 200, 'rows': 2})
         }
 
+class ReviewMatterForm(forms.ModelForm):
+
+    class Meta:
+        model = Matters
+        fields = 'appearance', 'referenceno', 'filing_date', 'filed_at', 'case_type', 'apptype', 'nature', 'matter_contact_person', 'lawyers_involve', 'matter_title', 'clientrefno', 'matterno', 'status', 'remarks', "opposing_counsel"
+        widgets = {
+            'matter_title': Textarea(attrs={'cols': 200, 'rows': 2}),
+            "lawyers_involve": Textarea(attrs={"placeholder": "type here the initials of the lawyers and put a comma in between...", "rows": 1}),
+            "opposing_counsel": Textarea(attrs={"placeholder": "type here the name of the opposing law firm and lawyers...", "rows": 1}),
+            'filing_date': NumberInput(attrs={'type': 'date'}),
+            'remarks': Textarea(attrs={'cols': 200, 'rows': 2})
+        }
 
 class MatterHeaderForm(forms.ModelForm):
     class Meta:

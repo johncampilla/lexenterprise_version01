@@ -9,12 +9,55 @@ Dashboard
 
 {% block content %}
 
+
 <div class="container">
     <div class="card">
-        {% include 'base/clientinfoheader.html' %}
         <div class="card-body">
+            {% include 'base/clientinfoheader.html' %}
+            <nav class="navbar navbar-expand-lg navbar-light bg-light small">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Matter</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page"
+                                    href="{% url 'supportstaff-matter-otherdetails' m_id matter.filed_at %}">Other
+                                    Information</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Awaiting Documents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Search Document</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Messages</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Reports
+                                </a>
+                                <ul class="dropdown-menu small" aria-labelledby="navbarDropdownMenuLink">
+                                    <li><a class="dropdown-item" href="#">Print Daily Service Report</a></li>
+                                    <li><a class="dropdown-item" href="#">Print Due Dates</a></li>
+                                    <li><a class="dropdown-item" href="#">Print Unpaid Bills & Payments</a></li>
+
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
             <div class="card text-white">
-                <div class="row mt-2">
+                <div class="row">
                     <form method="POST">
                         {% csrf_token %}
                         <!-- {{ form | crispy }} -->
@@ -91,14 +134,11 @@ Dashboard
 
                             </div>
                         </div>
-                        <a href="{% url 'associates-view-myclient-det' client.id %}"
+                        <a href="{% url 'supportstaff-matterlist' %}"
                             class="btn btn-outline-primary btn-sm mb-3">Return</a>
 
                         <!-- <a class= 'btn btn-success btn-sm mb-3' href="{% url 'associates-view-myclient-det' client.id %}">Return</a> -->
                         <input class="btn btn-outline-primary btn-sm mb-3" type="submit" value="Save Changes">
-                        <a class="btn btn-outline-primary btn-sm mb-3"
-                            href="{% url 'associate-matter-otherdetails' m_id matter.filed_at %}">Other Info Details</a>
-                        <a class="btn btn-outline-primary btn-sm mb-3" href="#">Special Instructions</a>
                     </form>
                 </div>
             </div>

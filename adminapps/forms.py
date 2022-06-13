@@ -147,8 +147,30 @@ class LawyerEntryForm(forms.ModelForm):
         widgets = {
             'remarks': Textarea(attrs={'cols': 200, 'rows': 3}),
             'Specialization': Textarea(attrs={'cols': 200, 'rows': 3}),
+        } 
+
+class MailsInwardFormNew(forms.ModelForm):
+    class Meta:
+        model = task_detail
+        fields = 'matter', 'tran_date','task_code', 'preparedby', 'lawyer', 'task', 'doc_date','mailing_date', 'examiner', 'mail_type', 'contact_person', 'duecode'
+        widgets = {
+            'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Activity Details..'}),
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'doc_date': NumberInput(attrs={'type': 'date'}),
+            'mailing_date': NumberInput(attrs={'type': 'date'}),
         }
 
+class AddTaskEntryForm(forms.ModelForm):
+    class Meta:
+        model  = task_detail
+        fields = '__all__'
+        widgets = {
+            'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Activity Details..'}),
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'doc_date': NumberInput(attrs={'type': 'date'}),
+            'mailing_date': NumberInput(attrs={'type': 'date'}),
+
+        }
 
 class TaskEntryForm(forms.ModelForm):
     # TRANTYPE = {
@@ -435,6 +457,16 @@ class MatterHeaderForm(forms.ModelForm):
         }
 
 
+class ApplicantEntryForm(forms.ModelForm):
+    class Meta:
+        model  = Applicant
+        fields = 'applicant', 'address', 'title', 'email' 
+        widgets = {
+            'applicant': Textarea(attrs={'cols': 200, 'rows': 2}),
+            'address': Textarea(attrs={'cols': 200, 'rows': 2}),
+
+        }
+
 class IPDetailForm(forms.ModelForm):
     # matter, applicant, ipo_examiner, status, certificate_no, registration_date, ipc_appno,
     # ipc_appdate, publication_reference, publication_date, priority_number, priority_date,
@@ -443,7 +475,7 @@ class IPDetailForm(forms.ModelForm):
 
     class Meta:
         model = IP_Matters
-        fields = 'matter', 'ipo_examiner', 'status', 'reason_withdrawn', 'certificate_no', \
+        fields = 'ipo_examiner', 'status', 'reason_withdrawn', 'certificate_no', \
             'registration_date', 'ipc_appno', 'ipc_appdate', 'publication_reference', \
             'publication_date', 'priority_number', 'priority_date', 'priority_country_filing',\
             'pct_appno', 'pct_appdate', 'pct_publication', 'pct_pubdate', 'lng_interappln', \
@@ -593,7 +625,7 @@ class ModifyClientForm(forms.ModelForm):
 class Non_IPDetailForm(forms.ModelForm):
     class Meta:
         model = CaseMatter
-        fields = '__all__'
+        fields = 'case_description', 'case_theory'
         widgets = {
             'case_description': Textarea(attrs={'cols': 200, 'rows': 3}),
             'case_theory': Textarea(attrs={'cols': 200, 'rows': 3}),
@@ -617,7 +649,7 @@ class MailsInwardEntry(forms.ModelForm):
 class ClassOfGoodsEntry(forms.ModelForm):
     class Meta:
         model = ClassOfGoods
-        fields = '__all__'
+        fields = 'classes', 'Goods_Descriptions'
         widgets = {
             'Goods_Descriptions': Textarea(attrs={'cols': 200, 'rows': 4}),
         }

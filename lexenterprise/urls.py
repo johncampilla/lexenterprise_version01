@@ -64,8 +64,6 @@ urlpatterns = [
          supportstaff_view.mails_inward_update, name='supportstaff-mailsinward_update'),
     path('support/matters/createtask/<int:pk>/',
          supportstaff_view.add_task, name='supportstaff-add_new_task'),
-    path('support/task/addactivy/',
-         supportstaff_view.add_activity, name='superstaff-add_activity'),
     path('support/recent/activities/<int:pk>/',
          supportstaff_view.recentactivities, name='superstaff-activity-review'),
     path('support/recent/duedate/<int:pk>/',
@@ -90,6 +88,18 @@ urlpatterns = [
          supportstaff_view.new_attachment, name='supportstaff-new_attachment'),
     path('support/alertmessages/viewattachment/<int:pk>/',
          supportstaff_view.view_attachment, name='supportstaff-open_document'),
+    path('support/matters/otherinfo/<int:pk>/<str:sk>/',
+         supportstaff_view.matter_otherdetails, name='supportstaff-matter-otherdetails'),
+    path('support/matters/classofgoods/<int:pk>/',
+         supportstaff_view.matter_classofgoods, name='supportstaff-matter-classofgoods'),
+    path('support/matters/applicant/<int:pk>/',
+         supportstaff_view.add_applicant, name='supportstaff-matter-add-applicant'),
+    path('support/task/addactivy/',
+         supportstaff_view.add_activity, name='superstaff-add_activity'),
+
+
+
+
 
 
 

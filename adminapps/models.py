@@ -328,10 +328,10 @@ class Applicant(models.Model):
         ('Individual', 'Individual'),
     }
     matter = models.ForeignKey(Matters, on_delete=models.CASCADE, null=True)
-    applicant = models.CharField(max_length=200, null=True)
-    address = models.CharField(max_length=200, null=True)
-    title = models.CharField(max_length=50, null=True)
-    category = models.CharField(max_length=20, choices=CATEGORY, null=True)
+    applicant = models.CharField(max_length=200, null=True, blank=True)
+    address = models.CharField(max_length=200, null=True, blank=True)
+    title = models.CharField(max_length=50, null=True, blank=True)
+    email = models.EmailField(max_length=100, blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Applicants'
@@ -402,8 +402,8 @@ class IP_Matters(models.Model):
 
 class CaseMatter(models.Model):
     matter = models.ForeignKey(Matters, on_delete=models.CASCADE, null=True)
-    case_description = models.TextField()
-    case_theory = models.TextField()
+    case_description = models.TextField(blank=True, null=True)
+    case_theory = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Case Description/Theory'
@@ -434,8 +434,8 @@ TRANTYPE = {
 
 class ClassOfGoods(models.Model):
     matter = models.ForeignKey(Matters, on_delete=models.CASCADE)
-    classes = models.SmallIntegerField(null=True)
-    Goods_Descriptions = models.TextField(blank=True)
+    classes = models.SmallIntegerField(null=True, blank=True)
+    Goods_Descriptions = models.TextField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Classification Of Goods'

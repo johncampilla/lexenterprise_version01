@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 
 {% block content %}
@@ -12,35 +12,69 @@
 <div class="container">
     <div class="card">
         <!-- <div class="card-body"> -->
-            <div class="card text-dark small">
-                <div class="row mt-2">
-                    <form method="POST">
+        <div class="card text-dark small">
+            <div class="row mt-2">
+                <form method="POST">
                     {% csrf_token %}
-                            <label> Client Name: </label>
-                            <input type="text" name='clientname' placeholder="Enter Client Name">
-                            <br>
-                            <label> Address </label>
-                            <input type="text" name="address" placeholder="Enter Client Address">
-                            <select>
-                                {% for matter in matter %}
-                                    <option>
-                                        {{ matter.matter_title }}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;"> Matter</span>
+                                <input type="text" name="matter" value="{{matter}}" class="form-control">
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Activity Date</span>
+                                {{form.tran_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Tran Type</span>
+                                {{form.tran_type}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Doc Type</span>
+                                {{form.doc_type}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Activity Codes</span>
+                                <select name="task_code" class="form-select form-control">
+                                    <option selected></option>
+                                    {% for code in codes %}
+                                    <option value="{{code.id}}">
+                                        {{ code.Activity }}
                                     </option>
-                                {% endfor %}
-                            </select>
-                            <a href="#" class="btn btn-outline-primary btn-sm mb-3">Return</a>
-                            <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
-
-
-                    <!-- {{ form | crispy }} -->
-                    
-
-                    </form>
-                </div>
-
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <!-- <div class="input-group input-group-sm mb-1">
+                                                    <span class="input-group-text" style="width: 110px;">Activity Codes</span>
+                                                    {{form.task_code}}
+                                                </div> -->
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Prepared By</span>
+                                {{form.preparedby}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                {{form.lawyer}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Activity Details</span>
+                                {{form.task}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Time Spent (hrs)</span>
+                                {{form.spentinhrs}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Time Spent (Mins)</span>
+                                {{form.spentinmin}}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
 {% endblock content%}
-
-

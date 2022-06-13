@@ -2,101 +2,97 @@
 {% block title %} Clients {% endblock %}
 {% load crispy_forms_tags %}
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 {% block content %}
 <div class="container">
-    <!-- Create Button & get username -->
-    <div class="d-flex justify-content-between mt-1">
-        <a href="{% url 'supportstaff-mails_new' %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp; New Inward</a>
-        <span>
-            Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
-        </span>
-    </div>
-
-     <!-- input search + buttons search and reset -->
-     <form>
-        <div class="input-group input-group-sm mb-1 mt-2">
+    {% include 'base/supportstaffnavbar.html' %}
+    <!-- input search + buttons search and reset -->
+    <form>
+        <div class="input-group input-group-sm mb-1 mt-1">
             <input name="q" type="text" class="form-control" placeholder="Search for...">
             <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
-            <a href="{% url 'supportstaff-mails_inward' %}" class="btn btn-dark" style="margin: left 2px;"><i class="fas fa-sync-alt"></i></a>
+            <a href="{% url 'supportstaff-mails_inward' %}" class="btn btn-dark" style="margin: left 2px;"><i
+                    class="fas fa-sync-alt"></i></a>
 
         </div>
-     </form>
-     <!-- Table -->
-     <table class="table-hover table-bordered table-sm small table">
-     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-             <thead class="table-primary text-center">
-                 <tr>
-                    <th style="width:5%;">Date Receipt</th>
-                    <th style="width:5%;">Doc Date</th>
-                    <th style="width:30%;">Client</th>
-                    <th style="width:10%;">Lawyer</th>
-                    <th style="width:20%;">Matter</th>
-                    <th style="width:25%;">Activity</th>
-                    <th style="width:5%;">Action</th>
-                 </tr>
-             </thead>
-             {% for mailsin in matters %}
-             <tr>
-                 <td style="font-weight: bold;">{{ mailsin.tran_date | date:'m/d/Y' }}</td>
-                 <td style="font-weight: bold;">{{ mailsin.doc_date | date:'m/d/Y' }}</td>
-                 <td style="font-weight: bold;">{{ mailsin.matter.folder.client.client_name }}</td>
-                 <td style="font-weight: bold;">{{ mailsin.matter.handling_lawyer.access_code }}</td>
-                 <td style="font-weight: bold;">{{ mailsin.matter.matter_title }}</td>
-                 <td style="font-weight: bold;">{{ mailsin.task }}</td>
-                 <td>
-                     <a class="btn btn-primary btn-sm" href="{% url 'supportstaff-mailsinward_update' mailsin.id mailsin.matter.id %}" title="Open Matter">
-                            <i class="fas fa-pen"></i>
-                     </a>
-                 </td>
-                 <!-- <td>
+    </form>
+    <!-- Table -->
+    <table class="table-hover table-bordered table-sm small table">
+        <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+        <thead class="table-primary text-center">
+            <tr>
+                <th style="width:5%;">Date Receipt</th>
+                <th style="width:5%;">Doc Date</th>
+                <th style="width:30%;">Client</th>
+                <th style="width:10%;">Lawyer</th>
+                <th style="width:20%;">Matter</th>
+                <th style="width:25%;">Activity</th>
+                <th style="width:5%;">Action</th>
+            </tr>
+        </thead>
+        {% for mailsin in matters %}
+        <tr>
+            <td style="font-weight: bold;">{{ mailsin.tran_date | date:'m/d/Y' }}</td>
+            <td style="font-weight: bold;">{{ mailsin.doc_date | date:'m/d/Y' }}</td>
+            <td style="font-weight: bold;">{{ mailsin.matter.folder.client.client_name }}</td>
+            <td style="font-weight: bold;">{{ mailsin.matter.handling_lawyer.access_code }}</td>
+            <td style="font-weight: bold;">{{ mailsin.matter.matter_title }}</td>
+            <td style="font-weight: bold;">{{ mailsin.task }}</td>
+            <td>
+                <a class="btn btn-primary btn-sm"
+                    href="{% url 'supportstaff-mailsinward_update' mailsin.id mailsin.matter.id %}" title="Open Matter">
+                    <i class="fas fa-pen"></i>
+                </a>
+            </td>
+            <!-- <td>
                     <a class="btn btn-info btn-sm btn-icon-split" href="#" title="Delete Matter">
                         <span class="icon text-white-20">
                             <i class="fas fa-trash"></i>
                         </span>                         
                     </a>
                  </td> -->
-            </tr>
-             {% endfor %}
-     </table>
-     <!-- Pagination-->
-     <nav class="small">
-         {% if matters.has_other_pages %}
-         <ul class="pagination justify-center-left">
+        </tr>
+        {% endfor %}
+    </table>
+    <!-- Pagination-->
+    <nav class="small">
+        {% if matters.has_other_pages %}
+        <ul class="pagination justify-center-left">
             {% if matters.has_previous %}
-                <a href="?page=1" class="btn btn-outline-primary mb-2" style="width: 60px; border-radius: 1px; border: 1px solid #d1d1d1;">First</a>
-                <li class="page-item"><a class="page-link" href="?page={{ matters.previous_page_number }}"><i class="fas fa-angle-double-left"></i></a></li>
+            <a href="?page=1" class="btn btn-outline-primary mb-2"
+                style="width: 60px; border-radius: 1px; border: 1px solid #d1d1d1;">First</a>
+            <li class="page-item"><a class="page-link" href="?page={{ matters.previous_page_number }}"><i
+                        class="fas fa-angle-double-left"></i></a></li>
             {% else %}
-                <li class="page-item disabled"></li>
+            <li class="page-item disabled"></li>
             {% endif %}
 
             {% for i in matters.paginator.page_range %}
-                {% if matters.number == i %}
-                <li class="page-item active"><span class="page-link">{{ i }}<span class="sr-only"></span></span></li>                
-                {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-                {% endif %}
+            {% if matters.number == i %}
+            <li class="page-item active"><span class="page-link">{{ i }}<span class="sr-only"></span></span></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
             {% endfor %}
 
             {% if matters.has_next %}
-                <li class="page-item"><a class="page-link" href="?page={{ matters.next_page_number }}"><i class="fas fa-angle-double-right"></i></a></li>
-                <a href="?page={{ matters.paginator.num_pages}}" class="btn btn-outline-primary mb-2" style="width: 60px; border-radius: 1px; border: 1px solid #d1d1d1; border-left: none;">Last</a>
+            <li class="page-item"><a class="page-link" href="?page={{ matters.next_page_number }}"><i
+                        class="fas fa-angle-double-right"></i></a></li>
+            <a href="?page={{ matters.paginator.num_pages}}" class="btn btn-outline-primary mb-2"
+                style="width: 60px; border-radius: 1px; border: 1px solid #d1d1d1; border-left: none;">Last</a>
             {% else %}
-                <li class="page-item disabled"></li>
+            <li class="page-item disabled"></li>
             {% endif %}
 
-         </ul>
-         <td style="font-weight: bold;">
+        </ul>
+        <td style="font-weight: bold;">
             <h6>Number Of Matters : {{noofmatters}}</h6>
             {% endif %}
-         </td>
+        </td>
 
-     </nav>
+    </nav>
 
 </div>
 
 {% endblock %}
-
-
-

@@ -1,0 +1,225 @@
+{% extends 'base/supportstaffmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        {% include 'base/caseinfoheader.html' %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light small">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Other Information</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page"
+                                href="{% url 'supportstaff-matter-add-applicant' matter.id %}">Applicants/Registrants</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"
+                                href="{% url 'supportstaff-matter-classofgoods' matter.id %}">Classification Of Goods
+                                (TM)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">IPC Matters</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Messages</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Reports
+                            </a>
+                            <ul class="dropdown-menu small" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="#">Print Daily Service Report</a></li>
+                                <li><a class="dropdown-item" href="#">Print Due Dates</a></li>
+                                <li><a class="dropdown-item" href="#">Print Unpaid Bills & Payments</a></li>
+
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- <div class="card-body"> -->
+        <div class="card text-white">
+            <div class="row mt-1">
+                <form method="POST">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">IPO
+                                    Examiner</span>
+                                {{form.ipo_examiner}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Status</span>
+                                {{form.status}}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">IPC #</span>
+                                {{form.ipc_appno}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">IPC
+                                    Filed</span>
+                                {{form.ipc_appdate}}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Publication
+                                    #</span>
+                                {{form.publication_reference}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Publication
+                                    Date</span>
+                                {{form.publication_date}}
+                            </div>
+                        </div>
+                        <!-- <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Remarks</span>
+                                    {{form.reason_withdrawn}}
+                                </div>
+                            </div> -->
+
+                        <div class="col-lg-3">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Certificate
+                                    #</span>
+                                {{form.certificate_no}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Cert
+                                    Date</span>
+                                {{form.registration_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text"
+                                    style="width: 110px; font-weight: bold;">CopyRight#</span>
+                                {{form.copyright_number}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Priority
+                                </span>
+                                {{form.date_Of_PCTPriority}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Renewal
+                                    Date</span>
+                                {{form.renewal_date}}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT
+                                    AppNo#</span>
+                                {{form.pct_appno}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Filed
+                                    Date</span>
+                                {{form.pct_appdate}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Lng Inter
+                                    App</span>
+                                {{form.lng_interappln}}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT
+                                    Publn#</span>
+                                {{form.pct_publication}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Publn
+                                    Date</span>
+                                {{form.pct_pubdate}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Lng Inter
+                                    Pub</span>
+                                {{form.lng_interpubln}}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Priority#</span>
+                                {{form.priority_number}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Priority
+                                    Date</span>
+                                {{form.priority_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Priority
+                                    Filing</span>
+                                {{form.priority_country_filing}}
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <a class='btn btn-outline-primary btn-sm mb-3 mt-2'
+                        href="{% url 'supportstaff-matter_review' matter.id %}">Return</a>
+                    <input class='btn btn-outline-primary btn-sm mb-3 mt-2' type="submit" value="Save Record">
+                </form>
+            </div>
+            <h6 class="card-title bg-primary text-white text-center">Due Dates</h6>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width:10%;">Due Date</th>
+                            <th style="width:15%;">Assign To</th>
+                            <th style="width:55%;">Particulars</th>
+                            <th style="width:10%;">Date Complied</th>
+                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_duedate' m_id %}"><i
+                                        class="fas fa-plus text-center"></i>&nbsp;Due Date</a></th>
+                        </tr>
+                    </thead>
+                    {% for duedate in duedatelist %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ duedate.duedate | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;">{{ duedate.assignto }}</td>
+                        <td style="font-weight: bold;">{{ duedate.particulars }}</td>
+                        <td style="font-weight: bold;">{{ duedate.date_complied }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{% url 'associate-edit_duedate' duedate.id m_id %}"
+                                title="Edit Due Date">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+</div>
+
+{% endblock content%}

@@ -4,13 +4,13 @@
 {% load static %}
 
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
-    {% include 'base/caseinfoheader.html' %}    
+    {% include 'base/caseinfoheader.html' %}
     <div class="card">
         <div class="card-body">
             <div class="card text-white">
@@ -21,18 +21,21 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Matter</span>
+                                    <span class="input-group-text"
+                                        style="width: 110px; font-weight: bold;">Matter</span>
                                     {{form.matter}}
                                 </div>
                             </div>
-                            
+
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">IPO Examiner</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">IPO
+                                        Examiner</span>
                                     {{form.ipo_examiner}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Status</span>
+                                    <span class="input-group-text"
+                                        style="width: 110px; font-weight: bold;">Status</span>
                                     {{form.status}}
                                 </div>
                             </div>
@@ -42,17 +45,20 @@
                                     {{form.ipc_appno}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">IPC Filed</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">IPC
+                                        Filed</span>
                                     {{form.ipc_appdate}}
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Publication #</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Publication
+                                        #</span>
                                     {{form.publication_reference}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Publication Date</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Publication
+                                        Date</span>
                                     {{form.publication_date}}
                                 </div>
                             </div>
@@ -65,74 +71,91 @@
 
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Certificate #</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Certificate
+                                        #</span>
                                     {{form.certificate_no}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Cert Date</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Cert
+                                        Date</span>
                                     {{form.registration_date}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">CopyRight#</span>
+                                    <span class="input-group-text"
+                                        style="width: 110px; font-weight: bold;">CopyRight#</span>
                                     {{form.copyright_number}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Priority </span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Priority
+                                    </span>
                                     {{form.date_Of_PCTPriority}}
-                                </div>    
+                                </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Renewal Date</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Renewal
+                                        Date</span>
                                     {{form.renewal_date}}
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT AppNo#</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT
+                                        AppNo#</span>
                                     {{form.pct_appno}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Filed Date</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Filed
+                                        Date</span>
                                     {{form.pct_appdate}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Lng Inter App</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Lng Inter
+                                        App</span>
                                     {{form.lng_interappln}}
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Publn#</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT
+                                        Publn#</span>
                                     {{form.pct_publication}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Publn Date</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Publn
+                                        Date</span>
                                     {{form.pct_pubdate}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Lng Inter Pub</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Lng Inter
+                                        Pub</span>
                                     {{form.lng_interpubln}}
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Priority#</span>
+                                    <span class="input-group-text"
+                                        style="width: 110px; font-weight: bold;">Priority#</span>
                                     {{form.priority_number}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Priority Date</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Priority
+                                        Date</span>
                                     {{form.priority_date}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Priority Filing</span>
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Priority
+                                        Filing</span>
                                     {{form.priority_country_filing}}
                                 </div>
                             </div>
 
 
                         </div>
-                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'associate-matter-review' matter.id %}">Return</a>
+                        <a class='btn btn-outline-primary btn-sm mb-3 mt-2'
+                            href="{% url 'supportstaff-matter_review' matter.id %}">Return</a>
                         <input class='btn btn-outline-primary btn-sm mb-3 mt-2' type="submit" value="Save Record">
-                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'associate-matter-clasofgoods' matter.id matter.apptype%}">Classification Of Goods</a>
+                        <a class='btn btn-outline-primary btn-sm mb-3 mt-2'
+                            href="{% url 'associate-matter-clasofgoods' matter.id matter.apptype%}">Classification Of
+                            Goods</a>
                     </form>
                 </div>
                 <h6 class="card-title bg-primary text-white text-center">Due Dates</h6>
@@ -145,23 +168,25 @@
                                 <th style="width:15%;">Assign To</th>
                                 <th style="width:55%;">Particulars</th>
                                 <th style="width:10%;">Date Complied</th>
-                                <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_duedate' m_id %}"><i class="fas fa-plus text-center"></i>&nbsp;Due Date</a></th>
+                                <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_duedate' m_id %}"><i
+                                            class="fas fa-plus text-center"></i>&nbsp;Due Date</a></th>
                             </tr>
                         </thead>
                         {% for duedate in duedatelist %}
-                            <tr>
-                                <td style="font-weight: bold;">{{ duedate.duedate | date:'m/d/Y' }}</td>
-                                <td style="font-weight: bold;">{{ duedate.assignto  }}</td>
-                                <td style="font-weight: bold;">{{ duedate.particulars }}</td>
-                                <td style="font-weight: bold;">{{ duedate.date_complied }}</td>                            
-                                <td>
-                                    <a class="btn btn-primary btn-sm" href="{% url 'associate-edit_duedate' duedate.id m_id %}" title="Edit Due Date">
-                                        <i class="fas fa-pen"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td style="font-weight: bold;">{{ duedate.duedate | date:'m/d/Y' }}</td>
+                            <td style="font-weight: bold;">{{ duedate.assignto }}</td>
+                            <td style="font-weight: bold;">{{ duedate.particulars }}</td>
+                            <td style="font-weight: bold;">{{ duedate.date_complied }}</td>
+                            <td>
+                                <a class="btn btn-primary btn-sm"
+                                    href="{% url 'associate-edit_duedate' duedate.id m_id %}" title="Edit Due Date">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                            </td>
+                        </tr>
                         {% endfor %}
-                    </table>        
+                    </table>
                 </div>
             </div>
         </div>
@@ -169,5 +194,3 @@
 </div>
 
 {% endblock content%}
-
-

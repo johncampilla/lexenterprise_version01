@@ -9,8 +9,12 @@ from adminapps.models import *
 from datetime import date, datetime, timedelta
 from django.core.paginator import Paginator
 from dateutil.relativedelta import relativedelta
-from adminapps.forms import InboxAttachmentEntryForm, InboxAttachmentViewForm, InboxMessageNewForm, InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry, ReviewMatterForm
+from adminapps.forms import MailsInwardFormNew, InboxAttachmentEntryForm, InboxAttachmentViewForm, InboxMessageNewForm, InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry, ReviewMatterForm,IPDetailForm, Non_IPDetailForm, ClassOfGoodsEntry, ApplicantEntryForm, AddTaskEntryForm
 from django.db.models import Q, Sum, Count
+from django.core.exceptions import ObjectDoesNotExist
+from dateutil.relativedelta import relativedelta
+from django.contrib import messages
+import io
 
 # Create your views here.
 today = date.today()
@@ -18,6 +22,7 @@ curr_month = today.month % 12
 prev_month = today.month - 1
 if prev_month == 0:
     prev_month = 12
+
 
 
 @login_required
@@ -163,11 +168,20 @@ def matterlist(request):
     paginator = Paginator(matters, 11)
     page = request.GET.get('page')
     all_matters = paginator.get_page(page)
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()    
 
     context = {
         'page': page,
         'noofmatters': noofmatters,
-        'matters': all_matters
+        'matters': all_matters,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
+
+
     }
     return render(request, 'supportstaff/listmatters.html', context)
 
@@ -581,11 +595,19 @@ def mails_inward(request):
     paginator = Paginator(docs, 11)
     page = request.GET.get('page')
     all_matters = paginator.get_page(page)
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    username = request.user.username    
 
     context = {
         'page': page,
         'noofmatters': noofmatters,
         'matters': all_matters,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
 
     }
     return render(request, 'supportstaff/mailsin.html', context)
@@ -624,16 +646,20 @@ def mails_inward_new(request):
 
     docs = task_detail.objects.filter(
         multiple_q, doc_type='Incoming').order_by('-tran_date')
-
+    print(docs)
     if request.method == 'POST':
-        task_form = TaskEntryForm(request.POST)
+        task_form = MailsInwardFormNew(request.POST)
         if task_form.is_valid():
-            task_form.save()
+            mailin_rec = task_form.save()
+            mailin_rec.tran_type = 'Non-Billable'
+            mailin_rec.doc_type = 'Incoming'
+            mailin_rec.save()
+
             return redirect('supportstaff-mails_inward')
         else:
-            task_form = TaskEntryForm()
+            task_form = MailsInwardFormNew()
     else:
-        task_form = TaskEntryForm()
+        task_form = MailsInwardFormNew()
 
     context = {
         'form': task_form,
@@ -718,7 +744,7 @@ def mails_inward_update(request, pk, m_id):
     client = Client_Data.objects.get(id=c_id)
 
     if request.method == 'POST':
-        task_form = TaskEntryForm(request.POST, instance=task)
+        task_form = MailsInwardFormNew(request.POST, instance=task)
         if task_form.is_valid():
             task_form.save()
             apptype = matter.apptype.apptype
@@ -727,9 +753,9 @@ def mails_inward_update(request, pk, m_id):
 
             return redirect('supportstaff-mails_inward')
         else:
-            task_form = TaskEntryForm(instance=task)
+            task_form = MailsInwardFormNew(instance=task)
     else:
-        task_form = TaskEntryForm(instance=task)
+        task_form = MailsInwardFormNew(instance=task)
 
     context = {
         'form': task_form,
@@ -818,13 +844,16 @@ def add_task(request, pk):
                 save_to_tempfiling()
 
     matter = Matters.objects.get(id=pk)
-    codes = IPTaskCodes.objects.all()
+    codes = ActivityCodes.objects.all()
     tasks = task_detail.objects.filter(matter__id=pk)
     if request.method == "POST":
         # Get the posted form
         form = TaskEntryForm(request.POST)
         if form.is_valid():
-            form.save()
+            task_rec = form.save(commit=False)
+            task_rec.matter_id = matter.id
+            task_rec.task_code_id = request.POST['task_code']
+            task_rec.save()
             perform_billable_services()
 
             return redirect('supportstaff-matter_review', pk)
@@ -871,10 +900,18 @@ def add_duedate(request, pk):
 def add_activity(request):
     matter = Matters.objects.all()
     if request.method == "POST":
-        pass
+        form = AddTaskEntryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('supportstaff-home')
+        else:
+            return redirect('superstaff-add_activity')
+    else:
+        form = AddTaskEntryForm()
 
     context = {
-        'matter': matter,
+        'form'  :form,
+        'matter':matter,
     }
 
     return render(request, 'supportstaff/add_task.html', context)
@@ -1114,3 +1151,215 @@ def remove_alertmessage(request, pk):
     selected = inboxmessage.objects.get(id=pk)
     selected.delete()
     return redirect('superstaff-list_messages')
+
+def matter_otherdetails(request, pk, sk):
+    def validateduedates():
+        def computeduedate():
+            if basisofcompute == "In Months":
+                nmonths = int(terms)
+                svalue = ("+"+str(nmonths))
+                duedate = sdate + relativedelta(months=int(svalue))
+            if basisofcompute == "In Years":
+                nyears = int(terms)
+                svalue = ("+"+str(nyears))
+                sduedate = sdate + relativedelta(years=int(svalue))
+                duedate = sduedate
+            if basisofcompute == "In Days":
+                ndays = int(terms)
+                svalue = ("+"+str(ndays))
+                duedate = sdate + relativedelta(days=int(svalue))
+
+            dues = AppDueDate.objects.filter(
+                matter_id=matter_id, duedate=duedate)
+            if dues.exists():
+                pass
+            else:
+                duedates = AppDueDate(
+                    matter_id=matter_id, duedate=duedate, particulars=particulars)
+                duedates.save()
+
+        result = DueCode.objects.filter(folder_type__id=4)
+        matter_id = matter.id
+        apptype = matter.apptype_id
+        lawyer = matter.handling_lawyer_id
+        for duecodes in result:
+            basisofcompute = duecodes.basisofcompute
+            terms = duecodes.terms
+            particulars = duecodes.Description
+            if duecodes.fieldbsis == 'Registration Date' and duecodes.apptype_id == apptype:
+                appdate = ip_matters.registration_date
+                sdate = appdate
+                if sdate is None:
+                    pass
+                else:
+                    computeduedate()
+            if duecodes.fieldbsis == 'Publication Date' and duecodes.apptype_id == apptype:
+                appdate = ip_matters.publication_date
+                sdate = appdate
+                if sdate is None:
+                    pass
+                else:
+                    computeduedate()
+            if duecodes.fieldbsis == 'Renewal Date' and duecodes.apptype_id == apptype:
+                appdate = ip_matters.renewal_date
+                sdate = appdate
+                if sdate is None:
+                    pass
+                else:
+                    computeduedate()
+
+    matter = Matters.objects.get(id=pk)
+    m_id = matter.folder.client.id
+    client = Client_Data.objects.get(id=m_id)
+
+    duedates = AppDueDate.objects.filter(matter__id=pk)
+    if sk == "IPO":
+        try:
+            ip_matters = IP_Matters.objects.get(matter__id=pk)
+            sw = 1
+        except ObjectDoesNotExist:
+            sw = 0
+        if request.method == 'POST':
+            if sw == 0:
+                form = IPDetailForm(request.POST)
+            else:
+                form = IPDetailForm(request.POST, instance=ip_matters)
+
+            if form.is_valid():
+                print("pumasok d2 sa form valid")
+                ipdetail_rec = form.save(commit=False)
+                ipdetail_rec.matter_id = pk
+                ipdetail_rec.save()
+                ip_matters = IP_Matters.objects.get(matter__id=pk)
+                apptype = matter.apptype.apptype
+                validateduedates()
+
+                return redirect('supportstaff-matter_review', pk)
+            else:
+                if sw == 0:
+                    form = IPDetailForm()
+                else:
+                    form = IPDetailForm(instance=ip_matters)
+        else:
+            if sw == 0:
+                form = IPDetailForm()
+            else:
+                form = IPDetailForm(instance=ip_matters)
+
+        context = {
+            'form': form,
+            'matter': matter,
+            'duedatelist': duedates,
+            'm_id': pk,
+            'client': client,
+            'sk':sk,
+
+        }
+        return render(request, 'supportstaff/ipdetailform.html', context)
+
+    else:
+
+        try:
+            casematter = CaseMatter.objects.get(matter__id=pk)
+            sw = 1
+        except ObjectDoesNotExist:
+            sw = 0
+
+        if request.method == 'POST':
+            if sw == 0:
+                form = Non_IPDetailForm(request.POST)
+            else:
+                form = Non_IPDetailForm(request.POST, instance=casematter)
+
+            if form.is_valid():
+                print("pumasok d2 sa form valid")
+                nonipdetail_rec = form.save(commit=False)
+                nonipdetail_rec.matter_id = pk
+                nonipdetail_rec.save()
+                return redirect('supportstaff-matter_review', pk)
+            else:
+                if sw == 0:
+                    form = Non_IPDetailForm()
+                else:
+                    form = Non_IPDetailForm(instance=casematter)
+
+        else:
+            if sw == 0:
+                form = Non_IPDetailForm()
+            else:
+                form = Non_IPDetailForm(instance=casematter)
+
+        context = {
+            'form': form,
+            'matter': matter,
+            'm_id': pk,
+            'client': client,
+        }
+        return render(request, 'supportstaff/nonipdetailform.html', context)
+
+def matter_classofgoods(request, pk):
+    matter = Matters.objects.get(id=pk)
+    sk = matter.apptype.apptype
+    print(sk)
+    listofgoods = ClassOfGoods.objects.filter(matter__id=pk)
+    if sk == "Trademark":
+        if request.method == 'POST':
+            form = ClassOfGoodsEntry(request.POST)
+            if form.is_valid():
+                classofgoods_rec = form.save(commit=False)
+                classofgoods_rec.matter_id = pk
+                classofgoods_rec.save()
+                return redirect('supportstaff-matter-classofgoods', pk)
+            else:
+                form = ClassOfGoodsEntry()        
+        else:
+            form = ClassOfGoodsEntry()
+
+        context = {
+            'form': form,
+            'm_id': pk,
+            'matter': matter,
+            'listofgoods': listofgoods,
+        }
+        return render(request, 'supportstaff/classofgoods.html', context)
+    else:
+        return redirect('supportstaff-matter-otherdetails', pk, 'IPO')
+
+
+
+def add_applicant(request, pk):
+    matter = Matters.objects.get(id=pk)
+    try:
+        applicant = Applicant.objects.get(matter__id=pk)
+        sw = 1
+    except ObjectDoesNotExist:
+        sw = 0 
+    
+
+    if request.method =='POST':
+        if sw == 1:
+            form = ApplicantEntryForm(request.POST, instance=applicant)
+        else:
+            form = ApplicantEntryForm(request.POST)
+
+        if form.is_valid():
+            applicant_rec = form.save(commit=False)
+            applicant_rec.matter_id = pk
+            applicant_rec.save()
+            return redirect('supportstaff-matter_review', pk)
+        else:
+            if sw == 1:
+                form = ApplicantEntryForm(instance=applicant)
+            else:
+                form = ApplicantEntryForm()
+    else:
+        if sw == 1:
+            form = ApplicantEntryForm(instance=applicant)
+        else:
+            form = ApplicantEntryForm()
+    
+    context = {
+        'form' :form,
+        'matter':matter
+    }
+    return render(request, 'supportstaff/new_applicant_IP.html', context)

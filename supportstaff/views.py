@@ -252,7 +252,7 @@ def matter_review(request, pk):
             apptype = matter.apptype.apptype
 #            if apptype == "Trademark":
             validateduedates()
-            return redirect('associate-matter-review', pk)
+            return redirect('supportstaff-matter_review', pk)
         else:
             form = ReviewMatterForm(instance=matter)
     else:
@@ -898,20 +898,63 @@ def add_duedate(request, pk):
 
 
 def add_activity(request):
-    matter = Matters.objects.all()
+    username = request.user.username
+    lawyers = request.user.user_profile.supporto
+    listoflawyers = lawyers.split(',')
+
+    code1 = ""
+    code2 = ""
+    code3 = ""
+    code4 = ""
+    code5 = ""
+    code6 = ""
+    code7 = ""
+
+    for i in range(0, len(listoflawyers)):
+        if i == 0:
+            code1 = listoflawyers[i]
+        elif i == 1:
+            code2 = listoflawyers[i]
+        elif i == 2:
+            code3 = listoflawyers[i]
+        elif i == 3:
+            code4 = listoflawyers[i]
+        elif i == 4:
+            code5 = listoflawyers[i]
+        elif i == 5:
+            code6 = listoflawyers[i]
+        elif i == 6:
+            code7 = listoflawyers[i]
+
+    multiple_q = Q(Q(handling_lawyer__access_code=code1) | Q(handling_lawyer__access_code=code2) | Q(handling_lawyer__access_code=code3) | Q(handling_lawyer__access_code=code4) | Q(handling_lawyer__access_code=code5) | Q(handling_lawyer__access_code=code6) | Q(handling_lawyer__access_code=code7))
+
+    #    print(multiple_q)
+
+    matters = Matters.objects.filter(multiple_q).order_by("-filing_date") 
+
+    multiple_q = Q(Q(matter__handling_lawyer__access_code=code1) | Q(matter__handling_lawyer__access_code=code2) | Q(matter__handling_lawyer__access_code=code3) | Q(
+        matter__handling_lawyer__access_code=code4) | Q(matter__handling_lawyer__access_code=code5) | Q(matter__handling_lawyer__access_code=code6) | Q(matter__handling_lawyer__access_code=code7))
+
+    docs = task_detail.objects.filter(
+        multiple_q, doc_type='Incoming').order_by('-tran_date')
+
     if request.method == "POST":
         form = AddTaskEntryForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('supportstaff-home')
-        else:
+            task_rec = form.save()
+            task_rec.matter_id = request.POST["matter"]
+            task_rec.doc_type = "Outgoing"
+            task_rec.save()
             return redirect('superstaff-add_activity')
+        else:
+            form = AddTaskEntryForm()
     else:
         form = AddTaskEntryForm()
 
     context = {
         'form'  :form,
-        'matter':matter,
+        'tasks':docs,
+        'matters':matters,
     }
 
     return render(request, 'supportstaff/add_task.html', context)

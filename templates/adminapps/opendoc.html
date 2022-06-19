@@ -1,0 +1,32 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card mt-3">
+        <!-- <div class="card-body"> -->
+        <div class="card text-white">
+            <div class="row mt-2">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+                    {{ form.as_p }}
+                    <a class='btn btn-outline-primary btn-sm mb-3' href="{% url 'search_docs' %}"><i
+                            class="fa fa-file-text fa-sm"></i>Return</a>
+                    <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+                </form>
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+
+</div>
+
+{% endblock content%}

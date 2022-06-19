@@ -84,6 +84,7 @@ admin.site.register(DocumentCode)
 admin.site.register(Currency)
 admin.site.register(inboxmessage)
 admin.site.register(messageattachment)
+admin.site.register(awaitingdocs)
 
 
 # Register your models here.

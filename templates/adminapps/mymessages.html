@@ -1,0 +1,88 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Create Button & get username -->
+    <div class="d-flex justify-content-between mt-1">
+        <a href="{% url 'new_message' %}" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp;
+            New Message</a>
+        <span>
+            Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
+        </span>
+    </div>
+
+    <!-- input search + buttons search and reset -->
+    <form>
+        <div class="input-group input-group-sm mb-1 mt-2">
+            <input name="q" type="text" class="form-control" placeholder="Search for...">
+            <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+            <a href="{% url 'supportstaff-my_messages' %}" class="btn btn-dark" style="margin: left 2px;"><i
+                    class="fas fa-sync-alt"></i></a>
+        </div>
+    </form>
+    <!-- Table -->
+    <h6 class="card-title bg-primary text-white text-center">InBox</h6>
+    <table class="table-hover table-bordered table-sm small table">
+        <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+        <thead class="table-primary text-center">
+            <tr>
+                <th style="width:10%;">From</th>
+                <th style="width:10%;">Date</th>
+                <th style="width:20%;">Subject</th>
+                <th style="width:50%;">Message</th>
+                <th style="width:5%;">Status</th>
+                <th style="width:5%;">Action</th>
+            </tr>
+        </thead>
+        {% for items in receivedmessages %}
+        <tr>
+            <td style="font-weight: bold;">{{ items.messagefrom }}</td>
+            <td style="font-weight: bold;">{{ items.messagedate | date:'m/d/Y' }}</td>
+            <td style="font-weight: bold;">{{ items.subject }}</td>
+            <td style="font-weight: bold;">{{ items.messagebox }}</td>
+            <td style="font-weight: bold;">{{ items.status }}</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{% url 'open_inboxmessage' items.id %}" title="Open Message">
+                    <i class="fas fa-pen"></i>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h6 class="card-title bg-primary text-white text-center">Sent Items</h6>
+    <table class="table-hover table-bordered table-sm small table">
+        <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+        <thead class="table-primary text-center">
+            <tr>
+                <th style="width:10%;">Sent To</th>
+                <th style="width:10%;">Date</th>
+                <th style="width:20%;">Subject</th>
+                <th style="width:50%;">Message</th>
+                <th style="width:5%;">Status</th>
+                <th style="width:5%;">Action</th>
+            </tr>
+        </thead>
+        {% for items in sentmessages %}
+        <tr>
+            <td style="font-weight: bold;">{{ items.messageto }}</td>
+            <td style="font-weight: bold;">{{ items.messagedate | date:'m/d/Y' }}</td>
+            <td style="font-weight: bold;">{{ items.subject }}</td>
+            <td style="font-weight: bold;">{{ items.messagebox }}</td>
+            <td style="font-weight: bold;">{{ items.status }}</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{% url 'open_sentitems' items.id %}" title="Open Message">
+                    <i class="fas fa-pen"></i>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Pagination-->
+</div>
+{% endblock %}

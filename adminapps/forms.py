@@ -154,7 +154,7 @@ class MailsInwardFormNew(forms.ModelForm):
         model = task_detail
         fields = 'matter', 'tran_date','task_code', 'preparedby', 'lawyer', 'task', 'doc_date','mailing_date', 'examiner', 'mail_type', 'contact_person', 'duecode'
         widgets = {
-            'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Activity Details..'}),
+            'task': Textarea(attrs={'cols': 200, 'rows': 3}),
             'tran_date': NumberInput(attrs={'type': 'date'}),
             'doc_date': NumberInput(attrs={'type': 'date'}),
             'mailing_date': NumberInput(attrs={'type': 'date'}),
@@ -163,9 +163,9 @@ class MailsInwardFormNew(forms.ModelForm):
 class AddTaskEntryForm(forms.ModelForm):
     class Meta:
         model  = task_detail
-        fields = '__all__'
+        fields = 'matter', 'tran_date','task_code', 'doc_type','tran_type','preparedby', 'lawyer', 'task', 'doc_date','mailing_date', 'examiner', 'mail_type', 'contact_person', 'duecode', 'spentinhrs', 'spentinmin'
         widgets = {
-            'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Activity Details..'}),
+            'task': Textarea(attrs={'cols': 200, 'rows': 3}),
             'tran_date': NumberInput(attrs={'type': 'date'}),
             'doc_date': NumberInput(attrs={'type': 'date'}),
             'mailing_date': NumberInput(attrs={'type': 'date'}),
@@ -179,7 +179,7 @@ class TaskEntryForm(forms.ModelForm):
     # }
     class Meta:
         model = task_detail
-        fields = 'tran_date', 'tran_type', 'doc_type', 'preparedby', 'lawyer', 'task', 'spentinhrs', 'spentinmin'
+        fields = 'matter', 'tran_date', 'tran_type', 'doc_type', 'preparedby', 'lawyer', 'task', 'spentinhrs', 'spentinmin'
         widgets = {
             'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Activity Details..'}),
             'tran_date': NumberInput(attrs={'type': 'date'}),
@@ -418,12 +418,37 @@ class EntryBillForm(forms.ModelForm):
 
         }
 
+class OpendocForm(forms.ModelForm):
+    class Meta:
+        model = FilingDocs
+        fields = ['DocsPDF']   
+
+class NewAwaitingDocForm(forms.ModelForm):
+    class Meta:
+        model = awaitingdocs
+        fields = 'tran_date', 'awaiting_date', 'lawyer', 'particulars', 'status'
+        widgets = {
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'awaiting_date': NumberInput(attrs={'type': 'date'}),
+            'particulars': Textarea(attrs={'cols': 200, 'rows': 2})
+        }
+
+class ViewAwaitingDocForm(forms.ModelForm):
+    class Meta:
+        model = awaitingdocs
+        fields = 'matter','tran_date', 'awaiting_date', 'lawyer', 'particulars', 'status'
+        widgets = {
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'awaiting_date': NumberInput(attrs={'type': 'date'}),
+            'particulars': Textarea(attrs={'cols': 200, 'rows': 2})
+        }
 
 class EntryMatterForm(forms.ModelForm):
 
     class Meta:
         model = Matters
-        fields = 'folder', 'appearance', 'referenceno', 'filing_date', 'filed_at', 'case_type', 'apptype', 'nature', 'handling_lawyer', 'matter_contact_person', 'lawyers_involve', 'matter_title', 'clientrefno', 'matterno', 'status', 'remarks', "opposing_counsel"
+#        fields = '__all__'
+        fields = 'appearance', 'referenceno', 'filing_date', 'filed_at', 'case_type', 'apptype', 'nature', 'handling_lawyer', 'matter_contact_person', 'lawyers_involve', 'matter_title', 'clientrefno', 'matterno', 'status', 'remarks', "opposing_counsel"
         widgets = {
             'matter_title': Textarea(attrs={'cols': 200, 'rows': 2}),
             "lawyers_involve": Textarea(attrs={"placeholder": "type here the initials of the lawyers and put a comma in between...", "rows": 1}),

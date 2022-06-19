@@ -4,28 +4,66 @@
 {% load static %}
 
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
-    {% include 'base/clientinfoheader.html' %}    
+    {% include 'base/clientinfoheader.html' %}
 
     <div class="card">
-        
-<!--         <div class="card-body"> -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light small">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Matter Detail</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'matterawaiting_docs' matter.id %}">Awaiting Documents</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'search_docs' %}">Search Document</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Messages</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Reports
+                            </a>
+                            <ul class="dropdown-menu small" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="#">Print Daily Service Report</a></li>
+                                <li><a class="dropdown-item" href="#">Print Due Dates</a></li>
+                                <li><a class="dropdown-item" href="#">Print Unpaid Bills & Payments</a></li>
+
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        <!--         <div class="card-body"> -->
         <div class="card text-white">
-                <div class="row mt-2">
-                    <form method="POST">
+            <div class="row mt-2">
+                <form method="POST">
                     {% csrf_token %}
                     <!-- {{ form | crispy }} -->
-                    
+
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;"> Case Folder</span>
-                                {{form.folder}}
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;"> Case Folder
+                                </span>
+                                <input type="text" name="folder" value="{{folder}}" class="form-control" readonly>
                             </div>
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;">Appearance</span>
@@ -94,53 +132,52 @@
 
                         </div>
                     </div>
-                        <a class= 'btn btn-outline-primary btn-sm mb-3' href="{% url 'admin-client-update' client.id %}">Return</a>
-                        <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
-                    </form>
-                </div>
-        </div>   
-           
-<!--         </div> -->
+                    <a class='btn btn-outline-primary btn-sm mb-3' href="{% url 'admin-matter-list' %}">Return</a>
+                    <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+                </form>
+            </div>
+        </div>
+
+        <!--         </div> -->
     </div>
     <table class="table-hover table-bordered table-sm small table">
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-            <thead class="table-primary text-center">
-                    <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Tran Type</th>
-                    <th scope="col">Lawyer</th>
-                    <th scope="col">Task</th>
-                    <th scope="col">Spent In Hrs</th>
-                    <th scope="col">Spent In Min</th>
-                   <th colspan="2" style="width:3%;">Action</th>
-                    </tr>
-            </thead>
-                {% for task in task %}
+        <thead class="table-primary text-center">
             <tr>
-                   <td style="font-weight: bold;">{{ task.tran_date }}</td>
-                   <td style="font-weight: bold;">{{ client.tran_type }}</td>
-                   <td style="font-weight: bold;">{{ client.lawyer }}</td>
-                   <td style="font-weight: bold;">{{ client.task }}</td>
-                   <td style="font-weight: bold;">{{ client.spentinhrs }}</td>
-                   <td style="font-weight: bold;">{{ client.spentinmin }}</td>
-                   <td>
-                       <a class="btn btn-primary btn-sm" href="#" title="Edit Client">
-                          <i class="fas fa-pen"></i>
-                       </a>
-                   </td>
-                   <td>
-                      <a class="btn btn-info btn-sm btn-icon-split" href= "{% url 'admin-client-delete' client.id %}" title="Delete Client">
-                          <span class="icon text-white-20">
-                              <i class="fas fa-trash"></i>
-                          </span>                         
-                      </a>
-                   </td>
-                </tr>
-                {% endfor %}
+                <th scope="col">Date</th>
+                <th scope="col">Tran Type</th>
+                <th scope="col">Lawyer</th>
+                <th scope="col">Task</th>
+                <th scope="col">Spent In Hrs</th>
+                <th scope="col">Spent In Min</th>
+                <th colspan="2" style="width:3%;">Action</th>
+            </tr>
+        </thead>
+        {% for task in task %}
+        <tr>
+            <td style="font-weight: bold;">{{ task.tran_date }}</td>
+            <td style="font-weight: bold;">{{ client.tran_type }}</td>
+            <td style="font-weight: bold;">{{ client.lawyer }}</td>
+            <td style="font-weight: bold;">{{ client.task }}</td>
+            <td style="font-weight: bold;">{{ client.spentinhrs }}</td>
+            <td style="font-weight: bold;">{{ client.spentinmin }}</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="#" title="Edit Client">
+                    <i class="fas fa-pen"></i>
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-info btn-sm btn-icon-split" href="{% url 'admin-client-delete' client.id %}"
+                    title="Delete Client">
+                    <span class="icon text-white-20">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
     </table>
 
 </div>
 
 {% endblock content%}
-
-

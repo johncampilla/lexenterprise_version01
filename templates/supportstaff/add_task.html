@@ -12,69 +12,105 @@ Dashboard
 <div class="container">
     <div class="card">
         <!-- <div class="card-body"> -->
-        <div class="card text-dark small">
+        <div class="card text-white">
             <div class="row mt-2">
                 <form method="POST">
                     {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;"> Matter</span>
-                                <input type="text" name="matter" value="{{matter}}" class="form-control">
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Activity Date</span>
-                                {{form.tran_date}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Tran Type</span>
-                                {{form.tran_type}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Doc Type</span>
-                                {{form.doc_type}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Activity Codes</span>
-                                <select name="task_code" class="form-select form-control">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;"> Matter</span>
+                                <select name="matter" class="form-select form-control">
                                     <option selected></option>
-                                    {% for code in codes %}
-                                    <option value="{{code.id}}">
-                                        {{ code.Activity }}
+                                    {% for matter in matters %}
+                                    <option value="{{matter.id}}">
+                                        {{matter.matter_title}} | {{ matter.referenceno }} |
+                                        {{matter.handling_lawyer.access_code }}
                                     </option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <!-- <div class="input-group input-group-sm mb-1">
-                                                    <span class="input-group-text" style="width: 110px;">Activity Codes</span>
-                                                    {{form.task_code}}
-                                                </div> -->
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Prepared By</span>
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Activity
+                                    Date</span>
+                                {{form.tran_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Activity
+                                    Codes</span>
+                                {{form.task_code}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Prepared
+                                    By</span>
                                 {{form.preparedby}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Lawyer</span>
                                 {{form.lawyer}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Activity Details</span>
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Tran Type</span>
+                                {{form.tran_type}}
+                            </div>
+
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Task
+                                    Details</span>
                                 {{form.task}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Time Spent (hrs)</span>
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Spent in (hrs)
+                                </span>
                                 {{form.spentinhrs}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Time Spent (Mins)</span>
+                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Spent in
+                                    (mins)</span>
                                 {{form.spentinmin}}
                             </div>
                         </div>
                     </div>
+
+                    <div>
+                        <a href="#" class="btn btn-outline-primary btn-sm mb-3">Return</a>
+                        <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+                    </div>
                 </form>
+            </div>
+            <h6 class="card-title bg-primary text-white text-center">Activities</h6>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width:10%;">Date</th>
+                            <th style="width:15%;">Lawyer</th>
+                            <th style="width:10%;">Doc Type</th>
+                            <th style="width:10%;">Tran Type</th>
+                            <th style="width:45%;">Activity</th>
+                            <th colspan="1" style="width:10%;"><a href="">Action</a></th>
+                        </tr>
+                    </thead>
+                    {% for task in tasks %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ task.tran_date | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
+                        <td style="font-weight: bold;">{{ task.doc_type }}</td>
+                        <td style="font-weight: bold;">{{ task.tran_type }}</td>
+                        <td style="font-weight: bold;">{{ task.task }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="#" title="Edit Activity">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
             </div>
         </div>
     </div>
-</div>
 
-{% endblock content%}
+    {% endblock content%}

@@ -273,7 +273,7 @@ class Matters(models.Model):
         Contact_Person, on_delete=models.PROTECT, null=True, blank=True)
     lawyers_involve = models.CharField(max_length=60, blank=True, null=True)
     opposing_counsel = models.CharField(max_length=100, blank=True, null=True)
-    remarks = models.TextField(blank=True)
+    remarks = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -426,12 +426,6 @@ class CaseEvidence(models.Model):
         return f'{self.matter} - {self.date_submitted} - {self.presented_by}'
 
 
-TRANTYPE = {
-    ('Billable', 'Billable'),
-    ('Non-Billable', 'Non-Billable'),
-}
-
-
 class ClassOfGoods(models.Model):
     matter = models.ForeignKey(Matters, on_delete=models.CASCADE)
     classes = models.SmallIntegerField(null=True, blank=True)
@@ -525,6 +519,12 @@ class IPOExaminer(models.Model):
 
 
 class task_detail(models.Model):
+
+    TRANTYPE = {
+        ('Billable', 'Billable'),
+        ('Non-Billable', 'Non-Billable'),
+    }
+
 
     DOCTYPE = {
         ('Outgoing', 'Outgoing'),
@@ -954,3 +954,20 @@ class TempFilingFees(models.Model):
     DocPDFs = models.FileField(upload_to='Receipts/', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+class awaitingdocs(models.Model):
+
+    STATUS = (
+        ('O', 'Waiting'),
+        ('R', 'Received'),
+        ('C', 'Cancelled'),
+    )
+
+    matter = models.ForeignKey(Matters, on_delete=PROTECT, null=True)
+    tran_date = models.DateField(null=True, blank=True)
+    awaiting_date = models.DateField(null=True, blank=True)
+    lawyer = models.ForeignKey(
+        Lawyer_Data, on_delete=PROTECT, null=True, blank=True)
+    particulars = models.CharField(max_length=200, blank=True, null=True)
+    status = models.CharField(max_length=15, choices=STATUS, blank=True)
+

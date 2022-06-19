@@ -98,11 +98,6 @@ urlpatterns = [
          supportstaff_view.add_activity, name='superstaff-add_activity'),
 
 
-
-
-
-
-
     # for management urls
     path('management/', management.main, name='management-home'),
     path('management/view_newmatters/', management.view_new_matters,
@@ -187,7 +182,43 @@ urlpatterns = [
          main_view.update_uploaded_docs, name='admin-uploaded-docs'),
     path('sysadmin/ref/filingfees/<int:pk>/',
          main_view.entry_filingfees, name='filingfee-code'),
+    path('sysadmin/message/view/<int:pk>/', main_view.open_message,
+         name='open_inboxmessage'),
+    path('sysadmin/alertmessages/viewattachment/<int:pk>/',
+         main_view.view_attachment, name='open_document'),
+    path('sysadmin/message/mymessages/', main_view.my_messages,
+         name='my_messages'),
+    path('sysadmin/alertmessages/new/',
+         main_view.new_message, name='new_message'),
+    path('sysadmin/alertmessages/newattachment/<int:pk>/',
+         main_view.new_attachment, name='new_attachment'),
+    path('sysadmin/message/view_sentitems/<int:pk>/', main_view.open_sentitems,
+         name='open_sentitems'),
+    path('sysadmin/searchdocs/',
+         main_view.search_docs, name='search_docs'),
+    path('sysadmin/client_searchdocs/<int:pk>',
+         main_view.clientsearch_docs, name='clientsearch_docs'),
+    path('sysadmin/client_matterlist/<int:pk>',
+         main_view.clientlistmatters, name='clientlistmatters'),
 
+    path('sysadmin/opendocument/<int:pk>/',
+         main_view.open_filingdocs, name='open_filingdocs'),
+
+
+    path('sysadmin/awaitingdocs/<int:pk>/',
+         main_view.awaiting_docs, name='awaiting_docs'),
+    path('sysadmin/newawaiting/<int:pk>/',
+         main_view.newawaiting_docs, name='newawaiting_docs'),
+    path('sysadmin/viewawaiting/<int:pk>/',
+         main_view.awaitingdoc_view, name='awaitingdoc_view'),
+    path('sysadmin/viewmatterawaiting/<int:pk>/',
+         main_view.matterawaiting_docs, name='matterawaiting_docs'),
+    path('sysadmin/addmatterawaiting/<int:pk>/',
+         main_view.addawaitingdocs_matter, name='addawaitingdocs_matter'),
+
+         
+
+         
 
 
     path('sysadmin/folder/newduedate/',

@@ -13,10 +13,10 @@
                     </tr>
                     <tr>
                         <th>E-mail</th>
-                        <td>{{ client.email}} </td>
+                        <td>{{ client.email}}&nbsp;/&nbsp;{{client.main_contact}} </td>
                     </tr>
                 </tbody>
-            </table>    
+            </table>
         </div>
         <div class="col-lg-4">
             <table class="table table-sm table-borderless small table my-2 text-white">
@@ -27,18 +27,19 @@
                     </tr>
                     <tr>
                         <th>Industry</th>
-                        <td><a href="#">{{ client.industry }}</a></td>
+                        <td>{{ client.industry }}</td>
                     </tr>
                     <tr>
                         <th>Client Status</th>
                         <td>{{ client.status }}</td>
                     </tr>
                 </tbody>
-            </table>  
+            </table>
         </div>
     </div>
     <div class="row">
-            <a class="text-white small" href="{% url 'client-full-details' client.id %}" style="font-style: italic;">&nbsp; Full Details</a>
+        <a class="text-white small" href="{% url 'client-full-details' client.id %}" style="font-style: italic;">&nbsp;
+            Full Details</a>
     </div>
-        
+
 </div>

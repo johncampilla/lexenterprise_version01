@@ -25,111 +25,55 @@ Dashboard
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px; font-weight: bold;"> Case Folder
                                 </span>
-                                <input type="text" value="{{folder.folder_description}}" name="folder_description"
-                                    class="form-control" readonly>
+                                <input type="text" name="folder" value="{{folder}}" class="form-control" readonly>
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text"
-                                    style="width: 110px; font-weight: bold;">Appearance</span>
-                                <select name="appearance" class="form-select form-control">
-                                    <option selected></option>
-                                    {% for apperance in appearance %}
-                                    <option value="{{ apperance.id }}">
-                                        {{ apperance.appearance }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
+                                <span class="input-group-text" style="width: 110px;font-weight: bold"> Appearance</span>
+                                {{form.appearance}}
                             </div>
 
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Reference
                                     No.</span>
-                                <input type="text" name="referenceno" class="form-control">
+                                {{form.referenceno}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Date Filed</span>
-                                <input type="date" name="filing_date" class="form-control">
+                                {{form.filing_date}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px; font-weight: bold;">Filed At</span>
-                                <select name="filed_at" class="form-select form-control">
-                                    <option selected></option>
-                                    {% for courts in courts %}
-                                    <option value="{{ courts.id }}">
-                                        {{ courts.court }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
-
+                                {{form.filed_at}}
                             </div>
-
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Status</span>
-                                <select name="status" class="form-select form-control">
-                                    <option selected></option>
-                                    {% for status in status %}
-                                    <option value="{{ status.id }}">
-                                        {{ status.status }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
+                                {{form.status}}
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Type Of
-                                    Case</span>
-                                <select name="case_type" class="form-select form-control">
-                                    <option selected></option>
-                                    {% for casetype in casetype %}
-                                    <option value="{{ casetype.id }}">
-                                        {{ casetype.case_type }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
+                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Case Type</span>
+                                {{form.case_type}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Type Of
-                                    Appln</span>
-                                <select name="apptype" class="form-select form-control">
-                                    <option selected></option>
-                                    {% for apptype in apptype %}
-                                    <option value="{{ apptype.id }}">
-                                        {{ apptype.apptype }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
+                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Appln Type</span>
+                                {{form.apptype}}
                             </div>
-
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Nature</span>
-                                <select name="nature" class="form-select form-control">
-                                    <option selected></option>
-                                    {% for nature in nature %}
-                                    <option value="{{ nature.id }}">
-                                        {{ nature.nature }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
+                                {{form.nature}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Lawyer</span>
-                                <select name="handling_lawyer" class="form-select form-control">
-                                    <option selected></option>
-                                    {% for lawyer in lawyer %}
-                                    <option value="{{ lawyer.id }}">
-                                        {{ lawyer.access_code }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
+                                {{form.handling_lawyer}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Client Ref</span>
-                                <input type="text" name="clientrefno" class="form-control">
+                                {{form.clientrefno}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Our Ref</span>
-                                <input type="text" name="matterno" class="form-control">
+                                {{form.matterno}}
                             </div>
                         </div>
                     </div>
@@ -138,21 +82,21 @@ Dashboard
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Matter
                                     Title</span>
-                                <textarea name="matter_title" id="" cols="200" rows="2" class="form-control"></textarea>
+                                {{form.matter_title}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Other
                                     Lawyers</span>
-                                <input type="text" name="lawyers_involve" class="form-control">
+                                {{form.lawyers_involve}}
                             </div>
-                            <div class="input-group input-group-sm mb-2">
+                            <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Remarks</span>
-                                <textarea name="remarks" id="" cols="200" rows="2" class="form-control"></textarea>
+                                {{form.remarks}}
                             </div>
                             <div class="input-group input-group-sm mb-2">
                                 <span class="input-group-text" style="width: 150px;font-weight: bold;">Opposing
                                     Counsel</span>
-                                <input type="text" name="opposing_counsel" class="form-control">
+                                {{form.opposing_counsel}}
                             </div>
 
                         </div>

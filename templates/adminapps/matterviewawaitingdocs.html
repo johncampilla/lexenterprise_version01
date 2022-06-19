@@ -1,0 +1,67 @@
+{% extends 'base/supportstaffmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    {% include 'base/clientinfoheader.html' %}
+    <div class="card">
+        <!-- <div class="card-body"> -->
+        <div class="card text-white mt-2">
+            <div class="row">
+                <!-- <div class="text-center mb-2"> 
+                        {{matter.matter_title}}
+                    </div> -->
+                <form method="POST">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Matter</span>
+                                {{form.matter}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Date Request</span>
+                                {{form.tran_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Date Needed</span>
+                                {{form.awaiting_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                {{form.lawyer}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Particulars</span>
+                                {{form.particulars}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Status</span>
+                                {{form.status}}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <a class='btn btn-outline-primary btn-sm mb-3'
+                            href="{% url 'matterawaiting_docs' m_id %}">Return</a>
+                        <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <!-- </div> -->
+
+    </div>
+</div>
+
+{% endblock content%}

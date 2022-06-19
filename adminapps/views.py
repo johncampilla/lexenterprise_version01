@@ -4,7 +4,7 @@ from html.entities import html5
 from django.contrib.auth import get_user
 from django.core import paginator
 from django.contrib.auth.models import User
-
+from datetime import date, datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.db import connection
 from django.forms.widgets import ClearableFileInput
@@ -18,6 +18,11 @@ from django.core.paginator import Paginator
 from django.db.models import Q, Sum
 from django.shortcuts import get_object_or_404
 
+today = date.today()
+curr_month = today.month % 12
+prev_month = today.month - 1
+if prev_month == 0:
+    prev_month = 12
 
 global matter_key
 
@@ -28,10 +33,10 @@ def main(request):
     ###### Determines the user portal to be displayed ########
     access_code = request.user.user_profile.userid
     user_id = User.id
+
     user_message_id = request.user.user_profile.id
-#    alertmessages = Alert_Messages.objects.filter(messageto=access_code)
-    alertmessages = inboxmessage.objects.filter(messageto_id=user_message_id)
-    print(alertmessages)
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
     countalert = alertmessages.count()
     srank = request.user.user_profile.rank
     username = request.user.username
@@ -260,6 +265,16 @@ def remove_lawyer(request, pk):
 
 @login_required
 def cliententry(request):
+    access_code = request.user.user_profile.userid
+    user_id = User.id
+
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    srank = request.user.user_profile.rank
+    username = request.user.username
+
     if request.method == "POST":
         # Get the posted form
         form = ClientEntryForm(request.POST)
@@ -274,6 +289,10 @@ def cliententry(request):
 
     context = {
         'form': form,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
+
     }
 
     return render(request, 'adminapps/newentryclient_details.html', context)
@@ -361,6 +380,16 @@ def matterentry(request):
 
 @login_required
 def clientlist(request):
+    access_code = request.user.user_profile.userid
+    user_id = User.id
+
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    srank = request.user.user_profile.rank
+    username = request.user.username
+
     if 'q' in request.GET:
         q = request.GET['q']
         #clients = Client_Data.objects.filter(client_name__icontains=q)
@@ -379,11 +408,13 @@ def clientlist(request):
     context = {
         'page': page,
         'noofclients': noofclients,
-        'clients': all_clients
+        'clients': all_clients,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
     }
 
     return render(request, 'adminapps/clientlist.html', context)
-
 
 @login_required
 def folderlist(request):
@@ -436,6 +467,17 @@ def folderlist(request):
 
 @login_required
 def matterlist(request):
+    access_code = request.user.user_profile.userid
+    user_id = User.id
+
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    srank = request.user.user_profile.rank
+    username = request.user.username
+
+
     if 'q' in request.GET:
         q = request.GET['q']
         #matters = Matters.objects.filter(matter_title__icontains=q)
@@ -455,7 +497,11 @@ def matterlist(request):
     context = {
         'page': page,
         'noofmatters': noofmatters,
-        'matters': all_matters
+        'matters': all_matters,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
+
     }
     return render(request, 'adminapps/listmatters.html', context)
 
@@ -558,10 +604,22 @@ def client_modify(request, pk):
         'matters': listofmatters,
         'folders': listoffolders,
 
-
     }
-#    return render(request, 'adminapps/clientupdate.html', context)
     return render(request, 'adminapps/admin_clientupdate.html', context)
+
+def clientlistmatters(request, pk):
+    matters = Matters.objects.filter(folder__client_id=pk)
+    client = Client_Data.objects.get(id=pk)
+    noofmatters = matters.count()
+
+    context = {
+        'matter': matters,
+        'client': client,
+        'noofmatters':noofmatters,
+    }
+    return render(request, 'adminapps/admin_clientmatterlist.html', context)
+
+
 
 
 @login_required
@@ -700,47 +758,25 @@ def matter_update_folder(request, pk):
 def matter_add_details(request, pk, fd):
     client = Client_Data.objects.get(id=pk)
     folder = CaseFolder.objects.get(id=fd)
-    apperance = Appearance.objects.all()
-    courts = Courts.objects.all()
-    status = Status.objects.all()
-    casetype = CaseType.objects.all()
-    apptype = AppType.objects.all()
-    nature = NatureOfCase.objects.all()
-    lawyer = Lawyer_Data.objects.all()
-
     if request.method == "POST":
-        matters = Matters()
-        matters.folder_id = fd
-        matters.referenceno = request.POST.get('referenceno')
-        matters.clientrefno = request.POST.get('clientrefno')
-        matters.matterno = request.POST.get('matterno')
-        matters.filing_date = request.POST.get('filing_date')
-        matters.filed_at_id = request.POST.get('filed_at')
-        matters.case_type_id = request.POST.get('case_type')
-        matters.apptype_id = request.POST.get('apptype')
-        matters.nature_id = request.POST.get('nature')
-        matters.matter_title = request.POST.get('matter_title')
-        matters.status_id = request.POST.get('status')
-        matters.appearance_id = request.POST.get('appearance')
-        matters.handling_lawyer_id = request.POST.get('handling_lawyer')
-        matters.lawyers_involve = request.POST.get('lawyers_involve')
-        matters.opposing_counsel = request.POST.get('opposing_counsel')
-        matters.remarks = request.POST.get('remarks')
-        matters.save()
-        messages.success(request, "Matter added successfully")
-        return redirect('admin-client-update', pk)
+        form = EntryMatterForm(request.POST)
+        if form.is_valid():
+            print("pumasok na sa save")
+            matter_rec = form.save()
+            matter_rec.folder_id = folder.id
+            matter_rec.save()
+            # messages.success(request, "Matter added successfully")
+            return redirect('admin-client-update', pk)
+        else:
+            form = EntryMatterForm()
+    else:
+        form = EntryMatterForm()
 
     context = {
+        'form': form,
         'client': client,
         'folder': folder,
-        'appearance': apperance,
-        'courts': courts,
-        'status': status,
-        'casetype': casetype,
-        'apptype': apptype,
-        'nature': nature,
-        'lawyer': lawyer,
-    }
+        }
     return render(request, 'adminapps/newentrymatter_details.html', context)
 
 
@@ -825,6 +861,7 @@ def folder_update_Client(request, pk):
     client = Client_Data.objects.get(id=cid)
     matters = Matters.objects.filter(folder_id=pk)
     fid = folder.id
+    print(client)
     if request.method == 'POST':
         form = EntryFolderForm(request.POST, instance=folder)
         if form.is_valid():
@@ -1553,3 +1590,335 @@ def staffprofile(request):
 
 def lookuplist(request):
     return render(request, 'adminapps/reference.html')
+
+def open_message(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    attachments = messageattachment.objects.filter(message_id=pk)
+    message.status = "READ"
+    message.save()
+    if request.method == 'POST':
+        form = InboxMessageForm(request.POST, instance=message)
+        return redirect('supportstaff-my_messages')
+    else:
+        form = InboxMessageForm(instance=message)
+
+    context = {
+        'form': form,
+        'replyid': pk,
+        'attachments': attachments,
+    }
+
+    return render(request, 'adminapps/readmessage_dashboard.html', context)
+
+def view_attachment(request, pk):
+    viewattachment = messageattachment.objects.get(id=pk)
+    message = inboxmessage.objects.get(id=viewattachment.message_id)
+    if request.method == 'POST':
+        form = InboxAttachmentViewForm(
+            request.POST, request.FILES, instance=viewattachment)
+        if form.is_valid():
+            attachment_rec = form.save(commit=False)
+            attachment_rec.message_id = message.id
+            attachment_rec.save()
+        else:
+            form = InboxAttachmentViewForm(instance=viewattachment)
+    else:
+        form = InboxAttachmentViewForm(instance=viewattachment)
+
+    context = {
+        'form': form,
+        'message': message,
+    }
+
+    return render(request, 'adminapps/viewattachment.html', context)
+
+@login_required
+def my_messages(request):
+
+    myuserid = request.user.user_profile.userid
+    access_code = request.user.user_profile.access_code
+
+    if 'q' in request.GET:
+        q = request.GET['q']
+        #clients = Client_Data.objects.filter(client_name__icontains=q)
+        multiple_q = Q(Q(messagefrom__icontains=q) | Q(subject__icontains=q) | Q(
+            messagebox__icontains=q) | Q(status__icontains=q) | Q(see_matter__matter_title__icontains=q))
+        receivedmessages = inboxmessage.objects.filter(
+            multiple_q, messageto__userid=myuserid).order_by('-messagedate')
+        sentmessages = inboxmessage.objects.filter(
+            multiple_q, messagefrom=myuserid).order_by('-messagedate')
+
+    else:
+        receivedmessages = inboxmessage.objects.filter(
+            messageto__userid=myuserid).order_by('-messagedate')
+        sentmessages = inboxmessage.objects.filter(
+            messagefrom=myuserid).order_by('-messagedate')
+
+    # receivedmessages = inboxmessage.objects.filter(messageto__userid=myuserid)
+    # sentmessages = inboxmessage.objects.filter(messagefrom=access_code)
+
+    context = {
+        'myuserid': myuserid,
+        'access_code': access_code,
+        'receivedmessages': receivedmessages,
+        'sentmessages': sentmessages,
+    }
+
+    return render(request, 'adminapps/mymessages.html', context)
+
+def new_message(request):
+
+    user_message_id = request.user.user_profile.id
+    username = request.user.username
+    a = date.today()
+    messagedate = a.strftime('%m/%d/%Y')
+    dateconvert = datetime.strptime(
+        messagedate, "%m/%d/%Y").strftime('%Y-%m-%d')
+
+    if request.method == "POST":
+        form = InboxMessageNewForm(request.POST)
+        if form.is_valid():
+            inbox_rec = form.save(commit=False)
+            inbox_rec.messagefrom = username
+            inbox_rec.messagedate = dateconvert
+            inbox_rec.status = "UNREAD"
+            inbox_rec.save()
+            id = inbox_rec.id
+            return redirect('new_attachment', id)
+        else:
+            return redirect('new_message')
+    else:
+        form = InboxMessageNewForm()
+
+    context = {
+        'form': form,
+        'messagefrom_id': user_message_id,
+        'messagefrom': username,
+        'messagedate': messagedate,
+    }
+
+    return render(request, 'adminapps/new_message.html', context)
+
+def new_attachment(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    if request.method == 'POST':
+        form = InboxAttachmentEntryForm(request.POST, request.FILES)
+        if form.is_valid():
+            attach_rec = form.save(commit=False)
+            attach_rec.message_id = pk
+            attach_rec.save()
+            return redirect('new_attachment', pk)
+        else:
+            return redirect('new_attachment', pk)
+    else:
+        form = InboxAttachmentEntryForm()
+
+    context = {
+        'form': form,
+        'message': message,
+    }
+
+    return render(request, 'adminapps/new_attachment.html', context)
+
+def open_sentitems(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    attachments = messageattachment.objects.filter(message_id=pk)
+    if request.method == 'POST':
+        form = InboxMessageForm(request.POST, instance=message)
+        return redirect('supportstaff-my_messages')
+    else:
+        form = InboxMessageForm(instance=message)
+
+    context = {
+        'form': form,
+        'replyid': pk,
+        'attachments': attachments,
+    }
+
+    return render(request, 'adminapps/readsentitems.html', context)
+
+def open_filingdocs(request, pk):
+    document = FilingDocs.objects.get(id=pk)
+    m_id = document.Task_Detail.matter.id
+    matter = Matters.objects.get(id=m_id)
+    c_id = matter.folder.client.id
+
+    client = Client_Data.objects.get(id=c_id)
+    print(client)
+    print(matter.matter_title)
+    if request.method == 'POST':
+        form = FilingDocsEntry(request.POST, instance=document)
+        if form.is_valid():
+            form.save()
+            return redirect('search_docs')
+    else:
+        form = FilingDocsEntry(instance=document)
+    
+    context = {
+        'form': form,
+        'client':client,
+        'matter':matter,
+    }
+    return render(request, 'adminapps/opendocument.html', context)
+
+
+def search_docs(request):
+    access_code = request.user.user_profile.userid
+    user_id = User.id
+
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    username = request.user.username
+
+
+
+    if 'q' in request.GET:
+        q = request.GET['q']
+        #clients = Client_Data.objects.filter(client_name__icontains=q)
+        multiple_q = Q(Q(Task_Detail__task__icontains=q) | Q(Description__icontains=q) | Q(Task_Detail__doc_type__icontains=q))
+        docs = FilingDocs.objects.filter(
+            multiple_q).order_by('-DocDate')
+    else:
+        #clients = Client_Data.objects.all().order_by("client_name")
+        docs = FilingDocs.objects.all().order_by('-DocDate')
+
+    noofclients = docs.count()
+    paginator = Paginator(docs, 11)
+    page = request.GET.get('page')
+    all_docs = paginator.get_page(page)
+
+    context = {
+        'page': page,
+        'noofclients': noofclients,
+        'clients': all_docs,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
+
+    }
+
+    return render(request, 'adminapps/search_docs.html', context) 
+
+def clientsearch_docs(request, pk):
+    client = Client_Data.objects.get(id=pk)
+    docs = FilingDocs.objects.filter(Task_Detail__matter__folder__client__id=pk).order_by('-DocDate')
+
+    noofclients = docs.count()
+    paginator = Paginator(docs, 11)
+    page = request.GET.get('page')
+    all_docs = paginator.get_page(page)
+
+    context = {
+        'page': page,
+        'client':client,
+        'noofclients': noofclients,
+        'clients': all_docs
+    }
+
+    return render(request, 'adminapps/clientsearch_docs.html', context) 
+
+
+def awaiting_docs(request, pk):
+    docs = awaitingdocs.objects.filter(matter__folder__client_id=pk).order_by('-awaiting_date')
+    client = Client_Data.objects.get(id=pk)
+
+    context = {
+        'awaitingdocs' : docs,
+        'client_id':pk,
+        'client':client,
+    }
+
+    return render(request, 'adminapps/awaitingdocs.html', context)
+
+def newawaiting_docs(request, pk):
+    client = Client_Data.objects.get(id=pk)
+    matterlist = Matters.objects.filter(folder__client__id=pk)
+    if request.method == 'POST':
+        form = NewAwaitingDocForm(request.POST)
+        if form.is_valid():
+            awaitingdoc_rec = form.save(commit=False)
+            awaitingdoc_rec.matter_id = request.POST['matter']
+            awaitingdoc_rec.save()
+            return redirect('awaiting_docs', pk)
+        else:
+            return redirect('newawaiting_docs')
+    else:
+        form = NewAwaitingDocForm()
+    
+    context = {
+        'form': form,
+        'client': client,
+        'matterlist':matterlist,
+    }
+    return render(request, 'adminapps/newawaitingdocs.html', context)
+
+def awaitingdoc_view(request, pk):
+    awaitingdoc = awaitingdocs.objects.get(id=pk)
+    m_id = awaitingdoc.matter_id
+    c_id = awaitingdoc.matter.folder.client.id
+    client = Client_Data.objects.get(id=c_id)
+    matterlist = Matters.objects.filter(folder__client__id=c_id)
+
+    if request.method == 'POST':
+        form = ViewAwaitingDocForm(request.POST, instance=awaitingdoc)
+        if form.is_valid():
+            form.save()
+        else:
+            return redirect('awaitingdoc_view', pk, c_id)
+    else:
+        form = ViewAwaitingDocForm(instance=awaitingdoc)
+
+    context = {
+        'form': form,
+        'awaitingdoc': awaitingdoc,
+        'client': client,
+        'matterlist':matterlist,
+        'm_id': m_id,
+    }
+
+    return render(request, 'adminapps/matterviewawaitingdocs.html', context)
+
+def matterawaiting_docs(request, pk):
+    docs = awaitingdocs.objects.filter(matter_id=pk).order_by('-awaiting_date')
+    matter = Matters.objects.get(id=pk)
+
+    context = {
+
+        'awaitingdocs' : docs,
+        'matter' : matter,
+    }
+
+    return render(request, 'adminapps/matterawaitingdocs.html', context)
+
+def addawaitingdocs_matter(request, pk):
+    matter = Matters.objects.get(id=pk)
+    if request.method == "POST":
+        form = NewAwaitingDocForm(request.POST)
+        if form.is_valid():
+            print("Awaiting Doc Pasok dito")
+            awaitingdoc_rec = form.save(commit=False)
+            awaitingdoc_rec.matter_id = pk
+            awaitingdoc_rec.save()
+            return redirect('matterawaiting_docs', pk)
+
+        else:
+            return redirect('addawaitingdocs_matter', pk)
+    else:
+        form = NewAwaitingDocForm()
+
+    context = {
+        'form' : form,
+        'matter' : matter,
+
+    }
+
+    return render(request, 'adminapps/newmatterawaitingdocs.html', context)
+
+
+
+
+
+
+    

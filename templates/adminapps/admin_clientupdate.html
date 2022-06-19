@@ -4,142 +4,175 @@
 {% load static %}
 
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 {% block content %}
 
 <div class="container">
     <div class="card">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light small">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Client Detail</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'awaiting_docs' sid %}">Awaiting Documents</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'clientsearch_docs' sid %}">Search Document</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'clientlistmatters' sid %}">List Matters</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Reports
+                            </a>
+                            <ul class="dropdown-menu small" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="#">Print Daily Service Report</a></li>
+                                <li><a class="dropdown-item" href="#">Print Due Dates</a></li>
+                                <li><a class="dropdown-item" href="#">Print Unpaid Bills & Payments</a></li>
+
+
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
         <!-- <div class="card-body"> -->
-            <div class="card text-white">
-                <div class="row mt-2">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <!-- {{ form | crispy }} -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;"> Client</span>
-                                    {{form.client_name}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Address</span>
-                                    {{form.address}}
-                                </div>
+        <div class="card text-white">
+            <div class="row mt-2">
+                <form method="POST">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;"> Client</span>
+                                {{form.client_name}}
                             </div>
-                            <div class="col-lg-6">
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Country</span>
-                                    {{form.country}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">E-mail</span>
-                                    {{form.email}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Mobile</span>
-                                    {{form.mobile}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Contact Person</span>
-                                    {{form.main_contact}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Date Acquired</span>
-                                    {{form.date_acquired}}
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Category</span>
-                                    {{form.category}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Entity Type</span>
-                                    {{form.entity_type}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Industry</span>
-                                    {{form.industry}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Refered By</span>
-                                    {{form.referredby}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Status</span>
-                                    {{form.status}}
-                                </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Address</span>
+                                {{form.address}}
                             </div>
                         </div>
-                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'admin-client-list' %}">Return</a>
-                        <input class='btn btn-outline-primary btn-sm mb-3 mt-2' type="submit" value="Save Record">
-                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'admin-new-folder' sid %}"><i class="fas fa-plus"></i>&nbsp; Case Folder</a>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Country</span>
+                                {{form.country}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">E-mail</span>
+                                {{form.email}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Mobile</span>
+                                {{form.mobile}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Contact
+                                    Person</span>
+                                {{form.main_contact}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Date
+                                    Acquired</span>
+                                {{form.date_acquired}}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Category</span>
+                                {{form.category}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Entity
+                                    Type</span>
+                                {{form.entity_type}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Industry</span>
+                                {{form.industry}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Refered
+                                    By</span>
+                                {{form.referredby}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Status</span>
+                                {{form.status}}
+                            </div>
+                        </div>
+                    </div>
+                    <a class='btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'admin-client-list' %}">Return</a>
+                    <input class='btn btn-outline-primary btn-sm mb-3 mt-2' type="submit" value="Save Record">
+                    <a class='btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'admin-new-folder' sid %}"><i
+                            class="fas fa-plus"></i>&nbsp; Case Folder</a>
 
-                    </form>
-                </div>  
+                </form>
             </div>
-            <h6 class="card-title bg-primary text-white text-center">Case Folders</h6>
-            <table class="table-hover table-bordered table-sm small table mt-3">
-                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">          sm-->
-                        <thead class="table-primary text-center">
-                            <tr">
-                               <th style="width:10%;">Folder Type</th>
-                               <th style="width:10%;">Lawyer</th>
-                               <th style="width:40%;">Folder Description</th>
-                               <th style="width:37%;">Remarks</th>
-                               <th style="width:3%;">Action</th>
-                            </tr>
-                        </thead>
-                        {% for folder in folders %}
-                        <tr>
-                            <td style="font-weight: bold;">{{ folder.folder_type }}</td>
-                            <td style="font-weight: bold;">{{ folder.Supervisinglawyer }}</td>
-                            <td style="font-weight: bold;">{{ folder.folder_description }}</td>
-                            <td style="font-weight: bold;">{{ folder.remarks }}</td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" href="{% url 'admin-client-folder-update' folder.id %}" title="Edit Matter">
-                                   <i class="fas fa-pen"></i>
-                                </a>
-                            </td>
-                            <!-- <td>
+        </div>
+        <h6 class="card-title bg-primary text-white text-center">Case Folders</h6>
+        <table class="table-hover table-bordered table-sm small table mt-3">
+            <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">          sm-->
+            <thead class="table-primary text-center">
+                <tr">
+                    <th style="width:10%;">Folder Type</th>
+                    <th style="width:10%;">Lawyer</th>
+                    <th style="width:40%;">Folder Description</th>
+                    <th style="width:40%;">Remarks</th>
+                    </tr>
+            </thead>
+            {% for folder in folders %}
+            <tr>
+                <td style="font-weight: bold;"><a
+                        href="{% url 'admin-client-folder-update' folder.id %}">{{folder.folder_type }}</a></td>
+                <td style="font-weight: bold;">{{ folder.Supervisinglawyer }}</td>
+                <td style="font-weight: bold;">{{ folder.folder_description }}</td>
+                <td style="font-weight: bold;">{{ folder.remarks }}</td>
+                <!-- <td>
                                <a class="btn btn-info btn-sm btn-icon-split" href="{% url 'admin-folder-delete' folder.id %}" title="Delete Matter">
                                    <span class="icon text-white-20">
                                        <i class="fas fa-trash"></i>
                                    </span>                         
                                </a>
                             </td> -->
-                        </tr>
-                        {% endfor %}
-            </table>           
-            <h6 class="card-title bg-primary text-white text-center">Engagements/Matters</h6>
-            <table class="table-hover table-bordered table-sm small table mt-3">
-                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">          sm-->
-                        <thead class="table-primary text-center">
-                            <tr">
-                               <th style="width:25%;">Matter Title</th>
-                               <th style="width:12%;">Reference No.</th>
-                               <th style="width:5%;">Filing Date</th>
-                               <th style="width:15%;">Handling Lawyer</th>
-                               <th style="width:40%;">Case Folder</th>
-                               <th colspan="2" style="width:3%;">Action</th>
-                            </tr>
-                        </thead>
-                        {% for matter in matters %}
-                        <tr>
-                            <td style="font-weight: bold;">{{ matter.matter_title }}</td>
-                            <td style="font-weight: bold;">{{ matter.referenceno }}</td>
-                            <td style="font-weight: bold;">{{ matter.filing_date | date:'m/d/Y' }}</td>
-                            <td style="font-weight: bold;">{{ matter.handling_lawyer.lawyer_name }}</td>
-                            <td style="font-weight: bold;">{{ matter.folder }}</td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" href="{% url 'admin-update-matter_client' matter.id %}" title="Edit Matter">
-                                   <i class="fas fa-pen"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-            </table>           
+            </tr>
+            {% endfor %}
+        </table>
+        <h6 class="card-title bg-primary text-white text-center">Engagements/Matters</h6>
+        <table class="table-hover table-bordered table-sm small table mt-3">
+            <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">          sm-->
+            <thead class="table-primary text-center">
+                <tr">
+                    <th style="width:25%;">Matter Title</th>
+                    <th style="width:12%;">Reference No.</th>
+                    <th style="width:15%;">Filing Date</th>
+                    <th style="width:15%;">Handling Lawyer</th>
+                    <th style="width:40%;">Case Folder</th>
+                    </tr>
+            </thead>
+            {% for matter in matters %}
+            <tr>
+                <td style="font-weight: bold;"><a
+                        href="{% url 'admin-update-matter_client' matter.id %}">{{matter.matter_title}}</a></td>
+
+                <td style="font-weight: bold;">{{ matter.referenceno }}</td>
+                <td style="font-weight: bold;">{{ matter.filing_date | date:'m/d/Y' }}</td>
+                <td style="font-weight: bold;">{{ matter.handling_lawyer.lawyer_name }}</td>
+                <td style="font-weight: bold;">{{ matter.folder }}</td>
+            </tr>
+            {% endfor %}
+        </table>
         <!-- </div> -->
     </div>
 </div>

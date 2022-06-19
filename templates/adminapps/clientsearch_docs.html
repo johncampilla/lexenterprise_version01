@@ -7,41 +7,22 @@ Dashboard
 {% endblock %}
 {% block content %}
 <div class="container">
-    {% include 'base/adminappsnavbar.html' %}
-
-    <!-- input search + buttons search and reset -->
-    <form>
-        <div class="input-group input-group-sm mb-1 mt-2">
-            <input name="q" type="text" class="form-control" placeholder="Search for...">
-            <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
-            <a href="{% url 'admin-client-list' %}" class="btn btn-dark" style="margin: left 2px;"><i
-                    class="fas fa-sync-alt"></i></a>
-        </div>
-    </form>
+    {% include 'base/clientinfoheader.html' %}
     <!-- Table -->
     <table class="table-hover table-bordered table-sm small table">
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
         <thead class="table-primary text-center">
             <tr>
-                <th scope="col">Client</th>
-                <th scope="col">Category</th>
-                <th scope="col">Email</th>
-                <th scope="col">Mobile</th>
-                <th scope="col">Industry</th>
-                <th scope="col">Address</th>
-                <th scope="col">Country</th>
+                <th style="width:10%;">Document Date</th>
+                <th style="width:45%;">Short Description</th>
+                <th style="width:45%;">Task Detail</th>
             </tr>
         </thead>
-        {% for client in clients %}
+        {% for docs in clients %}
         <tr>
-            <td style="font-weight: bold;"><a
-                    href="{% url 'admin-client-update' client.id %}">{{client.client_name}}</a></td>
-            <td style="font-weight: bold;">{{ client.category }}</td>
-            <td style="font-weight: bold;">{{ client.email }}</td>
-            <td style="font-weight: bold;">{{ client.mobile }}</td>
-            <td style="font-weight: bold;">{{ client.industry }}</td>
-            <td style="font-weight: bold;">{{ client.address }}</td>
-            <td style="font-weight: bold;">{{ client.country }}</td>
+            <td style="font-weight: bold;">{{ docs.DocDate | date:'m/d/Y'}}</td>
+            <td style="font-weight: bold;">{{ docs.Description }}</td>
+            <td style="font-weight: bold;"><a href="{% url 'open_filingdocs' docs.id %}">{{ docs.Task_Detail }}</a></td>
         </tr>
         {% endfor %}
     </table>

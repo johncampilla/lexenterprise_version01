@@ -1,0 +1,59 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card mt-3">
+        <!-- <div class="card-body"> -->
+        <div class="card text-white">
+            <div class="row mt-2">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Date</span>
+                                <input type="text" value="{{message.messagedate}}" class="form-control" readonly>
+                            </div>
+
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Subject</span>
+                                <input type="text" value="{{message.subject}}" class="form-control" readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Message</span>
+                                <input type="text" value="{{message.messagebox}}" class="form-control" readonly>
+                            </div>
+
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text"
+                                    style="width: 110px; font-weight: bold;">Description</span>
+                                {{form.description}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Document</span>
+
+                                {{form.DocsPDF}}
+                            </div>
+                        </div>
+                    </div>
+                    <a class='btn btn-outline-primary btn-sm mb-3' href="{% url 'open_inboxmessage' message.id %}"><i
+                            class="fa fa-file-text fa-sm"></i>Return</a>
+                    <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+                </form>
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+
+</div>
+
+{% endblock content%}

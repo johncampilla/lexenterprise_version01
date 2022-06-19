@@ -1,0 +1,41 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% include 'base/clientinfoheader.html' %}
+    <div class="row my-1">
+        <div class="col">
+            <table class="table-hover table-bordered table-sm small table">
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th style="width:30%;">Case Folder</th>
+                        <th style="width:10%;">Reference No.</th>
+                        <th style="width:10%;">Filing Date</th>
+                        <th style="width:10%;">Handling Lawyer</th>
+                        <th style="width:40%;">Matter Title</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for matter in matter %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ matter.folder }}</td>
+                        <td style="font-weight: bold;">{{ matter.referenceno }}</td>
+                        <td style="font-weight: bold;">{{ matter.filing_date }}</td>
+                        <td style="font-weight: bold;">{{ matter.handling_lawyer.lawyer_name }}</td>
+                        <td style="font-weight: bold;">{{ matter.matter_title }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="row small">
+                <p>Total No. Of Records : {{ noofmatters }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -22,4 +22,22 @@ class AppType(models.Model):
 class LawyersCases(models.Model):
     lawyer = models.ForeignKey(Lawyer_Data, on_delete=CASCADE, null=True)
     noofcases = models.PositiveIntegerField()
-    
+
+# Below are the temporary ables for Graphical Visual Data
+
+class ClientSummaryCount(models.Model):
+    client_name = models.CharField(max_length=200)
+    no_of_matters = models.PositiveIntegerField(blank=True, null=True)
+
+class CaseTypeSummary(models.Model):
+    casetype = models.CharField(max_length=60)
+    no_of_matters = models.PositiveIntegerField(blank=True, null=True)
+
+class CaseTypeSummary_Month(models.Model):
+    casetype = models.CharField(max_length=60)
+    no_of_matters = models.PositiveIntegerField(blank=True, null=True)
+
+class LawyerSummary(models.Model):
+    Lawyer = models.CharField(max_length=5)
+    no_of_matters = models.PositiveIntegerField(blank=True, null=True)
+

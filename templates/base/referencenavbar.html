@@ -1,0 +1,65 @@
+{% include 'base/adminappsnavbar.html' %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light small">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Reference</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'activity-code' %}">Activity</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'folder-code' %}">Folder Type</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'country-code' %}">Country</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'industry-code' %}">Industry</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'nature-code' %}">Nature Of Case</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'casetype-code' %}">Case Type</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'apptype-code' %}">App Type (IP)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'matterstatus-code' %}">Status</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'entity-code' %}">Courts/Entity</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'appearance-code' %}">Appearance</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Print
+                    </a>
+                    <ul class="dropdown-menu small" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="#">Activity</a></li>
+                        <li><a class="dropdown-item" href="#">Folder Type</a></li>
+                        <li><a class="dropdown-item" href="#">Country</a></li>
+                        <li><a class="dropdown-item" href="#">Industry</a></li>
+                        <li><a class="dropdown-item" href="#">Nature Of Case</a></li>
+                        <li><a class="dropdown-item" href="#">Case Type</a></li>
+                        <li><a class="dropdown-item" href="#">App Type</a></li>
+                        <li><a class="dropdown-item" href="#">Status</a></li>
+                        <li><a class="dropdown-item" href="#">Courts/Entity</a></li>
+                        <li><a class="dropdown-item" href="#">Appearance</a></li>
+
+
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

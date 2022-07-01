@@ -29,6 +29,9 @@ class User_Profile(models.Model):
     mobile = models.CharField(max_length=60, null=True)
     image = models.ImageField(upload_to='Profile_Images/', blank=True)
     remarks = models.TextField(null=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    date_acquired = models.DateField(null=True, blank=True)
+    
 
     class Meta:
         verbose_name_plural = 'User Profile'

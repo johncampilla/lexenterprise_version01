@@ -1,4 +1,4 @@
-{% extends 'base/sysadminmenu.html' %}
+{% extends 'base/managementmenu.html' %}
 {% block title %} Clients {% endblock %}
 {% load crispy_forms_tags %}
 {% block appname %}
@@ -6,6 +6,8 @@ Dashboard
 {% endblock %}
 {% block content %}
 <div class="container">
+
+    {% include 'base/manageappsnavbar.html' %}
     {% include 'base/clientinfoheader.html' %}
     <div class="row my-1">
         <div class="col">
@@ -23,7 +25,7 @@ Dashboard
                     {% for matter in matter %}
                     <tr>
                         <td style="font-weight: bold;"><a
-                                href="{% url 'admin-update-matter_client' matter.id %}">{{matter.filing_date }}</a></td>
+                                href="{% url 'management-matterview' matter.id %}">{{matter.filing_date }}</a></td>
                         <td style="font-weight: bold;">{{ matter.folder }}</td>
                         <td style="font-weight: bold;">{{ matter.referenceno }}</td>
                         <td style="font-weight: bold;">{{ matter.handling_lawyer.lawyer_name }}</td>

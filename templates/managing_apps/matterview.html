@@ -1,0 +1,91 @@
+{% extends 'base/managementmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+
+    {% include 'base/manageappsnavbar.html' %}
+
+    {% include 'base/caseinfoheader.html' %}
+    <div class="row my-1">
+        <div class="col-lg-12">
+            <h6 class="card-title bg-primary text-white text-center">Due Dates</h6>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width:5%;">Due Date</th>
+                            <th style="width:95%;">Particulars</th>
+                            <th style="width:5%;">Date Complied</th>
+                        </tr>
+                    </thead>
+                    {% for duedate in duedatelist %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ duedate.duedate | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;">{{ duedate.particulars }}</td>
+                        <td style="font-weight: bold;">{{ duedate.date_complied | date:'m/d/Y' }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <h6 class="card-title bg-primary text-white text-center">Activities</h6>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width:5%;">Date</th>
+                            <th style="width:10%;">Tran Type</th>
+                            <th style="width:10%;">Lawyer</th>
+                            <th style="width:65%;">Task</th>
+                            <th style="width:5%;">Spent In Hrs</th>
+                            <th style="width:5%;">Spent In Min</th>
+                        </tr>
+                    </thead>
+                    {% for task in task %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ task.tran_date | date:'m/d/Y' }} </td>
+                        <td style="font-weight: bold;">{{ task.tran_type }}</td>
+                        <td style="font-weight: bold;">{{ task.lawyer }}</td>
+                        <td style="font-weight: bold;">{{ task.task }}</td>
+                        <td style="font-weight: bold;">{{ task.spentinhrs }}</td>
+                        <td style="font-weight: bold;">{{ task.spentinmin }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <h6 class="card-title bg-primary text-white text-center">Documents</h6>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="table-primary text-center">
+                        <tr>
+                            <th style="width:5%;">Document Date</th>
+                            <th style="width:5%;">Prepared By</th>
+                            <th style="width:10%;">Activity</th>
+                            <th style="width:10%;">Description</th>
+                        </tr>
+                    </thead>
+                    {% for docs in docs %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ docs.DocDate | date:'m/d/Y' }} </td>
+                        <td style="font-weight: bold;">{{ docs.Task_Detail.lawyer.access_code }}</td>
+                        <td style="font-weight: bold;">{{ docs.Task_Detail.task }}</td>
+                        <td style="font-weight: bold;">{{ docs.Description }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

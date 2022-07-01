@@ -1,54 +1,37 @@
-{% extends 'base/sysadminmenu.html' %}
+{% extends 'base/managementmenu.html' %}
 {% block title %} Clients {% endblock %}
 {% load crispy_forms_tags %}
+
 {% block appname %}
 Dashboard
 {% endblock %}
 {% block content %}
 <div class="container">
-    {% include 'base/adminappsnavbar.html' %}
-    <form>
-        <div class="input-group input-group-sm mb-1 mt-2">
-            <input name="q" type="text" class="form-control" placeholder="Search for...">
-            <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
-            <a href="{% url 'admin-user-list' %}" class="btn btn-dark" style="margin: left 2px;"><i
-                    class="fas fa-sync-alt"></i></a>
-        </div>
-    </form>
+    {% include 'base/manageappsnavbar.html' %}
     <!-- Table -->
     <table class="table-hover table-bordered table-sm small table">
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
         <thead class="table-primary text-center">
             <tr>
-                <th scope="col">Lawyer Name</th>
-                <th scope="col">Access Code</th>
+                <th scope="col">Employee Name</th>
+                <th scope="col">Group</th>
+                <th scope="col">Hourly Rate</th>
+                <th scope="col">Address</th>
+                <th scope="col">Email</th>
                 <th scope="col">Mobile</th>
-                <th scope="col">Specialization/th>
-                <th scope="col">Remarks</th>
-                <th colspan="2" style="width:3%;">Action</th>
             </tr>
         </thead>
-        {% for user in users %}
+        {% for emplist in emplist %}
         <tr>
-            <td style="font-weight: bold;">{{ user.lawyer_name }}</td>
-            <td style="font-weight: bold;">{{ user.access_code }}</td>
-            <td style="font-weight: bold;">{{ user.phone }}</td>
-            <td style="font-weight: bold;">{{ user.Specialization }}</td>
-            <td style="font-weight: bold;">{{ user.remarks }}</td>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{% url 'admin-lawyer-edit' user.id %}"
-                    title="Edit User Profile">
-                    <i class="fas fa-pen"></i>
-                </a>
-            </td>
-            <td>
-                <a class="btn btn-info btn-sm btn-icon-split" href="{% url 'admin-lawyer-delete' user.id %}"
-                    title="Delete User Profile">
-                    <span class="icon text-white-20">
-                        <i class="fas fa-trash"></i>
-                    </span>
-                </a>
-            </td>
+            <!-- <td style="font-weight: bold;"><a href="{% url 'management-clientview' emplist.id %}">{{emplist.id}}</a>
+            </td> -->
+            <td style="font-weight: bold;"><a href="{% url 'employee-detail' emplist.id %}">
+                    {{ emplist.lawyer_name }}</a></td>
+            <td style="font-weight: bold;">{{ emplist.lawyerID.rank }}</td>
+            <td style="font-weight: bold;">{{ emplist.hourlyrate }}</td>
+            <td style="font-weight: bold;">{{ emplist.lawyerID.address }}</td>
+            <td style="font-weight: bold;">{{ emplist.lawyerID.userid.email }}</td>
+            <td style="font-weight: bold;">{{ emplist.lawyerID.mobile }}</td>
         </tr>
         {% endfor %}
     </table>
@@ -84,5 +67,4 @@ Dashboard
         {% endif %}
     </nav>
 </div>
-
 {% endblock %}

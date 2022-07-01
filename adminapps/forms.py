@@ -138,8 +138,6 @@ class InboxMessageNewForm(forms.ModelForm):
             'messagedate': NumberInput(attrs={'type': 'date'}),
 
         }
-
-
 class LawyerEntryForm(forms.ModelForm):
     class Meta:
         model = Lawyer_Data
@@ -149,10 +147,29 @@ class LawyerEntryForm(forms.ModelForm):
             'Specialization': Textarea(attrs={'cols': 200, 'rows': 3}),
         } 
 
+class UserEntryForm(forms.ModelForm):
+    class Meta:
+        model = User_Profile
+        fields = '__all__'
+        widgets = {
+            'remarks': Textarea(attrs={'cols': 200, 'rows': 3}),
+            'date_acquired' : NumberInput(attrs={'type': 'date'}),
+        }
 class MailsInwardFormNew(forms.ModelForm):
     class Meta:
         model = task_detail
         fields = 'matter', 'tran_date','task_code', 'preparedby', 'lawyer', 'task', 'doc_date','mailing_date', 'examiner', 'mail_type', 'contact_person', 'duecode'
+        widgets = {
+            'task': Textarea(attrs={'cols': 200, 'rows': 3}),
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'doc_date': NumberInput(attrs={'type': 'date'}),
+            'mailing_date': NumberInput(attrs={'type': 'date'}),
+        }
+
+class MailsInwardFormNewWithMatter(forms.ModelForm):
+    class Meta:
+        model = task_detail
+        fields = 'tran_date','task_code', 'preparedby', 'lawyer', 'task', 'doc_date','mailing_date', 'examiner', 'mail_type', 'contact_person', 'duecode'
         widgets = {
             'task': Textarea(attrs={'cols': 200, 'rows': 3}),
             'tran_date': NumberInput(attrs={'type': 'date'}),
@@ -181,7 +198,7 @@ class TaskEntryForm(forms.ModelForm):
         model = task_detail
         fields = 'matter', 'tran_date', 'tran_type', 'doc_type', 'preparedby', 'lawyer', 'task', 'spentinhrs', 'spentinmin'
         widgets = {
-            'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Activity Details..'}),
+            'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Type here the activity details..'}),
             'tran_date': NumberInput(attrs={'type': 'date'}),
             'doc_date': NumberInput(attrs={'type': 'date'}),
             'mailing_date': NumberInput(attrs={'type': 'date'}),

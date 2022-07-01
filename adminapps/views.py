@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from ctypes import c_double
 from datetime import datetime
 from html.entities import html5
@@ -528,6 +529,17 @@ def userlist(request):
 
 @login_required
 def lawyerlist(request):
+    access_code = request.user.user_profile.userid
+    user_id = User.id
+
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    srank = request.user.user_profile.rank
+    username = request.user.username
+
+
     if 'q' in request.GET:
         q = request.GET['q']
         #clients = Client_Data.objects.filter(client_name__icontains=q)
@@ -542,10 +554,39 @@ def lawyerlist(request):
     noofusers = users.count()
     context = {
         'users': users,
-        'noofusers': noofusers
+        'noofusers': noofusers,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
+
     }
     return render(request, 'adminapps/lawyerlist.html', context)
 
+@login_required
+def nonlawyer(request):
+    access_code = request.user.user_profile.userid
+    user_id = User.id
+
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    srank = request.user.user_profile.rank
+    username = request.user.username
+
+    users = User_Profile.objects.filter(rank = 'SECRETARY')
+    noofusers = users.count()
+
+    context = {
+        'users': users,
+        'noofusers': noofusers,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
+
+    }
+
+    return render(request, 'adminapps/lawyerlist.html', context)
 
 @login_required
 def client_information(request, pk):
@@ -608,14 +649,17 @@ def client_modify(request, pk):
     return render(request, 'adminapps/admin_clientupdate.html', context)
 
 def clientlistmatters(request, pk):
-    matters = Matters.objects.filter(folder__client_id=pk)
+    matters = Matters.objects.filter(folder__client_id=pk).order_by('-filing_date')
     client = Client_Data.objects.get(id=pk)
     noofmatters = matters.count()
+
+
 
     context = {
         'matter': matters,
         'client': client,
         'noofmatters':noofmatters,
+
     }
     return render(request, 'adminapps/admin_clientmatterlist.html', context)
 
@@ -705,11 +749,17 @@ def matter_update(request, pk):
 @login_required
 def matter_update_client(request, pk):
     matter = Matters.objects.get(id=pk)
-    task = task_detail.objects.filter(id=pk)
+    task = task_detail.objects.filter(matter__id=pk)
+    duedates = AppDueDate.objects.filter(matter__id=pk, date_complied__isnull=True)
+    print(pk, duedates)
     f_id = matter.folder.id
     c_id = matter.folder.client.id
     folder = CaseFolder.objects.get(id=f_id)
     client = Client_Data.objects.get(id=c_id)
+    tempbills = TempBills.objects.filter(matter__id=pk)
+    tempfilings = TempFilingFees.objects.filter(matter__id=pk)
+    expenses = TempExpenses.objects.filter(matter__id=pk)
+
     if request.method == 'POST':
         form = EntryMatterForm(request.POST, instance=matter)
         if form.is_valid():
@@ -727,6 +777,10 @@ def matter_update_client(request, pk):
         'folder': folder,
         'client': client,
         'task': task,
+        'duedatelist':duedates,
+        'tempbills': tempbills,
+        'tempfilings': tempfilings,
+        'listofexpenses': expenses,
     }
     return render(request, 'adminapps/matter_update_inclient.html', context)
 
@@ -1271,7 +1325,7 @@ def entry_activitycodes(request):
         'codes': activitycodes,
     }
 
-    return render(request, 'adminapps/entry_activitycodes_1.html', context)
+    return render(request, 'adminapps/entry_activitycodes.html', context)
 
 
 def entry_filingfees(request, pk):
@@ -1819,6 +1873,110 @@ def clientsearch_docs(request, pk):
 
     return render(request, 'adminapps/clientsearch_docs.html', context) 
 
+def mattersearch_docs(request, pk):
+    matter = Matters.objects.get(id=pk)
+    cid = matter.folder.client.id
+    client = Client_Data.objects.get(id=cid)
+
+    docs = FilingDocs.objects.filter(Task_Detail__matter__id=pk).order_by('-DocDate')
+
+    noofclients = docs.count()
+    paginator = Paginator(docs, 11)
+    page = request.GET.get('page')
+    all_docs = paginator.get_page(page)
+
+    context = {
+        'page': page,
+        'client':client,
+        'noofclients': noofclients,
+        'clients': all_docs,
+        'matter': matter,
+    }
+
+    return render(request, 'adminapps/mattersearch_docs.html', context) 
+
+def matter_unbilledservices(request, pk):
+    matter = Matters.objects.get(id=pk)
+    cid = matter.folder.client.id
+    client = Client_Data.objects.get(id=cid)
+    tempbills = TempBills.objects.filter(matter__id=pk)
+    tempfilings = TempFilingFees.objects.filter(matter__id=pk)
+    expenses = TempExpenses.objects.filter(matter__id=pk)
+    bill_amt_dollar = 0
+    bill_amt_peso = 0
+    filing_fee_dollar = 0
+    filing_fee_peso = 0
+    expense_dollar = 0
+    expense_dollar = 0
+    expense_peso = 0
+
+
+    total_amount = TempBills.objects.filter(matter__id=pk).aggregate(Sum('amount'))
+    bill_amt_dollar = total_amount["amount__sum"]
+    if bill_amt_dollar is None:
+        bill_amt_dollar = 0
+
+    total_amount = TempBills.objects.filter(matter__id=pk).aggregate(Sum('pesoamount'))
+    bill_amt_peso = total_amount["pesoamount__sum"]
+    if bill_amt_peso is None:
+        bill_amt_peso = 0
+
+    total_amount = TempFilingFees.objects.filter(matter__id=pk).aggregate(Sum('expense_actual_amt'))
+    filing_fee_dollar = total_amount["expense_actual_amt__sum"]
+    if filing_fee_dollar is None:
+        filing_fee_dollar = 0        
+
+    total_amount = TempFilingFees.objects.filter(matter__id=pk).aggregate(Sum('pesoamount'))
+    filing_fee_peso = total_amount["pesoamount__sum"]
+    if filing_fee_peso is None:
+        filing_fee_peso = 0
+
+    total_amount = TempExpenses.objects.filter(matter__id=pk).aggregate(Sum('expense_actual_amt'))
+    expense_dollar = total_amount["expense_actual_amt__sum"]
+    if expense_dollar is None:
+        expense_dollar = 0
+    
+    total_amount = TempExpenses.objects.filter(matter__id=pk).aggregate(Sum('pesoamount'))
+    expense_peso = total_amount["pesoamount__sum"]
+    if expense_peso is None:
+        expense_peso = 0
+
+
+    total_amount_dollar = bill_amt_dollar+filing_fee_dollar+expense_dollar
+    total_amount_peso = bill_amt_peso+filing_fee_peso+expense_peso
+
+    docs = FilingDocs.objects.filter(Task_Detail__matter__id=pk).order_by('-DocDate')
+
+    noofclients = docs.count()
+    paginator = Paginator(docs, 11)
+    page = request.GET.get('page')
+    all_docs = paginator.get_page(page)
+
+
+    context = {
+        'page': page,
+        'client': client,
+        'noofclients': noofclients,
+        'clients': all_docs,
+        'matter': matter,
+        'tempbills': tempbills,
+        'tempfilings': tempfilings,
+        'listofexpenses': expenses,
+        'bill_amt_peso': bill_amt_peso,
+        'bill_amt_dollar': bill_amt_dollar,
+        'filing_fee_dollar': filing_fee_dollar,
+        'filing_fee_peso': filing_fee_peso,
+        'expense_dollar': expense_dollar,
+        'expense_peso': expense_peso,
+        'total_amount_dollar':total_amount_dollar,
+        'total_amount_peso':total_amount_peso
+
+    }
+
+    return render(request, 'adminapps/matter_unbilledservices.html', context) 
+
+
+
 
 def awaiting_docs(request, pk):
     docs = awaitingdocs.objects.filter(matter__folder__client_id=pk).order_by('-awaiting_date')
@@ -1916,6 +2074,162 @@ def addawaitingdocs_matter(request, pk):
 
     return render(request, 'adminapps/newmatterawaitingdocs.html', context)
 
+def mails_inward_new(request):
+    docs = task_detail.objects.all().order_by('-tran_date')
+
+    if request.method == 'POST':
+        task_form = MailsInwardFormNew(request.POST)
+        if task_form.is_valid():
+            mailin_rec = task_form.save()
+            mailin_rec.tran_type = 'Non-Billable'
+            mailin_rec.doc_type = 'Incoming'
+            mailin_rec.save()
+
+            return redirect('sysadmin-home')
+        else:
+            task_form = MailsInwardFormNew()
+    else:
+        task_form = MailsInwardFormNew()
+
+    context = {
+        'form': task_form,
+        'matters': docs,
+    }
+    return render(request, 'adminapps/newinward.html', context)
+
+def matter_newmail(request, pk):
+    matter = Matters.objects.get(id=pk)
+    c_id = matter.folder.client.id    
+    client = Client_Data.objects.get(id = c_id)
+    tasks = task_detail.objects.filter(matter__id = pk).order_by('-tran_date')
+
+    if request.method == 'POST':
+        task_form = MailsInwardFormNewWithMatter(request.POST)
+        if task_form.is_valid():
+            mailin_rec = task_form.save()
+            mailin_rec.matter_id = pk
+            mailin_rec.tran_type = 'Non-Billable'
+            mailin_rec.doc_type = 'Incoming'
+            mailin_rec.save()
+            return redirect('admin-update-matter_client', pk)
+    else:
+        task_form =  MailsInwardFormNewWithMatter()
+    
+    context = {
+        'form':task_form,
+        'matter': matter,
+        'client': client,
+        'tasks': tasks,
+    }
+    return render(request, 'adminapps/newmail.html', context)
+
+def add_task(request, pk):
+    def perform_billable_services():
+        def save_to_tempPF():
+            tempbills = TempBills.objects.filter(
+                matter_id=matter_id, tran_date=tran_date, bill_service_id=bill_id)
+            if tempbills.exists():
+                pass
+            else:
+                # if prate > 0:
+                #     pesoamount = (PF_amount * prate)
+                # else:
+                #     prate = 0
+                #     pesoamount = 0
+
+                tempbills = TempBills(
+                    matter_id=matter_id,
+                    tran_date=tran_date,
+                    bill_service_id=bill_id,
+                    lawyer_id=lawyer,
+                    particulars=bill_description,
+                    amount=PF_amount,
+                    # pesorate=prate,
+                    currency=currency)
+                tempbills.save()
+
+        def save_to_tempfiling():
+            tempfees = TempFilingFees.objects.filter(
+                matter_id=matter_id, tran_date=tran_date, filing=filing)
+            if tempfees.exists():
+                pass
+            else:
+                tempfees = TempFilingFees(
+                    matter_id=matter_id,
+                    tran_date=tran_date,
+                    bill_id=filingfees.activitycode.id,
+                    filing=filing,
+                    lawyer_id=lawyer,
+                    expense_detail=bill_description,
+                    pesoamount=PF_amount,
+                    expense_actual_amt=PF_amount,
+                    # pesorate=prate,
+                    currency=currency)
+                tempfees.save()
+
+        tran_type = request.POST["tran_type"]
+        task_code = request.POST["task_code"]
+        tran_date = request.POST["tran_date"]
+        if tran_type is None:
+            pass
+        else:
+            result = ActivityCodes.objects.filter(id=task_code)
+            matter_id = matter.id
+            apptype = matter.apptype_id
+            lawyer = matter.handling_lawyer_id
+            for activitycode in result:
+                #                print("pumasok sa result")
+                bill_description = activitycode.bill_description
+                bill_id = activitycode.id
+                PF_amount = activitycode.amount
+                prate = activitycode.pesorate
+                currency = activitycode.currency
+#                print(bill_description, bill_id, PF_amount, pesorate)
+                save_to_tempPF()
+
+            feeresult = FilingCodes.objects.filter(activitycode_id=task_code)
+            for filingfees in feeresult:
+                filing = filingfees.filing
+                bill_description = filingfees.filing_description
+                bill_id = filingfees.activitycode.id
+                PF_amount = filingfees.amount
+                prate = filingfees.pesorate
+                currency = filingfees.currency
+                save_to_tempfiling()
+
+    matter = Matters.objects.get(id=pk)
+    folder_id = matter.folder.folder_type.id
+    codes = ActivityCodes.objects.all()
+    codes = ActivityCodes.objects.filter(foldertype__id = folder_id)
+    tasks = task_detail.objects.filter(matter__id=pk)
+    c_id = matter.folder.client.id    
+    client = Client_Data.objects.get(id = c_id)
+
+    if request.method == "POST":
+        # Get the posted form
+        form = TaskEntryForm(request.POST)
+        if form.is_valid():
+            print("pumasok")
+            task_rec = form.save(commit=False)
+            task_rec.matter_id = matter.id
+            task_rec.task_code_id = request.POST['task_code']
+            task_rec.save()
+            perform_billable_services()
+            return redirect('admin-matter-list')
+        else:
+            print("meron mali")
+    else:
+        form = TaskEntryForm()
+
+    context = {
+        'form': form,
+        'matter': matter,
+        'client': client,
+        'm_id': pk,
+        'codes': codes,
+        'tasks': tasks,
+    }
+    return render(request, 'adminapps/add_new_task.html', context)
 
 
 

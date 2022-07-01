@@ -1,0 +1,224 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light small">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Lawyer Detail</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Client List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">List Matters</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Print DSR (Daily Service Report</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- <div class="card-body"> -->
+        <div class="card text-white">
+            <div class="row mt-2">
+                <form method="POST">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;"> Name</span>
+                                <input type="text" name="matter" value="{{lawyer.lawyer_name}}" class=" form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Access Code</span>
+                                <input type="text" name="matter" value="{{lawyer.access_code}}" class=" form-control"
+                                    readonly>
+                            </div>
+
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;"> E-Mail</span>
+                                <input type="text" name="matter" value="{{lawyer.lawyerID.userid.email}}"
+                                    class="form-control" readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Specialization</span>
+                                <input type="text" name="matter" value="{{lawyer.Specialization}}" class="form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Lawyer H/Rate</span>
+                                <input type="text" name="matter" value="{{lawyer.hourlyrate}}" class="form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Address</span>
+                                <input type="text" name="matter" value="{{userprof.address}}" class="form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Group</span>
+                                <input type="text" name="matter" value="{{userprof.rank}}" class="form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Handles</span>
+                                <input type="text" name="matter" value="{{userprof.supporto}}" class="form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Mobile</span>
+                                <input type="text" name="matter" value="{{userprof.mobile}}" class="form-control"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">IBP Chapter</span>
+                                <input type="text" name="matter" value="{{lawyer.IBPChapter}}" class=" form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">IBP Roll#</span>
+                                <input type="text" name="matter" value="{{lawyer.IBPRollNo}}" class=" form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">IBP Roll#</span>
+                                <input type="text" name="matter" value="{{lawyer.IBPRollNo}}" class=" form-control"
+                                    readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">IBP Lifetime</span>
+                                <input type="text" name="matter" value="{{lawyer.IBPLifetimeNo}}" class=" form-control"
+                                    readonly>
+                            </div>
+                        </div>
+                        <div class="input-group input-group-sm mb-1">
+                            <span class="input-group-text" style="width: 110px;">Remarks</span>
+                            <input type="text" name="matter" value="{{userprof.remarks}}" class=" form-control"
+                                readonly>
+                        </div>
+                        <div class="input-group input-group-sm mb-1">
+                            <span class="input-group-text" style="width: 110px;">Profile Pic</span>
+                            <input type="text" name="matter" value="{{lawyer.profile_pic}}" class=" form-control"
+                                readonly>
+                        </div>
+                    </div>
+                    <a class='btn btn-outline-primary btn-sm mb-3 mt-2'
+                        href="{% url 'management-lawyerlist' %}">Return</a>
+                </form>
+            </div>
+        </div>
+
+        <h5 class="text-center">Visual Summary Data </h5>
+        <hr>
+        <div class="row mb-1">
+            <div class="col-md-6">
+                <h6 class="text-center font-weight-bold">Number Of Matters Todate </h6>
+                <canvas id="myChart" width="1000" height="150"></canvas>
+                <script>
+                    const ctx = document.getElementById('myChart').getContext('2d');
+                    const myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: [{% for data in data %} '{{data.casetype}}', {% endfor %}],
+                    datasets: [{
+                        label: '# of matters',
+                        data: [{% for data in data %} {{ data.no_of_matters }}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                                borderWidth: 1
+                                    }]
+                                        },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                                    });
+                </script>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-center font-weight-bold">Number Of Matters Current Month </h6>
+                <canvas id="myChart1" width="1000" height="150"></canvas>
+                <script>
+                    const ctx1 = document.getElementById('myChart1').getContext('2d');
+                    const myChart1 = new Chart(ctx1, {
+                        type: 'line',
+                        data: {
+                            labels: [{% for data in data1 %} '{{data.casetype}}', {% endfor %}],
+                    datasets: [{
+                        label: '# of matters',
+                        data: [{% for data in data1 %} {{ data.no_of_matters }}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                                borderWidth: 1
+                                                }]
+                                                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                                                });
+                </script>
+            </div>
+
+        </div>
+
+        <!-- </div> -->
+    </div>
+</div>
+
+{% endblock content%}

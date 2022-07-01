@@ -106,9 +106,27 @@ urlpatterns = [
          management.view_matter, name='management-view-matter'),
     path('management/view_newclients/', management.view_new_clients,
          name='management-view-newclients'),
-
     path('management/chart_onbills', management.chartonbillings,
          name='management-chart-view-bills'),
+    path('management/client/', management.clientlist, name='manage-clientlist'),
+    path('management/matters/', management.matterlist, name='manage-matter-list'),
+
+    path('management/client_matterlist/<int:pk>',
+         management.clientlistmatters, name='management-clientview'),
+    path('management/matter/update_client/<int:pk>/', management.matter_update_client, name='management-matterview'),
+
+    path('management/employeelist/',
+         management.lawyerlist, name='management-lawyerlist'),   
+     path('mamagement/opendocument/<int:pk>/', management.open_filingdocs, name='management-documentview'),
+    path('management/unpaidbills/',management.unpaidbills, name='management-unpaidbills'), 
+
+    path('management/unpaid_details/<int:pk>/', management.unpaid_details, name='management-unpaid_details'), 
+
+    path('management/empdetails/<int:pk>/', management.employee_detail, name='employee-detail'), 
+
+     
+
+  
 
 
     # for Main VIew  urls (adimin)
@@ -133,6 +151,7 @@ urlpatterns = [
     path('sysadmin/users/add_user/', main_view.add_user, name='admin-user-add'),
 
     path('sysadmin/lawyers/', main_view.lawyerlist, name='admin-lawyer-list'),
+    path('sysadmin/nonlawyer/', main_view.nonlawyer, name='admin-nonlawyer-list'),
     path('sysadmin/lawyers/add_lawyer/',
          main_view.add_lawyer, name='admin-lawyer-add'),
     path('sysadmin/lawyers/edit_lawyer/<int:pk>/',
@@ -152,9 +171,12 @@ urlpatterns = [
          main_view.matter_update_client, name='admin-update-matter_client'),
     path('sysadmin/matter/update_folder/<int:pk>/',
          main_view.matter_update_folder, name='admin-update-matter_folder'),
-
     path('sysadmin/matter/delete_matter/<int:pk>/',
          main_view.matter_delete, name='admin-delete-matter'),
+    path('sysadmin/matter/new_mail/<int:pk>/',
+         main_view.matter_newmail, name='matter_new-mail'),
+
+         
 
     #    path('sysadmin/matter_info/add/', main_view.IPmatter_add_details, name='admin-IPmatter-details'),
     #    path('sysadmin/matter_info/update/<int:pk>/', main_view.IPmatter_edit_details, name='admin-IPmatter-edit-details'),
@@ -198,6 +220,20 @@ urlpatterns = [
          main_view.search_docs, name='search_docs'),
     path('sysadmin/client_searchdocs/<int:pk>',
          main_view.clientsearch_docs, name='clientsearch_docs'),
+
+    path('sysadmin/matter_searchdocs/<int:pk>',
+         main_view.mattersearch_docs, name='mattersearch_docs'),
+
+    path('sysadmin/matter_unbilled/<int:pk>',
+         main_view.matter_unbilledservices, name='matter_unbilledservices'),
+    path('sysadmin/message/inward/add/', main_view.mails_inward_new,
+         name='mails_inward_new'),
+    path('sysadmin/matters/createtask/<int:pk>/',
+         main_view.add_task, name='add_task'),
+
+
+
+     
     path('sysadmin/client_matterlist/<int:pk>',
          main_view.clientlistmatters, name='clientlistmatters'),
 

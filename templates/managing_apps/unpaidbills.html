@@ -1,0 +1,31 @@
+{% extends 'base/managementmenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% include 'base/manageappsnavbar.html' %}
+    <table class="table-hover table-bordered table-sm small table">
+        <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+        <thead class="table-primary text-center">
+            <tr>
+                <th style="width:90%;">Client</th>
+                <th style="width:10%;">Unpaid Bills</th>
+            </tr>
+        </thead>
+        {% for clientunpaid in unpaidbills %}
+        <tr>
+            <td style="font-weight: bold;">{{clientunpaid.matter__folder__client__client_name }}</td>
+            <td style="font-weight: bold; text-align: center;">
+                <a href="{% url 'management-unpaid_details' clientunpaid.matter__folder__client__id %}">
+                    {{ clientunpaid.NoOfMatter }}</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+{% endblock %}

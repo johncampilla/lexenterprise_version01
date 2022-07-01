@@ -13,7 +13,7 @@ class CreateUserForm(UserCreationForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['username', 'email', 'last_name', 'first_name']
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:

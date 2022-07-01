@@ -8,13 +8,17 @@
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
         <li>
-            <a href="{% url 'mails_inward_new' %}" class="btn btn-primary btn-sm mt-3"><i
-                    class="fas fa-plus"></i>&nbsp;&nbsp;Incoming</a>
             <a href="{% url 'admin-new-client' %}" class="btn btn-primary btn-sm mt-3"><i
-                    class="fas fa-plus"></i>&nbsp;&nbsp;New Client</a>
-            <a href="#" class="btn btn-primary btn-sm mt-3"><i class="fas fa-plus"></i>&nbsp;&nbsp;New Matter</a>
-            <a href="{% url 'search_docs' %}" class="btn btn-primary btn-sm mt-3">Search Document</a>
-            <a href="{% url 'activity-code' %}" class="btn btn-primary btn-sm mt-3">Reference</a>
+                    class="fas fa-plus"></i>&nbsp;&nbsp;Messages</a>
+            <a href="{% url 'manage-clientlist' %}" class="btn btn-primary btn-sm mt-3"><i
+                    class="fas fa-clone"></i>&nbsp;&nbsp;Clients</a>
+            <a href="{% url 'manage-matter-list' %}" class="btn btn-primary btn-sm mt-3"><i
+                    class="fas fa-briefcase"></i>&nbsp;&nbsp;Matters</a>
+            <a href="{% url 'management-lawyerlist' %}" class="btn btn-primary btn-sm mt-3"><i
+                    class="fas fa-portrait"></i>&nbsp;&nbsp;lawyers</a>
+            <a href="{% url 'management-unpaidbills' %}" class="btn btn-primary btn-sm mt-3"><i
+                    class="fas fa-money-bill"></i>&nbsp;&nbsp;Unpaid
+                Bills</a>
 
         </li>
         <li class="nav-item dropdown no-arrow mx-1">

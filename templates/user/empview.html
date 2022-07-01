@@ -1,0 +1,35 @@
+{% extends 'base/sysadminmenu.html' %}
+{% block title %} Staff Profile {% endblock %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="row">
+    </div>
+
+    <div class="row my-4">
+        <div class="col-md-4"></div>
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    Customer Detail Page
+                </div>
+                <div class="row p-3">
+                    <div class="col-md-8">
+                        <span class="h4 text-dark">Porfile Information </span class="h4">
+                        <hr>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ u_form | crispy }}
+                            {{ p_form | crispy }}
+                            <a class='btn btn-secondary' href="#">Return</a>
+                            <input class='btn btn-success' type="submit" value="Update">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

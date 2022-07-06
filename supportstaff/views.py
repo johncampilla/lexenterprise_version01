@@ -9,7 +9,7 @@ from adminapps.models import *
 from datetime import date, datetime, timedelta
 from django.core.paginator import Paginator
 from dateutil.relativedelta import relativedelta
-from adminapps.forms import MailsInwardFormNew, InboxAttachmentEntryForm, InboxAttachmentViewForm, InboxMessageNewForm, InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry, ReviewMatterForm,IPDetailForm, Non_IPDetailForm, ClassOfGoodsEntry, ApplicantEntryForm, AddTaskEntryForm
+from adminapps.forms import MailsInwardFormNew, InboxAttachmentEntryForm, InboxAttachmentViewForm, InboxMessageNewForm, InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry, ReviewMatterForm2, ReviewMatterForm,IPDetailForm, Non_IPDetailForm, ClassOfGoodsEntry, ApplicantEntryForm, AddTaskEntryForm
 from django.db.models import Q, Sum, Count
 from django.core.exceptions import ObjectDoesNotExist
 from dateutil.relativedelta import relativedelta
@@ -80,6 +80,8 @@ def main(request):
 
     duedates = AppDueDate.objects.filter(
         multiple_q, duedate__gte=duedate1, duedate__lte=duedate2, date_complied__isnull=True).order_by('-duedate')
+    
+    duedates_count = duedates.count()
 
     messages = inboxmessage.objects.filter(
         messageto__userid=access_code, status='UNREAD')
@@ -87,9 +89,11 @@ def main(request):
         sw = 1
     else:
         sw = 0
-
+    messages_count = messages.count()
     recenttask = task_detail.objects.filter(
         multiple_q, tran_date__year=today.year, tran_date__month=today.month).order_by('-tran_date')
+    
+    recenttask_count = recenttask.count()
 
     multiple_q2 = Q(Q(Task_Detail__matter__handling_lawyer__access_code=code1) | Q(Task_Detail__matter__handling_lawyer__access_code=code2) | Q(Task_Detail__matter__handling_lawyer__access_code=code3) | Q
                     (Task_Detail__matter__handling_lawyer__access_code=code4) | Q(Task_Detail__matter__handling_lawyer__access_code=code5) | Q(Task_Detail__matter__handling_lawyer__access_code=code6) | Q(Task_Detail__matter__handling_lawyer__access_code=code7))
@@ -103,8 +107,12 @@ def main(request):
         'username': username,
         'duedates': duedates,
         'messages': messages,
+        'messages_count':messages_count,
         'recenttask': recenttask,
         'recentdocs': recentdocs,
+        'duedates_count': duedates_count,
+        'recenttask_count':recenttask_count,
+
         'sw': sw,
     }
 
@@ -236,7 +244,6 @@ def matter_review(request, pk):
                     computeduedate()
 
     matter = Matters.objects.get(id=pk)
-    nature = NatureOfCase.objects.filter(casetype_id=matter.case_type_id)
     c_id = matter.folder.client.id
     client = Client_Data.objects.get(id=c_id)
     appduedates = AppDueDate.objects.filter(matter__id=pk).order_by('-duedate')
@@ -245,7 +252,7 @@ def matter_review(request, pk):
     expenses = TempExpenses.objects.filter(
         Q(matter__id=pk), Q(status='O') | Q(status='P'))
     if request.method == 'POST':
-        form = ReviewMatterForm(request.POST, instance=matter)
+        form = ReviewMatterForm2(request.POST, instance=matter)
         if form.is_valid():
             form.save()
 #            apptype = request.POST["apptype"]
@@ -254,9 +261,9 @@ def matter_review(request, pk):
             validateduedates()
             return redirect('supportstaff-matter_review', pk)
         else:
-            form = ReviewMatterForm(instance=matter)
+            form = ReviewMatterForm2(instance=matter)
     else:
-        form = ReviewMatterForm(instance=matter)
+        form = ReviewMatterForm2(instance=matter)
 
     activities = task_detail.objects.filter(
         matter__id=pk).order_by('-tran_date')
@@ -312,7 +319,6 @@ def matter_review(request, pk):
         'tempfilings': tempfilings,
         'apptype': apptype,
         'duelist': appduedates,
-        'nature': nature,
 
     }
 
@@ -982,29 +988,35 @@ def recentactivities(request, pk):
     }
     return render(request, 'supportstaff/recenttaskview.html', context)
 
+    # Financial Data
+    # ARBills = AccountsReceivable.objects.filter(
+    #     matter__id=matterid, payment_tag="UN").order_by('bill_date')
+    # Total_bill_amount = AccountsReceivable.objects.filter(
+    #     matter__id=matterid, payment_tag="UN").aggregate(Sum('bill_amount'))
+    # Unpaid_amt = Total_bill_amount["bill_amount__sum"]
+    # tmpbills = TempBills.objects.filter(
+    #     matter_id=matterid).order_by('-tran_date')
+    # tmpfees = TempFilingFees.objects.filter(
+    #     matter_id=matterid).order_by('-tran_date')
+    # tmpexp = TempExpenses.objects.filter(
+    #     matter_id=matterid).order_by('-tran_date')
+
 
 def recentviewduedates(request, pk):
+    username = request.user.username
     duedate = AppDueDate.objects.get(id=pk)
     matterid = duedate.matter.id
-    activity = task_detail.objects.filter(
-        matter__id=matterid).order_by('-tran_date')
+    activity = task_detail.objects.filter(matter__id=matterid).order_by('-tran_date')
+    activity_count = activity.count()
     matter = Matters.objects.get(id=matterid)
-    ARBills = AccountsReceivable.objects.filter(
-        matter__id=matterid, payment_tag="UN").order_by('bill_date')
-    Total_bill_amount = AccountsReceivable.objects.filter(
-        matter__id=matterid, payment_tag="UN").aggregate(Sum('bill_amount'))
-    Unpaid_amt = Total_bill_amount["bill_amount__sum"]
-    tmpbills = TempBills.objects.filter(
-        matter_id=matterid).order_by('-tran_date')
-    tmpfees = TempFilingFees.objects.filter(
-        matter_id=matterid).order_by('-tran_date')
-    tmpexp = TempExpenses.objects.filter(
-        matter_id=matterid).order_by('-tran_date')
     if request.method == 'POST':
         form = DueDateEntryForm(request.POST, instance=duedate)
         if form.is_valid():
-            form.save()
-            return redirect('associate-home')
+           duedate_rec = form.save(commit=False)
+           duedate_rec.matter_id = matterid
+           duedate_rec.createdby = username
+           duedate_rec.save()
+           return redirect('supportstaff-home')
         else:
             form = DueDateEntryForm(instance=duedate)
     else:
@@ -1014,13 +1026,8 @@ def recentviewduedates(request, pk):
         'form': form,
         'matter': matter,
         'activity': activity,
-        'ARBills': ARBills,
-        'total_unpaid': Unpaid_amt,
-        'due_id': pk,
-        'tmpbills': tmpbills,
-        'tmpfees': tmpfees,
-        'tmpexp': tmpexp,
-
+        'activity_count': activity_count,
+        'duedate': duedate
     }
     return render(request, 'supportstaff/recentduedateview.html', context)
 
@@ -1108,9 +1115,9 @@ def newdocumentPDF(request, pk, m_id):
             docs_rec = form.save(commit=False)
             docs_rec.Task_Detail_id = pk
             docs_rec.save()
-            return redirect('recent_adddocument', pk, m_id)
+            return redirect('superstaff-recent_adddocument', pk, m_id)
         else:
-            return redirect('recent_adddocument', pk, m_id)
+            return redirect('superstaff-recent_adddocument', pk, m_id)
     else:
         form = FilingDocsEntry()
 

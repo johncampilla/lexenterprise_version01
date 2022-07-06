@@ -61,6 +61,7 @@ Dashboard
                     <form method="POST">
                         {% csrf_token %}
                         <!-- {{ form | crispy }} -->
+
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm mb-1">
@@ -73,68 +74,64 @@ Dashboard
                                     <input type="text" name="handling_lawyer" value="{{matter.handling_lawyer}}"
                                         class="form-control" readonly>
                                 </div>
+
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px;">Appearance</span>
-                                    <input type="text" name="appearance" value="{{matter.appearance}}"
-                                        class="form-control" readonly>
+                                    {{form.appearance}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Reference No.</span>
+                                    {{form.referenceno}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Date Filed</span>
+                                    {{form.filing_date}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Filed At</span>
+                                    {{form.filed_at}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Status</span>
+                                    {{form.status}}
                                 </div>
                             </div>
+
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px;">Type Of Case</span>
-                                    <input type="text" name="case_type" value="{{matter.case_type}}"
-                                        class="form-control" readonly>
+                                    {{form.case_type}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px;">Type Of Appln</span>
-                                    <input type="text" name="apptype" value="{{matter.apptype}}" class="form-control"
-                                        readonly>
+                                    {{form.apptype}}
                                 </div>
 
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px;">Nature</span>
-                                    <input type=text name="nature" value="{{matter.nature}}" class="form-control"
-                                        readonly>
+                                    {{form.nature}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Client Ref#</span>
+                                    {{form.clientrefno}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Our Ref#</span>
+                                    {{form.matterno}}
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-12">
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px;">Matter Title</span>
-                                    <input type="text" name="matter_title" value="{{matter.matter_title}}"
-                                        class="form-control" readonly>
+                                    {{form.matter_title}}
                                 </div>
-                                <div class="input-group input-group-sm mb-1">
+                                <div class="input-group input-group-sm mb-2">
                                     <span class="input-group-text" style="width: 110px;">Remarks</span>
                                     {{form.remarks}}
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Client Ref#</span>
-                                        {{form.clientrefno}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Our Ref#</span>
-                                        {{form.matterno}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Status</span>
-                                        {{form.status}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Reference No.</span>
-                                        {{form.referenceno}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Date Filed</span>
-                                        {{form.filing_date}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Filed At</span>
-                                        {{form.filed_at}}
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                         <a href="{% url 'supportstaff-matterlist' %}"

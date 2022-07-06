@@ -13,9 +13,15 @@ from userprofile.models import User_Profile
 
 today = date.today()
 curr_month = today.month % 12
+curr_year = today.year
+
+prev_year  = today.year
 prev_month = today.month -1
 if prev_month == 0:
     prev_month = 12
+    prev_year  = today.year -1 
+
+
 
 # Create your views here.
 
@@ -38,8 +44,14 @@ def main(request):
     bill_amount = AccountsReceivable.objects.filter(bill_date__year = today.year, bill_date__month = today.month).exclude(payment_tag="CN").aggregate(Sum('bill_amount'))
     bill_amt = bill_amount["bill_amount__sum"]
 
-    prev_bill_amount = AccountsReceivable.objects.filter(bill_date__year = today.year, bill_date__month = prev_month).exclude(payment_tag="CN").aggregate(Sum('bill_amount'))
+    prev_bill_amount = AccountsReceivable.objects.filter(bill_date__year = prev_year, bill_date__month = prev_month).exclude(payment_tag="CN").aggregate(Sum('bill_amount'))
     prev_bill_amt = prev_bill_amount["bill_amount__sum"]
+
+    peso_amount = AccountsReceivable.objects.filter(bill_date__year = today.year, bill_date__month = today.month).exclude(payment_tag="CN").aggregate(Sum('pesoamount'))
+    peso_amt = peso_amount["pesoamount__sum"]
+
+    prev_peso_amount = AccountsReceivable.objects.filter(bill_date__year =prev_year, bill_date__month = prev_month).exclude(payment_tag="CN").aggregate(Sum('pesoamount'))
+    prev_peso_amt = prev_peso_amount["pesoamount__sum"]
 
     Unbill_amount = AccountsReceivable.objects.filter(payment_tag = 'UN').aggregate(Sum('bill_amount'))
     unbill_amt = Unbill_amount["bill_amount__sum"]
@@ -104,7 +116,9 @@ def main(request):
         'matterscount' : matterscount,
         'prevcount' : prevmonthmatters,
         'ARbills': bill_amt,
+        'peso_amt': peso_amt,        
         'prev_ARbills' : prev_bill_amt,
+        'prev_peso_amt':prev_peso_amt,
         'unbill_amount': unbill_amt,
         'queryset' : queryset,
         'inventory': lawyerInventory,
@@ -119,12 +133,14 @@ def main(request):
     return render(request, 'managing_apps/index.html', context)
 
 def view_new_clients(request):
+
+    # filtering new clients for the month ######################
     clients = Client_Data.objects.filter(date_acquired__year = today.year, date_acquired__month = today.month).order_by('client_name')
     client_count = clients.count()
-    prevclients = Client_Data.objects.filter(date_acquired__year = today.year, date_acquired__month = prev_month).order_by('-date_acquired')
-    prevclient_counts = prevclients.count()
 
-    #client_summary = Matters.objects.values('folder__folder_type__folder').annotate(case_count=Count('folder__folder_type__folder')).filter(filing_date__year = today.year, filing_date__month = today.month).order_by('-case_count')
+    # filtering new clients for the month ######################
+    prevclients = Client_Data.objects.filter(date_acquired__year = prev_year, date_acquired__month = prev_month).order_by('-date_acquired')
+    prevclient_counts = prevclients.count()
 
     client_summary_count = Matters.objects.values('folder__client__client_name').annotate(NoOfMatter = Count('folder__client')).filter(filing_date__year = today.year, filing_date__month = today.month).order_by('folder__client__client_name')
 
@@ -149,11 +165,13 @@ def view_new_clients(request):
     return render(request, 'managing_apps/view_newclients.html', context)
 
 def view_new_matters(request):
+    # filter matters filed current month #############
     matters = Matters.objects.filter(filing_date__year = today.year, filing_date__month = today.month ).order_by('-filing_date')
-    prevmatters = Matters.objects.filter(filing_date__year = today.year, filing_date__month = prev_month).order_by('-filing_date')
+    # filter matters filed previous month
+    prevmatters = Matters.objects.filter(filing_date__year = prev_year, filing_date__month = prev_month).order_by('-filing_date')
 
     matter_count = matters.count()
-    prevmonthmatters = prevmatters.count
+    prevmonthmatters = prevmatters.count()
 
     lawyer_summary = Matters.objects.values('handling_lawyer__lawyer_name').annotate(case_count=Count('handling_lawyer__lawyer_name')).filter(filing_date__year = today.year, filing_date__month = today.month).order_by('-case_count')
     prev_lawyer_summary = Matters.objects.values('handling_lawyer__lawyer_name').annotate(case_count=Count('handling_lawyer__lawyer_name')).filter(filing_date__year = today.year, filing_date__month = prev_month).order_by('-case_count')
@@ -193,7 +211,7 @@ def view_matter(request, pk):
     Tofees_amt = tofees_amount["ofees_amount__sum"]
     Tope_amt = tope_amount["ope_amount__sum"]
 
-    listpayments = Payments.objects.filter(matter_id=pk).order_by("-payment_date")
+    listpayments = Payments.objects.filter(bill_number__matter__id=pk).order_by("-payment_date")
 
     context = {
         'matter' : matter,
@@ -264,17 +282,27 @@ def clientlist(request):
     return render(request, 'managing_apps/clientlist.html', context)
 
 def clientlistmatters(request, pk):
+    access_code = request.user.user_profile.userid
+    user_id = User.id
+
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+    messageto_id = user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    srank = request.user.user_profile.rank
+    username = request.user.username
+
     matters = Matters.objects.filter(folder__client_id=pk).order_by('-filing_date')
     client = Client_Data.objects.get(id=pk)
     noofmatters = matters.count()
-
-
 
     context = {
         'matter': matters,
         'client': client,
         'noofmatters':noofmatters,
-
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
     }
     return render(request, 'managing_apps/clientview.html', context)
 
@@ -291,7 +319,9 @@ def matter_update_client(request, pk):
 
     matter = Matters.objects.get(id=pk)
     task = task_detail.objects.filter(matter__id=pk)
+    task_count = task.count()
     duedates = AppDueDate.objects.filter(matter__id=pk, date_complied__isnull=True)
+    duedate_count = duedates.count()
     f_id = matter.folder.id
     c_id = matter.folder.client.id
     folder = CaseFolder.objects.get(id=f_id)
@@ -300,6 +330,10 @@ def matter_update_client(request, pk):
     tempfilings = TempFilingFees.objects.filter(matter__id=pk)
     expenses = TempExpenses.objects.filter(matter__id=pk)
     docs = FilingDocs.objects.filter(Task_Detail__matter__id=pk)
+    docs_count = docs.count()
+    applicant = Applicant.objects.filter(matter__id=pk)
+
+
 
 
     context = {
@@ -308,6 +342,7 @@ def matter_update_client(request, pk):
         'client': client,
         'task': task,
         'duedatelist':duedates,
+        'duedate_count': duedate_count,
         'tempbills': tempbills,
         'tempfilings': tempfilings,
         'listofexpenses': expenses,
@@ -315,8 +350,11 @@ def matter_update_client(request, pk):
         'alertmessages': alertmessages,
         'noofalerts': countalert,
         'username': username,
-
+        'task_count': task_count,
+        'docs_count':docs_count,
+        'applicant':applicant,
     }
+
     return render(request, 'managing_apps/matterview.html', context)
 
 def matterlist(request):
@@ -373,13 +411,14 @@ def lawyerlist(request):
     # emplist = User_Profile.objects.filter(rank__startswith="ASS") | User_Profile.objects.filter(rank__startswith = "PART")
 
     emplist = Lawyer_Data.objects.all().order_by('access_code')
+    empcount = emplist.count()
 
     context = {
         'emplist' : emplist,
         'alertmessages': alertmessages,
         'noofalerts': countalert,
         'username': username,
-
+        'empcount':empcount,
     }
     return render(request, 'managing_apps/emplist.html', context)
 
@@ -405,18 +444,36 @@ def open_filingdocs(request, pk):
     return render(request, 'managing_apps/opendocument.html', context)
 
 def unpaidbills(request):
-    unpaidbills = AccountsReceivable.objects.values('matter__folder__client__id', 'matter__folder__client__client_name').annotate(NoOfMatter=Count('bill_number')).order_by('-NoOfMatter')
 
-    print(unpaidbills)
+    # unpaidbills = AccountsReceivable.objects.values('matter__folder__client__id', 'matter__folder__client__client_name').annotate(NoOfMatter=Count('bill_number')).order_by('-NoOfMatter')
+
+    unpaidbills = AccountsReceivable.objects.values('matter__folder__client__id','matter__folder__client__client_name').annotate(NoOfMatter=Count('bill_number')).filter(payment_tag = 'UN').order_by('-NoOfMatter')
+    bill_count = unpaidbills.aggregate(Sum('NoOfMatter'))
+    billcount = bill_count["NoOfMatter__sum"]
+
+
+
+    unpaid_bills = AccountsReceivable.objects.filter(payment_tag = 'UN').order_by('-bill_date')
+
+    curr_total_bll_amount =unpaid_bills.aggregate(Sum('bill_amount'))
+    curr_Tot_bill_amount = curr_total_bll_amount["bill_amount__sum"]
+
+    curr_total_peso_amount =unpaid_bills.aggregate(Sum('pesoamount'))
+    curr_Tot_peso_amount = curr_total_peso_amount["pesoamount__sum"]
 
     context = {
         'unpaidbills': unpaidbills,
+        'billcount':billcount,
+        'unpaid_bills':unpaid_bills,
+        'curr_Tot_bill_amount': curr_Tot_bill_amount,
+        'curr_Tot_peso_amount': curr_Tot_peso_amount,
+
     }
     return render(request, 'managing_apps/unpaidbills.html', context)
 
 def unpaid_details(request, pk):
     client = Client_Data.objects.get(id=pk)
-    bills = AccountsReceivable.objects.filter(matter__folder__client__id = pk)
+    bills = AccountsReceivable.objects.filter(matter__folder__client__id = pk, payment_tag = 'UN')
 
     context={
         'bills' : bills,
@@ -475,3 +532,122 @@ def employee_detail(request, pk):
         'data1': casetypesummary1,
     }
     return render(request, 'managing_apps/empview.html', context)
+
+def view_billings_details(request):
+
+    current_bills = AccountsReceivable.objects.filter(bill_date__year = today.year, bill_date__month = today.month).exclude(payment_tag="CN")
+
+    curr_total_bll_amount =current_bills.aggregate(Sum('bill_amount'))
+    curr_Tot_bill_amount = curr_total_bll_amount["bill_amount__sum"]
+
+    curr_total_peso_amount =current_bills.aggregate(Sum('pesoamount'))
+    curr_Tot_peso_amount = curr_total_peso_amount["pesoamount__sum"]
+
+    prev_bills = AccountsReceivable.objects.filter(bill_date__year = prev_year, bill_date__month = prev_month).exclude(payment_tag="CN")
+
+    prev_total_bll_amount =prev_bills.aggregate(Sum('bill_amount'))
+    prev_Tot_bill_amount = prev_total_bll_amount["bill_amount__sum"]
+
+    prev_total_peso_amount =prev_bills.aggregate(Sum('pesoamount'))
+    prev_Tot_peso_amount = prev_total_peso_amount["pesoamount__sum"]
+
+
+
+    context = {
+        'current_bills':current_bills,
+        'prev_bills':prev_bills,
+        'curr_Tot_bill_amount': curr_Tot_bill_amount,
+        'curr_Tot_peso_amount': curr_Tot_peso_amount,
+
+        'prev_Tot_bill_amount':prev_Tot_bill_amount,
+        'prev_Tot_peso_amount': prev_Tot_peso_amount,
+    }
+
+    return render(request, 'managing_apps/view_billdetails.html', context)
+
+def view_unpaidbills(request):
+    unpaid_bills = AccountsReceivable.objects.filter(payment_tag = 'UN').order_by('-bill_date')
+
+    curr_total_bll_amount =unpaid_bills.aggregate(Sum('bill_amount'))
+    curr_Tot_bill_amount = curr_total_bll_amount["bill_amount__sum"]
+
+    curr_total_peso_amount =unpaid_bills.aggregate(Sum('pesoamount'))
+    curr_Tot_peso_amount = curr_total_peso_amount["pesoamount__sum"]
+
+
+    context = {
+        'unpaid_bills': unpaid_bills,
+        'curr_Tot_bill_amount': curr_Tot_bill_amount,
+        'curr_Tot_peso_amount': curr_Tot_peso_amount,
+
+    }
+
+    return render(request, 'managing_apps/view_unpaidbills.html', context)
+
+def my_messages(request):
+    myuserid = request.user.user_profile.userid
+    access_code = request.user.user_profile.access_code
+
+    if 'q' in request.GET:
+        q = request.GET['q']
+        #clients = Client_Data.objects.filter(client_name__icontains=q)
+        multiple_q = Q(Q(messagefrom__icontains=q) | Q(subject__icontains=q) | Q(
+            messagebox__icontains=q) | Q(status__icontains=q) | Q(see_matter__matter_title__icontains=q))
+        receivedmessages = inboxmessage.objects.filter(
+            multiple_q, messageto__userid=myuserid).order_by('-messagedate')
+        sentmessages = inboxmessage.objects.filter(
+            multiple_q, messagefrom=myuserid).order_by('-messagedate')
+
+    else:
+        receivedmessages = inboxmessage.objects.filter(
+            messageto__userid=myuserid).order_by('-messagedate')
+        sentmessages = inboxmessage.objects.filter(
+            messagefrom=myuserid).order_by('-messagedate')
+
+    # receivedmessages = inboxmessage.objects.filter(messageto__userid=myuserid)
+    # sentmessages = inboxmessage.objects.filter(messagefrom=access_code)
+    rcvd_msgcount = receivedmessages.count()
+    sent_msgcount = sentmessages.count()
+    context = {
+        'myuserid': myuserid,
+        'access_code': access_code,
+        'receivedmessages': receivedmessages,
+        'rcvd_msgcount':rcvd_msgcount,
+        'sentmessages': sentmessages,
+        'sent_msgcount':sent_msgcount,
+
+    }
+
+    return render(request, 'managing_apps/mymessages.html', context)
+
+def new_message(request):
+
+    user_message_id = request.user.user_profile.id
+    username = request.user.username
+    a = date.today()
+    messagedate = a.strftime('%m/%d/%Y')
+    dateconvert = datetime.strptime(
+        messagedate, "%m/%d/%Y").strftime('%Y-%m-%d')
+
+    if request.method == "POST":
+        form = InboxMessageNewForm(request.POST)
+        if form.is_valid():
+            inbox_rec = form.save(commit=False)
+            inbox_rec.messagefrom = username
+            inbox_rec.messagedate = dateconvert
+            inbox_rec.status = "UNREAD"
+            inbox_rec.save()
+            return redirect('management-my_messages')
+        else:
+            return redirect('management-my_messages')
+    else:
+        form = InboxMessageNewForm()
+
+    context = {
+        'form': form,
+        'messagefrom_id': user_message_id,
+        'messagefrom': username,
+        'messagedate': messagedate,
+    }
+
+    return render(request, 'managing_apps/new_message.html', context)

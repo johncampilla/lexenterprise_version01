@@ -12,15 +12,17 @@ Dashboard
     {% include 'base/caseinfoheader.html' %}
     <div class="row my-1">
         <div class="col-lg-12">
-            <h6 class="card-title bg-primary text-white text-center">Due Dates</h6>
+            <div class="card-header text-center text-white bg-primary">
+                Due Dates
+            </div>
             <div>
                 <table class="table-hover table-bordered table-sm small table">
-                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                    <thead class="table-primary text-center">
+                    <!-- <table class=" table-hover table-sm table-bordered small table table-dark table-striped"> -->
+                    <thead class="text-center text-white" style="background-color:green;">
                         <tr>
-                            <th style="width:5%;">Due Date</th>
-                            <th style="width:95%;">Particulars</th>
-                            <th style="width:5%;">Date Complied</th>
+                            <th style="width:10%;">Due Date</th>
+                            <th style="width:80%;">Particulars</th>
+                            <th style="width:10%;">Date Complied</th>
                         </tr>
                     </thead>
                     {% for duedate in duedatelist %}
@@ -30,22 +32,29 @@ Dashboard
                         <td style="font-weight: bold;">{{ duedate.date_complied | date:'m/d/Y' }}</td>
                     </tr>
                     {% endfor %}
+                    <tr style="background-color:white; font-weight:bold">
+                        <td>Total Count:{{duedate_count}}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
                 </table>
             </div>
         </div>
         <div class="col-lg-12">
-            <h6 class="card-title bg-primary text-white text-center">Activities</h6>
+            <div class="card-header text-center text-white bg-primary">
+                Activity Details
+            </div>
             <div>
                 <table class="table-hover table-bordered table-sm small table">
-                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                    <thead class="table-primary text-center">
+                    <thead class="text-center text-white" style="background-color:green;">
                         <tr>
-                            <th style="width:5%;">Date</th>
+                            <th style="width:10%;">Date</th>
                             <th style="width:10%;">Tran Type</th>
                             <th style="width:10%;">Lawyer</th>
-                            <th style="width:65%;">Task</th>
-                            <th style="width:5%;">Spent In Hrs</th>
-                            <th style="width:5%;">Spent In Min</th>
+                            <th style="width:50%;">Task</th>
+                            <th style="width:10%;">Spent In Hrs</th>
+                            <th style="width:10%;">Spent In Min</th>
                         </tr>
                     </thead>
                     {% for task in task %}
@@ -58,17 +67,27 @@ Dashboard
                         <td style="font-weight: bold;">{{ task.spentinmin }}</td>
                     </tr>
                     {% endfor %}
+                    <tr style="background-color:white; font-weight:bold">
+                        <td>Total Count: {{task_count}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 </table>
             </div>
         </div>
         <div class="col-lg-12">
-            <h6 class="card-title bg-primary text-white text-center">Documents</h6>
+            <div class="card-header text-center text-white bg-primary">
+                Documents
+            </div>
             <div>
                 <table class="table-hover table-bordered table-sm small table">
                     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                    <thead class="table-primary text-center">
+                    <thead class="text-center text-white" style="background-color:green">
                         <tr>
-                            <th style="width:5%;">Document Date</th>
+                            <th style=" width:5%;">Document Date</th>
                             <th style="width:5%;">Prepared By</th>
                             <th style="width:10%;">Activity</th>
                             <th style="width:10%;">Description</th>
@@ -82,9 +101,42 @@ Dashboard
                         <td style="font-weight: bold;">{{ docs.Description }}</td>
                     </tr>
                     {% endfor %}
+                    <tr style="background-color:white ;font-weight:bold">
+                        <td>Total Count:{{docs_count}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 </table>
             </div>
         </div>
+        <div class="col-lg-12">
+            <div class="card-header text-center text-white bg-primary">
+                Applicant/Registrant/Assignee/Inventory
+            </div>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="text-center text-white" style="background-color:green;">
+                        <tr>
+                            <th style="width:5%;">Applicant</th>
+                            <th style="width:5%;">Title</th>
+                            <th style="width:10%;">Address</th>
+                            <th style="width:10%;">E-Mail</th>
+                        </tr>
+                    </thead>
+                    {% for applicant in applicant %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ applicant.applicant }} </td>
+                        <td style="font-weight: bold;">{{ applicant.title }}</td>
+                        <td style="font-weight: bold;">{{ applicant.address }}</td>
+                        <td style="font-weight: bold;">{{ applicant.email }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>
 

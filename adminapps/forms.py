@@ -63,7 +63,7 @@ class ClientEntryForm(forms.ModelForm):
 class FilingDocsEntry(forms.ModelForm):
     class Meta:
         model = FilingDocs
-        fields = 'Task_Detail', 'DocDate', 'DocsPDF', 'Description'
+        fields = 'DocDate', 'DocsPDF', 'Description'
         widgets = {
             'DocDate': NumberInput(attrs={'type': 'date'}),
             'Description': Textarea(attrs={'class': 'form-control', 'cols': 200, 'rows': 2}),
@@ -196,7 +196,7 @@ class TaskEntryForm(forms.ModelForm):
     # }
     class Meta:
         model = task_detail
-        fields = 'matter', 'tran_date', 'tran_type', 'doc_type', 'preparedby', 'lawyer', 'task', 'spentinhrs', 'spentinmin'
+        fields = 'tran_date', 'tran_type', 'doc_type', 'lawyer','task_code','task','spentinhrs', 'spentinmin'
         widgets = {
             'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Type here the activity details..'}),
             'tran_date': NumberInput(attrs={'type': 'date'}),
@@ -370,7 +370,7 @@ class DocumentEditForm(forms.ModelForm):
 class DueDateEntryForm(forms.ModelForm):
     class Meta:
         model = AppDueDate
-        fields = 'matter', 'duecode', 'duedate', 'assignto', 'particulars', 'date_complied'
+        fields = 'duedate', 'assignto', 'particulars', 'date_complied'
         widgets = {
             'particulars': Textarea(attrs={'cols': 200, 'rows': 3}),
             'duedate': NumberInput(attrs={'type': 'date'}),
@@ -486,6 +486,17 @@ class ReviewMatterForm(forms.ModelForm):
             'filing_date': NumberInput(attrs={'type': 'date'}),
             'remarks': Textarea(attrs={'cols': 200, 'rows': 2})
         }
+
+class ReviewMatterForm2(forms.ModelForm):
+
+    class Meta:
+        model = Matters
+        fields = 'referenceno', 'filing_date', 'filed_at', 'matter_contact_person', 'clientrefno', 'matterno', 'status', 'remarks',
+        widgets = {
+            'filing_date': NumberInput(attrs={'type': 'date'}),
+            'remarks': Textarea(attrs={'cols': 200, 'rows': 2})
+        }
+
 
 class MatterHeaderForm(forms.ModelForm):
     class Meta:

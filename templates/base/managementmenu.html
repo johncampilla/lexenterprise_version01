@@ -67,52 +67,29 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseOne"
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOne"
                     aria-expanded="true" aria-controls="collapseOne">
-                    <i class="fa fa-bullhorn"></i>
-                    <span>Activities</span>
+                    <i class="fas fa-folder-open"></i>
+                    <span>InfoCards</span>
                 </a>
                 <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="#">Sending Message (Alert) </a>
-                        <a class="collapse-item" href="#">Make an Announcement</a>
-                        <a class="collapse-item" href="#">Schedule Tasks</a>
-                        <a class="collapse-item" href="#">Chat/Video</a>
+                        <a class="collapse-item" href="{% url 'management-my_messages' %}">My Messages </a>
+                        <a class="collapse-item" href="{% url 'manage-clientlist' %}">Client List </a>
+                        <a class="collapse-item" href="{% url 'manage-matter-list' %}">Matter List </a>
+                        <a class="collapse-item" href="{% url 'management-lawyerlist' %}">Lawyers </a>
 
                         <!-- <a class="collapse-item" href="{% url 'management-chart-view-bills' %}">Lawyers Billing Report</a> -->
                     </div>
                 </div>
             </li>
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa fa-battery-full"></i>
-                    <span>Performance</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="#">Lawyers</a>
-                        <a class="collapse-item" href="#">Support Staff</a>
-                    </div>
-                </div>
-            </li>
-
             <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fa fa-archive"></i>
-                    <span>Find Documents</span>
+                    <span>Search Items</span>
                 </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="#">Documents Image</a>
-                        <a class="collapse-item" href="#">Porfolio/Engagement</a>
-                        <a class="collapse-item" href="#">Bill & Payments</a>
-                    </div>
-                </div>
             </li>
 
             <!-- Divider -->

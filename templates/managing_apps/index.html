@@ -63,30 +63,13 @@ Dashboard
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
-                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                        New Payments</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">#</div>
-                                </div>
-                                <div class="col-auto">
-                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1 text-center">
-                            <hr>
-                            <a href="">View Details</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6 mb-4">
-                    <div class="card border-left-warning shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="row no-gutters align-items-center">
-                                <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Billings
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">{{ ARbills }}/{{prev_ARbills}}
                                     </div>
+                                    <hr>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ peso_amt }}/{{prev_peso_amt}}
+                                    </div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -95,14 +78,10 @@ Dashboard
                         </div>
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1 text-center">
                             <hr>
-                            <a href="">View Details</a>
+                            <a href="{% url 'management-view-billings' %}">View Details</a>
                         </div>
-
                     </div>
                 </div>
-
-            </div>
-            <div class="row">
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-warning shadow h-100 py-2">
                         <div class="card-body">
@@ -121,10 +100,12 @@ Dashboard
                         </div>
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1 text-center">
                             <hr>
-                            <a href="">View Details</a>
+                            <a href="{% url 'management-unpaidbills' %}">View Details</a>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-left-warning shadow h-100 py-2">
                         <div class="card-body">

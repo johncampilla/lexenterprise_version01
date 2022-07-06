@@ -11,7 +11,7 @@ Dashboard
     <!-- Table -->
     <table class="table-hover table-bordered table-sm small table">
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-        <thead class="table-primary text-center">
+        <thead class="text-center text-white" style="background-color:grey ;">
             <tr>
                 <th scope="col">Employee Name</th>
                 <th scope="col">Group</th>
@@ -28,12 +28,20 @@ Dashboard
             <td style="font-weight: bold;"><a href="{% url 'employee-detail' emplist.id %}">
                     {{ emplist.lawyer_name }}</a></td>
             <td style="font-weight: bold;">{{ emplist.lawyerID.rank }}</td>
-            <td style="font-weight: bold;">{{ emplist.hourlyrate }}</td>
+            <td style="font-weight: bold; text-align:right ;">{{ emplist.hourlyrate }}</td>
             <td style="font-weight: bold;">{{ emplist.lawyerID.address }}</td>
             <td style="font-weight: bold;">{{ emplist.lawyerID.userid.email }}</td>
             <td style="font-weight: bold;">{{ emplist.lawyerID.mobile }}</td>
         </tr>
         {% endfor %}
+        <tr class="text-white" style="background-color:grey ;">
+            <td>Total Count : {{empcount}} </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
     </table>
     <!-- Pagination-->
     <nav class="mt-1">

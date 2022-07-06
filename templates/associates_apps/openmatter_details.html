@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 
 {% block content %}
@@ -13,244 +13,191 @@
     <div class="card">
         {% include 'base/clientinfoheader.html' %}
         <div class="card-body">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light small">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Matter Detail</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Awaiting Documents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Search Document</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Unbilled Activities
+                                </a>
+                                <ul class="dropdown-menu small" aria-labelledby="navbarDropdownMenuLink">
+                                    <li><a class="dropdown-item" href="#">Services Rendered</a></li>
+                                    <li><a class="dropdown-item" href="#">Fees/Govt Fees</a></li>
+                                    <li><a class="dropdown-item" href="#">Out Of Pocket Expenses</a></li>
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
             <div class="card text-white">
                 <div class="row mt-2">
                     <form method="POST">
-                    {% csrf_token %}
-                    <!-- {{ form | crispy }} -->
-                    
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;"> Case Folder</span>
-                                {{form.folder}}
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Case
+                                        Folder</span>
+                                    <input type="text" name="matter" value="{{ matter.folder }}" class="form-control"
+                                        readonly>
+                                </div>
+
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Appearance</span>
+                                    {{form.appearance}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Reference No.</span>
+                                    {{form.referenceno}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Date Filed</span>
+                                    {{form.filing_date}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Filed At</span>
+                                    {{form.filed_at}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Status</span>
+                                    {{form.status}}
+                                </div>
                             </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Appearance</span>
-                                {{form.appearance}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Reference No.</span>
-                                {{form.referenceno}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Date Filed</span>
-                                {{form.filing_date}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Filed At</span>
-                                {{form.filed_at}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Status</span>
-                                {{form.status}}
+
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Type Of Case</span>
+                                    {{form.case_type}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Type Of Appln</span>
+                                    {{form.apptype}}
+                                </div>
+
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Nature</span>
+                                    {{form.nature}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                    {{form.handling_lawyer}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Client Ref#</span>
+                                    {{form.clientrefno}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Our Ref#</span>
+                                    {{form.matterno}}
+                                </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Matter Title</span>
+                                    {{form.matter_title}}
+                                </div>
+                                <div class="input-group input-group-sm mb-2">
+                                    <span class="input-group-text" style="width: 110px;">Remarks</span>
+                                    {{form.remarks}}
+                                </div>
 
-                        <div class="col-lg-6">
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Type Of Case</span>
-                                {{form.case_type}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Type Of Appln</span>
-                                {{form.apptype}}
-                            </div>
-
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Nature</span>
-                                {{form.nature}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Lawyer</span>
-                                {{form.handling_lawyer}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Client Ref#</span>
-                                {{form.clientrefno}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Our Ref#</span>
-                                {{form.matterno}}
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Matter Title</span>
-                                {{form.matter_title}}
-                            </div>
-                            <div class="input-group input-group-sm mb-2">
-                                <span class="input-group-text" style="width: 110px;">Remarks</span>
-                                {{form.remarks}}
-                            </div>
+                        <a href="{% url 'associates-view-myclient-det' client.id %}"
+                            class="btn btn-outline-primary btn-sm mb-3">Return</a>
 
-                        </div>
-                    </div>
-                    <a href="{% url 'associates-view-myclient-det' client.id %}" class="btn btn-outline-primary btn-sm mb-3">Return</a>
-
-                    <!-- <a class= 'btn btn-success btn-sm mb-3' href="{% url 'associates-view-myclient-det' client.id %}">Return</a> -->
-                    <input class="btn btn-outline-primary btn-sm mb-3" type="submit" value="Save Changes">
-                        <a class= "btn btn-outline-primary btn-sm mb-3" href="{% url 'associate-matter-otherdetails' m_id matter.filed_at %}">Other Info Details</a>
-                        <a class= "btn btn-outline-primary btn-sm mb-3" href="#">Special Instructions</a>
+                        <!-- <a class= 'btn btn-success btn-sm mb-3' href="{% url 'associates-view-myclient-det' client.id %}">Return</a> -->
+                        <input class="btn btn-outline-primary btn-sm mb-3" type="submit" value="Save Changes">
+                        <a class="btn btn-outline-primary btn-sm mb-3"
+                            href="{% url 'associate-matter-otherdetails' m_id matter.filed_at %}">Other Info Details</a>
+                        <a class="btn btn-outline-primary btn-sm mb-3" href="#">Special Instructions</a>
                     </form>
                 </div>
             </div>
-<!----------------- Infocard for the activity of the selected matter ---------->
-            <h6 class="card-title bg-primary text-white text-center">Activities</h6>
+            <!----------------- Infocard for the duedates of the selected matter ---------->
+            <div class="card-header text-center text-white bg-primary">
+                Due Dates
+            </div>
             <div>
                 <table class="table-hover table-bordered table-sm small table">
                     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                    <thead class="table-primary text-center">
+                    <thead class="text-center text-white" style="background-color:green ;">
+                        <tr>
+                            <th style="width:10%;">Due Date</th>
+                            <th style="width:70%;">Particulars</th>
+                            <th style="width:10%;">Date Complied</th>
+                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_duedate' m_id %}"><i
+                                        class="fas fa-plus text-center"></i>&nbsp;Due Date</a></th>
+                        </tr>
+                    </thead>
+                    {% for duedate in duedatelist %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ duedate.duedate | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;">{{ duedate.particulars }}</td>
+                        <td style="font-weight: bold;">{{ duedate.date_complied | date:'m/d/Y' }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{% url 'associate-edit_duedate' duedate.id m_id %}"
+                                title="Edit Due Date">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <!----------------- Infocard for the activity of the selected matter ---------->
+            <div class="card-header text-center text-white bg-primary">
+                Activities
+            </div>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="text-center text-white" style="background-color:green ;">
                         <tr>
                             <th style="width:10%;">Date</th>
                             <th style="width:15%;">Lawyer</th>
                             <th style="width:10%;">Doc Type</th>
                             <th style="width:10%;">Tran Type</th>
                             <th style="width:45%;">Activity</th>
-                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_new_task' m_id %}"><i class="fas fa-plus text-center"></i>&nbsp;Activity</a></th>
+                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_new_task' m_id %}"><i
+                                        class="fas fa-plus text-center"></i>&nbsp;Activity</a></th>
                         </tr>
                     </thead>
                     {% for task in tasks %}
-                        <tr>
-                            <td style="font-weight: bold;">{{ task.tran_date | date:'m/d/Y' }}</td>
-                            <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
-                            <td style="font-weight: bold;">{{ task.doc_type }}</td>
-                            <td style="font-weight: bold;">{{ task.tran_type }}</td>
-                            <td style="font-weight: bold;">{{ task.task }}</td>
-                            <td>
-                                <a class="btn btn-primary btn-sm" href="{% url 'associate-modify_task' task.id m_id %}" title="Edit Activity">
-                                       <i class="fas fa-pen"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>    
-            </div>
-<!----------------- Infocard for the duedates of the selected matter ---------->
-            <h6 class="card-title bg-primary text-white text-center">Due Dates</h6>
-            <div>
-                <table class="table-hover table-bordered table-sm small table">
-                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                    <thead class="table-primary text-center">
-                        <tr>
-                            <th style="width:10%;">Due Date</th>
-                            <th style="width:70%;">Particulars</th>
-                            <th style="width:10%;">Date Complied</th>
-                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_duedate' m_id %}"><i class="fas fa-plus text-center"></i>&nbsp;Due Date</a></th>
-                        </tr>
-                    </thead>
-                    {% for duedate in duedatelist %}
-                        <tr>
-                            <td style="font-weight: bold;">{{ duedate.duedate | date:'m/d/Y' }}</td>
-                            <td style="font-weight: bold;">{{ duedate.particulars }}</td>
-                            <td style="font-weight: bold;">{{ duedate.date_complied | date:'m/d/Y' }}</td>                            
-                            <td>
-                                <a class="btn btn-primary btn-sm" href="{% url 'associate-edit_duedate' duedate.id m_id %}" title="Edit Due Date">
-                                    <i class="fas fa-pen"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>        
-            </div> 
-            <h6 class="card-title bg-primary text-white text-center">Unbilled Services Rendered </h6>
-            <div>
-                <table class="table-hover table-bordered table-sm small table">
-                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                    <thead class="table-primary text-center">
-                        <tr>
-                            <th style="width:5%;">Tran Date</th>
-                            <th style="width:60%;">Services Rendered</th>
-                            <th style="width:5%;">Spent In Hrs</th>
-                            <th style="width:5%;">Spent In Min</th>
-                            <th style="width:10%;">Amount</th>
-                            <th style="width:10%;">Peso Amount</th>
-                            <th style="width:5%;"><a href="#">Action</a></th>
-                        </tr>
-                    </thead>
-                    {% for tmpbills in tempbills %}
                     <tr>
-                        <td style="font-weight: bold;">{{ tmpbills.tran_date | date:'m/d/Y' }}</td>
-                        <td style="font-weight: bold;">{{ tmpbills.particulars}}</td>
-                        <td style="font-weight: bold;">{{ tmpbills.spentinhrs}}</td>
-                        <td style="font-weight: bold;">{{ tmpbills.spentinmin}}</td>
-                        <td style="font-weight: bold; text-align: right;">{{ tmpbills.amount }}</td>
-                        <td style="font-weight: bold; text-align: right;">{{ tmpbills.pesoamount }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" href="#" title="Edit Bill">
-                                <i class="fas fa-pen text-center"></i>
-                            </a>
-                        </td>
+                        <td style="font-weight: bold;"><a href="{% url 'associate-modify_task' task.id m_id %}">
+                                {{task.tran_date | date:'m/d/Y' }}</a></td>
+                        <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
+                        <td style="font-weight: bold;">{{ task.doc_type }}</td>
+                        <td style="font-weight: bold;">{{ task.tran_type }}</td>
+                        <td style="font-weight: bold;">{{ task.task }}</td>
                     </tr>
                     {% endfor %}
                 </table>
             </div>
-            <h6 class="card-title bg-primary text-white text-center">Unbilled Filing Fees</h6>
-            <div>
-                <table class="table-hover table-bordered table-sm small table">
-                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                    <thead class="table-primary text-center">
-                        <tr>
-                            <th style="width:5%;">Tran Date</th>
-                            <th style="width:70%;">Filing Particulars</th>
-                            <th style="width:10%;">Amount</th>
-                            <th style="width:10%;">Peso Amount</th>
-                            <th style="width:5%;"><a href="#">Action</a></th>
-                        </tr>
-                    </thead>
-                    {% for tmpfees in tempfilings %}
-                    <tr>
-                        <td style="font-weight: bold;">{{ tmpfees.tran_date | date:'m/d/Y' }}</td>
-                        <td style="font-weight: bold;">{{ tmpfees.expense_detail}}</td>
-                        <td style="font-weight: bold; text-align: right;">{{ tmpfees.expense_actual_amt }}</td>
-                        <td style="font-weight: bold; text-align: right;">{{ tmpfees.pesoamount }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" href="#" title="Edit Bill">
-                                <i class="fas fa-pen text-center"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-            <h6 class="card-title bg-primary text-white text-center">Unbilled Incidental/OPE Expenses </h6>
-            <div>
-                <table class="table-hover table-bordered table-sm small table">
-                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                            <thead class="table-primary text-center">
-                                <tr>
-                                <th style="width:5%;">Tran Date</th>
-                                <th style="width:35%;">Services Rendered</th>
-                                <th style="width:35%;">Expense Particulars</th>
-                                <th style="width:10%;">Expense (PhP)</th>
-                                <th style="width:10%;">Bill Amount</th>
-
-                               <th colspan="1" style="width:5%;"><a href="#">Action</a></th>
-                            </tr>
-                            </thead>
-                            {% for expense in listofexpenses %}
-                            <tr>
-                                <td style="font-weight: bold;">{{ expense.tran_date | date:'m/d/Y' }}</td>
-                                <td style="font-weight: bold;">{{ expense.bill_service }}</td>
-                                <td style="font-weight: bold;">{{ expense.expense_detail }}</td>
-                                <td style="font-weight: bold; text-align: right;">{{ expense.pesoamount }}</td>
-                                <td style="font-weight: bold; text-align: right;">{{ expense.expense_actual_amt }}</td>
-                                <td>
-                                   <a class="btn btn-primary btn-sm" href="#" title="Edit Expense">
-                                      <i class="fas fa-pen"></i>
-                                   </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                </table>        
-            </div>
-
-        </div>    
+        </div>
     </div>
 </div>
 
 {% endblock content%}
-
-

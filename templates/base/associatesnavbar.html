@@ -1,5 +1,6 @@
 {% load static %}
-<nav class="navbar navbar-expand navbar-light bg-light topbar mb-1 static-top shadow">
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
     <!-- Sidebar Toggle (Topbar) -->
     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
         <i class="fa fa-bars"></i>
@@ -8,16 +9,44 @@
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
         <li>
-            <a href="{% url 'management-my_messages' %}" class="btn btn-outline-primary btn-sm mt-3"><i
-                    class="fas fa-envelope-open"></i>&nbsp;&nbsp;My Messages</a>
-            <a href="{% url 'manage-clientlist' %}" class="btn btn-outline-primary btn-sm mt-3"><i
-                    class="fas fa-clone"></i>&nbsp;&nbsp;Clients</a>
-            <a href="{% url 'manage-matter-list' %}" class="btn btn-outline-primary btn-sm mt-3"><i
-                    class="fas fa-briefcase"></i>&nbsp;&nbsp;Matters</a>
-            <a href="{% url 'management-lawyerlist' %}" class="btn btn-outline-primary btn-sm mt-3"><i
-                    class="fas fa-portrait"></i>&nbsp;&nbsp;lawyers</a>
+            <a href="{% url 'associate-myclient-list' %}" class="btn btn-outline-primary btn-sm mt-3">My
+                Clients</a>
+            <a href="{% url 'associate-myfolder-list' %}" class="btn btn-outline-primary btn-sm mt-3">My
+                Folders</a>
+            <a href="{% url 'associate-matter-list' %}" class="btn btn-outline-primary btn-sm mt-3">My
+                Matters</a>
+            <a href="{% url 'associate-mybilling-list' %}" class="btn btn-outline-primary btn-sm mt-3">My
+                Bills</a>
+            <a href="{% url 'associate-my_messages' %}" class="btn btn-outline-primary btn-sm mt-3">My
+                Messages</a>
+
 
         </li>
+
+        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+        <li class="nav-item dropdown no-arrow d-sm-none">
+            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+            </a>
+            <!-- Dropdown - Messages -->
+            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                aria-labelledby="searchDropdown">
+                <form class="form-inline mr-auto w-100 navbar-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                            aria-label="Search" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </li>
+
+        <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
@@ -32,7 +61,7 @@
                     Alerts Center
                 </h6>
                 {% for alert in alertmessages %}
-                <a class="dropdown-item d-flex align-items-center" href="{% url 'open_inboxmessage' alert.id %}">
+                <a class="dropdown-item d-flex align-items-center" href="{% url 'associate-list_messages' %}">
                     <div class="mr-3">
                         <div class="icon-circle bg-primary">
                             <i class="fas fa-file-alt text-white"></i>
@@ -47,12 +76,9 @@
             </div>
         </li>
 
-
-        <!-- Nav Item - Alerts -->
-
         <!-- Nav Item - Messages -->
 
-        <!-- <div class="topbar-divider d-none d-sm-block"></div> -->
+        <div class="topbar-divider d-none d-sm-block"></div>
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
@@ -63,7 +89,7 @@
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="{% url 'user-profile' %}">
+                <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
@@ -80,4 +106,5 @@
         </li>
 
     </ul>
+
 </nav>

@@ -1,6 +1,7 @@
 #from asyncio.windows_events import NULL
 #from os import CLD_CONTINUED
 from asyncio.windows_events import NULL
+from multiprocessing.connection import Client
 from pickletools import read_uint1
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -71,12 +72,12 @@ def main(request):
     number_of_docs = matterlist.count()
     context = {
         'alertmessages': alertmessages,
+        'username': username,
         'noofalerts': countalert,
         'duedates': duedates,
         'recenttask': recenttask,
         'recentdocs': recentdocs,
         'recent_billables': recent_billables,
-        'username': username,
         'matterlist': matterlist,
         'number_of_task': number_of_task,
         'number_of_dues': number_of_dues,
@@ -846,25 +847,20 @@ def modify_task(request, pk, m_id):
 
             tempbills = TempBills.objects.filter(
                 matter_id=matter_id, tran_date=tran_date, bill_service_id=bill_id)
-            if tempbills.exists():
+            if tempbills:
                 pass
             else:
-                # if prate > 0:
-                #     pesoamount = (PF_amount * prate)
-                # else:
-                #     prate = 0
-                #     pesoamount = 0
-
-                tempbills = TempBills(
-                    matter_id=matter_id,
-                    tran_date=tran_date,
-                    bill_service_id=bill_id,
-                    lawyer_id=lawyer,
-                    particulars=bill_description,
-                    amount=PF_amount,
-                    # pesorate=prate,
-                    currency=currency)
-                tempbills.save()
+                if bill_description is not None:
+                    tempbills = TempBills(
+                        matter_id=matter_id,
+                        tran_date=tran_date,
+                        bill_service_id=bill_id,
+                        lawyer_id=lawyer,
+                        particulars=bill_description,
+                        amount=PF_amount,
+                        # pesorate=prate,
+                        currency=currency)
+                    tempbills.save()
 
         def save_to_tempfiling():
             tempfees = TempFilingFees.objects.filter(
@@ -926,13 +922,14 @@ def modify_task(request, pk, m_id):
         matter_id=m_id, tran_date=task.tran_date, bill_service_id=task.task_code_id)
     print(m_id, task.tran_date, task.task_code_id)
     tmpexp = TempExpenses.objects.filter(matter_id=m_id)
+    task_list = task_detail.objects.filter(matter__id=m_id)
 
     if request.method == 'POST':
         task_form = TaskEntryForm(request.POST, instance=task)
         if task_form.is_valid():
             task_form.save()
             perform_billable_services()
-#            return redirect('associate-matter-review', m_id)
+            return redirect('associate-matter-review', m_id)
         else:
             task_form = TaskEntryForm(instance=task)
     else:
@@ -949,6 +946,7 @@ def modify_task(request, pk, m_id):
         'tmpbills': tmpbills,
         'tmpfees': tmpfees,
         'tmpexp': tmpexp,
+        'task_list': task_list,
     }
     return render(request, 'associates_apps/modify_task.html', context)
 
@@ -1697,6 +1695,15 @@ def myfolderlist(request):
 def myclientlist(request):
     access_code = request.user.user_profile.userid
     username = request.user.username
+#    alertmessages = Alert_Messages.objects.filter(messageto=access_code)
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+
+
+    access_code = request.user.user_profile.userid
+    username = request.user.username
     result = Matters.objects.values('folder__client__id', 'folder__client__client_name').annotate(
         NoOfMatter=Count('matter_title')).filter(handling_lawyer__lawyerID__userid=access_code).order_by('-NoOfMatter')
     # TotalCount = result.objects.aggregate(Sum('NoOfMatter'))
@@ -1708,6 +1715,10 @@ def myclientlist(request):
 
     context = {
         'result': result,
+        'alertmessages': alertmessages,
+        'username': username,
+        'noofalerts': countalert,
+
     }
 
     return render(request, 'associates_apps/myclientlist.html', context)
@@ -1730,13 +1741,26 @@ def myfolderdetail(request, pk):
 def myclientdetail(request, pk):
     access_code = request.user.user_profile.userid
     username = request.user.username
+#    alertmessages = Alert_Messages.objects.filter(messageto=access_code)
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+
+    access_code = request.user.user_profile.userid
+    username = request.user.username
     client = Client_Data.objects.get(id=pk)
     matters = Matters.objects.filter(
         folder__client_id=pk, handling_lawyer__lawyerID__userid=access_code)
+    matters_count = matters.count()
 
     context = {
         'client': client,
         'matters': matters,
+        'alertmessages': alertmessages,
+        'username': username,
+        'noofalerts': countalert,
+        'NoOfMatters':matters_count
     }
 
     return render(request, 'associates_apps/myclientdetails.html', context)

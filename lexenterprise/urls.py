@@ -124,7 +124,18 @@ urlpatterns = [
 
     path('management/empdetails/<int:pk>/', management.employee_detail, name='employee-detail'), 
 
-     
+    path('management/viewbills/', management.view_billings_details, name='management-view-billings'),
+
+    path('management/message/mymessages/', management.my_messages,
+         name='management-my_messages'),
+
+    path('management/alertmessages/new/', management.new_message, name='management-new_message'),
+
+
+
+
+
+    
 
   
 

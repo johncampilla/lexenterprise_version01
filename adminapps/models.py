@@ -211,7 +211,7 @@ class NatureOfCase(models.Model):
         verbose_name_plural = 'Natures Of Cases'
 
     def __str__(self):
-        return f'{self.nature} - {self.casetype}'
+        return f'{self.nature}'
 
 
 class AppType(models.Model):
@@ -348,8 +348,11 @@ class AppDueDate(models.Model):
         Lawyer_Data, on_delete=models.CASCADE, null=True, blank=True)
     particulars = models.CharField(max_length=250)
     date_complied = models.DateField(null=True, blank=True)
+    createdby = models.CharField(max_length=30, blank=True, null=True)
+    updatedby = models.CharField(max_length=30, blank=True, null=True)
     date_created = models.DateField(auto_now_add=True)
     date_updated = models.DateField(auto_now=True)
+
 
     class Meta:
         verbose_name_plural = 'Due Dates'

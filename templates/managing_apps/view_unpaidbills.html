@@ -1,40 +1,12 @@
 {% extends 'base/managementmenu.html' %}
 {% block title %} Clients {% endblock %}
 {% load crispy_forms_tags %}
-
+{% load static %}
 {% block appname %}
 Dashboard
 {% endblock %}
 {% block content %}
 <div class="container">
-    <div class="card mt-4">
-        <div class="card-header bg-primary text-white text-center">
-            Summary Of Unpaid Bills As Of Todate
-        </div>
-        <table class="table-hover table-bordered table-sm small table">
-            <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-            <thead class="text-center text-white" style="background-color:grey ;">
-                <tr>
-                    <th style="width:90%;">Client</th>
-                    <th style="width:10%;"># Bills</th>
-                </tr>
-            </thead>
-            {% for clientunpaid in unpaidbills %}
-            <tr>
-                <td style="font-weight: bold;">{{clientunpaid.matter__folder__client__client_name }}</td>
-                <td style="font-weight: bold; text-align: center;">
-                    <a href="{% url 'management-unpaid_details' clientunpaid.matter__folder__client__id %}">
-                        {{ clientunpaid.NoOfMatter }}</a>
-                </td>
-            </tr>
-            {% endfor %}
-            <tr class="text-white text-center" style="background-color:grey; font-weight: bold;">
-                <td></td>
-                <td>{{billcount}}</td>
-            </tr>
-
-        </table>
-    </div>
     <div class="row my-1 mt-4">
         <div class="col">
             <div class="card">
@@ -66,15 +38,16 @@ Dashboard
                             <td style="font-weight: bold;text-align: right;">{{ current.pesoamount }}</td>
                         </tr>
                         {% endfor %}
-                        <tr class="text-white text-center"
-                            style="background-color:grey; font-weight: bold; text-align: right;">
+                        <tr>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td> Total Bill Amount</td>
-                            <td style="text-align:right ;">{{curr_Tot_bill_amount}}</td>
-                            <td style="text-align:right ;">{{ curr_Tot_peso_amount}}</td>
+                            <td style="font-weight: bold;text-align: right;"> Total Bill Amount</td>
+                            <td style="font-weight: bold;text-align: right;background-color:aqua;">
+                                {{curr_Tot_bill_amount}}</td>
+                            <td style="font-weight: bold;text-align: right;background-color:aqua;">
+                                {{ curr_Tot_peso_amount}}</td>
                         </tr>
                     </tbody>
                 </table>

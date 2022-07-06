@@ -12,7 +12,7 @@ Dashboard
     <div class="row my-1">
         <div class="col">
             <table class="table-hover table-bordered table-sm small table">
-                <thead class="table-primary text-center">
+                <thead class="text-center text-white" style="background-color:grey;">
                     <tr>
                         <th style="width:10%;">Filing Date</th>
                         <th style="width:30%;">Case Folder</th>
@@ -32,11 +32,16 @@ Dashboard
                         <td style="font-weight: bold;">{{ matter.matter_title }}</td>
                     </tr>
                     {% endfor %}
+                    <tr style="background-color:grey;" class="text-white">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align:center;">Total No. Of Records : {{ noofmatters }}</td>
+                    </tr>
+
                 </tbody>
             </table>
-            <div class="row small">
-                <p>Total No. Of Records : {{ noofmatters }}</p>
-            </div>
         </div>
     </div>
 </div>

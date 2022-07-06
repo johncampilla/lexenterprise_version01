@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 {% block content %}
 <div class="container">
@@ -11,94 +11,87 @@
         <div class="col">
             <div class="card">
                 <div class="card-header bg-primary text-white text-center">
-                    New Clients - Current Month
+                    Current Month (New Clients)
                 </div>
-                <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
-                    <thead class="text-center">
-                    <tr class="table-active table-primary bg-white text-dark">
-                        <th scope="col">Date Acquired</th>
-                        <th scope="col">Client</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Mobile</th>
-                        <th scope="col">Contact</th>
-                        <th scope="col">Address</th>
-                        <th scope="col"></th>
-                    </tr>
+                <table class="table-hover table-bordered table-sm small table">
+                    <thead class="text-center text-white" style="background-color:grey ;">
+                        <tr>
+                            <th style="width:30%;">Client</th>
+                            <th style="width:10%;">Date Acquired</th>
+                            <th style="width:15%;">Email</th>
+                            <th style="width:10%;">Mobile</th>
+                            <th style="width:20%;"">Contact</th>
+                            <th style=" width:15%;">Country</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {% for client in clients %}
                         <tr>
-                            <td>{{ client.date_acquired }}</td>
-                            <td>{{ client.client_name }}</td>
-                            <td>{{ client.email }}</td>
-                            <td>{{ client.mobile }}</td>
-                            <td>{{ client.main_contact }}</td>
-                            <td>{{ client.address }}</td>
-                            <td class="text-center">
-                                <!-- <a href="#" class="btn btn-info btn-sm btn-icon-split" > -->
-                                <a href="#" class="btn btn-info btn-sm btn-icon-split" >
-                                    <span class="icon text-white-20">
-                                        <i class="fas fa-info-circle"></i>
-                                    </span>
-                                </a>
-                            </td>
+                            <td style="font-weight: bold;"><a href="{% url 'management-clientview' client.id %}">
+                                    {{client.client_name }}</a></td>
+                            <td style="font-weight: bold;">{{ client.date_acquired | date:'m/d/Y' }}</td>
+                            <td style="font-weight: bold;">{{ client.email }}</td>
+                            <td style="font-weight: bold;">{{ client.mobile }}</td>
+                            <td style="font-weight: bold;">{{ client.main_contact }}</td>
+                            <td style="font-weight: bold;">{{ client.country.country }}</td>
                         </tr>
                         {% endfor %}
-                        <tr>
-                            <td> Total Clients :   {{ clientcount}}</td>
+                        <tr class="text-white" style="background-color:grey;font-weight: bold;">
+                            <td> Total Clients : {{ clientcount }}</td>
                             <td> </td>
                             <td> </td>
                             <td> </td>
                             <td> </td>
                             <td> </td>
-                            <td> </td>
-
-
-
                         </tr>
 
                     </tbody>
-                </table>   
-            </div> 
+                </table>
+            </div>
 
         </div>
     </div>
     <div class="row my-1 mt-4">
         <div class="col">
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Client's New Matters - Current Month
+                <div class="card-header bg-primary text-white text-center">
+                    Previous Month (New Clients)
                 </div>
-                <table class="table table-hover table-sm table-bordered small table table-dark table-striped">
-                    <thead class="text-center">
-                    <tr class="table-active table-primary bg-white text-dark">
-                        <th scope="col">Client</th>
-                        <th scope="col">Number Of Matters</th>
-                        <th scope="col"></th>
-                    </tr>
+                <table class="table-hover table-bordered table-sm small table">
+                    <thead class="text-center text-white" style="background-color:grey ;">
+                        <tr>
+                            <th style="width:30%;">Client</th>
+                            <th style="width:10%;">Date Acquired</th>
+                            <th style="width:15%;">Email</th>
+                            <th style="width:10%;">Mobile</th>
+                            <th style="width:20%;"">Contact</th>
+                            <th style=" width:15%;">Country</th>
+                        </tr>
                     </thead>
                     <tbody>
-                        {% for clientsummary in clientsummary %}
+                        {% for prevclient in prevclients %}
                         <tr>
-                            <td>{{ clientsummary.folder__client__client_name }}</td>
-                            <td class="text-center">{{ clientsummary.NoOfMatter }}</td>
-                            <td class="text-center">
-                                <!-- <a href="#" class="btn btn-info btn-sm btn-icon-split" > -->
-                                <a href="#" class="btn btn-info btn-sm btn-icon-split" >
-                                    <span class="icon text-white-20">
-                                        <i class="fas fa-info-circle"></i>
-                                    </span>
-                                </a>
-                            </td>
+                            <td style="font-weight: bold;"><a href="{% url 'management-clientview' prevclient.id %}">
+                                    {{ prevclient.client_name }}</a></td>
+                            <td style="font-weight: bold;">{{ prevclient.date_acquired | date:'m/d/Y'}}</td>
+                            <td style="font-weight: bold;">{{ prevclient.email }}</td>
+                            <td style="font-weight: bold;">{{ prevclient.mobile }}</td>
+                            <td style="font-weight: bold;">{{ prevclient.main_contact }}</td>
+                            <td style="font-weight: bold;">{{ prevclient.country.country }}</td>
                         </tr>
                         {% endfor %}
-                        <tr>
-                            <td> Total number of mattters :   {{ total_count_matters }}</td>
+                        <tr class="text-white" style="background-color:grey;font-weight: bold;">
+                            <td> Total Clients : {{ prevclientcount }}</td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
+                            <td> </td>
                         </tr>
 
                     </tbody>
-                </table>   
-            </div> 
+                </table>
+            </div>
 
         </div>
     </div>

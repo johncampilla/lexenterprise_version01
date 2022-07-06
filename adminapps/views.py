@@ -915,7 +915,6 @@ def folder_update_Client(request, pk):
     client = Client_Data.objects.get(id=cid)
     matters = Matters.objects.filter(folder_id=pk)
     fid = folder.id
-    print(client)
     if request.method == 'POST':
         form = EntryFolderForm(request.POST, instance=folder)
         if form.is_valid():
@@ -2128,25 +2127,29 @@ def add_task(request, pk):
         def save_to_tempPF():
             tempbills = TempBills.objects.filter(
                 matter_id=matter_id, tran_date=tran_date, bill_service_id=bill_id)
-            if tempbills.exists():
+            print(tempbills)
+            if tempbills:
                 pass
             else:
+
+
                 # if prate > 0:
                 #     pesoamount = (PF_amount * prate)
                 # else:
                 #     prate = 0
                 #     pesoamount = 0
-
-                tempbills = TempBills(
-                    matter_id=matter_id,
-                    tran_date=tran_date,
-                    bill_service_id=bill_id,
-                    lawyer_id=lawyer,
-                    particulars=bill_description,
-                    amount=PF_amount,
-                    # pesorate=prate,
-                    currency=currency)
-                tempbills.save()
+                if bill_description is not None:
+                    print("d2 ksi sya pumasok sa saving ng tembills")
+                    tempbills = TempBills(
+                        matter_id=matter_id,
+                        tran_date=tran_date,
+                        bill_service_id=bill_id,
+                        lawyer_id=lawyer,
+                        particulars=bill_description,
+                        amount=PF_amount,
+                        # pesorate=prate,
+                        currency=currency)
+                    tempbills.save()
 
         def save_to_tempfiling():
             tempfees = TempFilingFees.objects.filter(
@@ -2201,9 +2204,10 @@ def add_task(request, pk):
     folder_id = matter.folder.folder_type.id
     codes = ActivityCodes.objects.all()
     codes = ActivityCodes.objects.filter(foldertype__id = folder_id)
-    tasks = task_detail.objects.filter(matter__id=pk)
+    tasks = task_detail.objects.filter(matter__id=pk).order_by('-tran_date')
     c_id = matter.folder.client.id    
     client = Client_Data.objects.get(id = c_id)
+    user_id = request.user.id
 
     if request.method == "POST":
         # Get the posted form
@@ -2213,9 +2217,10 @@ def add_task(request, pk):
             task_rec = form.save(commit=False)
             task_rec.matter_id = matter.id
             task_rec.task_code_id = request.POST['task_code']
+            task_rec.preparedby_id = user_id
             task_rec.save()
             perform_billable_services()
-            return redirect('admin-matter-list')
+            return redirect('admin-update-matter_client', pk)
         else:
             print("meron mali")
     else:

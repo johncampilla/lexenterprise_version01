@@ -574,6 +574,8 @@ class task_detail(models.Model):
         DueCode, on_delete=models.PROTECT, blank=True, null=True)
     billstatus = models.CharField(
         max_length=15, choices=BILLSTATUS, blank=True, null=True, default='Unbilled')
+    createdby = models.CharField(max_length=30, blank=True, null=True)
+    updatedby = models.CharField(max_length=30, blank=True, null=True)
     datemodified = models.DateTimeField(auto_now=True)
     datecreated = models.DateTimeField(auto_now_add=True)
 

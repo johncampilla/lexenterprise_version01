@@ -23,7 +23,7 @@ Dashboard
                         <div class="col-lg-12">
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;"> Matter</span>
-                                <input type="text" name="matter" value="{{matter}}" class="form-control">
+                                <input type="text" name="matter" value="{{matter}}" class="form-control" readonly>
                             </div>
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;">Activity Date</span>
@@ -48,28 +48,20 @@ Dashboard
                                     {% endfor %}
                                 </select>
                             </div>
-                            <!-- <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Activity Codes</span>
-                                {{form.task_code}}
-                            </div> -->
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Prepared By</span>
-                                {{form.preparedby}}
-                            </div>
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;">Lawyer</span>
                                 {{form.lawyer}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Activity Details</span>
+                                <span class="input-group-text" style="width: 110px;">Activity</span>
                                 {{form.task}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Time Spent (hrs)</span>
+                                <span class="input-group-text" style="width: 110px;">Spent (hrs)</span>
                                 {{form.spentinhrs}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Time Spent (Mins)</span>
+                                <span class="input-group-text" style="width: 110px;">Spent (Mins)</span>
                                 {{form.spentinmin}}
                             </div>
                         </div>
@@ -82,11 +74,11 @@ Dashboard
                     </div>
                 </form>
             </div>
-            <h6 class="card-title bg-primary text-white text-center">Activities</h6>
+            <div class="card-header text-center text-white bg-primary">Activities</div>
             <div>
                 <table class="table-hover table-bordered table-sm small table">
                     <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                    <thead class="table-primary text-center">
+                    <thead class="text-center text-white" style="background-color:green ;">
                         <tr>
                             <th style="width:10%;">Date</th>
                             <th style="width:15%;">Lawyer</th>
@@ -98,17 +90,12 @@ Dashboard
                     </thead>
                     {% for task in tasks %}
                     <tr>
-                        <td style="font-weight: bold;">{{ task.tran_date | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;"><a href="{% url 'superstaff-activity-modify' task.id m_id %}">
+                                {{task.tran_date | date:'m/d/Y' }}</a></td>
                         <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
                         <td style="font-weight: bold;">{{ task.doc_type }}</td>
                         <td style="font-weight: bold;">{{ task.tran_type }}</td>
                         <td style="font-weight: bold;">{{ task.task }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" href="{% url 'associate-modify_task' task.id m_id %}"
-                                title="Edit Activity">
-                                <i class="fas fa-pen"></i>
-                            </a>
-                        </td>
                     </tr>
                     {% endfor %}
                 </table>

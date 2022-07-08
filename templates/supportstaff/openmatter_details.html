@@ -104,34 +104,40 @@ Dashboard
                                         class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px;">Remarks</span>
+                                    <span class="input-group-text" style="width: 110px;font-weight:bold;">Remarks</span>
                                     {{form.remarks}}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Client Ref#</span>
+                                        <span class="input-group-text" style="width: 110px;font-weight:bold;">Client
+                                            Ref#</span>
                                         {{form.clientrefno}}
                                     </div>
                                     <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Our Ref#</span>
+                                        <span class="input-group-text" style="width: 110px;font-weight:bold;">Our
+                                            Ref#</span>
                                         {{form.matterno}}
                                     </div>
                                     <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Status</span>
+                                        <span class="input-group-text"
+                                            style="width: 110px;font-weight:bold;">Status</span>
                                         {{form.status}}
                                     </div>
                                     <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Reference No.</span>
+                                        <span class="input-group-text" style="width: 110px;font-weight:bold;">Reference
+                                            No.</span>
                                         {{form.referenceno}}
                                     </div>
                                     <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Date Filed</span>
+                                        <span class="input-group-text" style="width: 110px;font-weight:bold;">Date
+                                            Filed</span>
                                         {{form.filing_date}}
                                     </div>
                                     <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Filed At</span>
+                                        <span class="input-group-text" style="width: 110px;font-weight:bold;">Filed
+                                            At</span>
                                         {{form.filed_at}}
                                     </div>
                                 </div>
@@ -163,7 +169,7 @@ Dashboard
                     </thead>
                     {% for task in tasks %}
                     <tr>
-                        <td style="font-weight: bold;"><a href="{% url 'associate-modify_task' task.id m_id %}">
+                        <td style="font-weight: bold;"><a href="{% url 'superstaff-activity-review' task.id %}">
                                 {{ task.tran_date | date:'m/d/Y' }}</a></td>
                         <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
                         <td style="font-weight: bold;">{{ task.doc_type }}</td>

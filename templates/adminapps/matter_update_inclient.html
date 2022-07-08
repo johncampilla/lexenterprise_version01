@@ -23,14 +23,18 @@ Dashboard
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'matter_new-mail' matter.id %}">New Mail</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Communications
+                            </a>
+                            <ul class="dropdown-menu small" aria-labelledby="navbarDropdownMenuLink">
+                                <li><a class="dropdown-item" href="#">IPO Documents</a></li>
+                                <li><a class="dropdown-item" href="{% url 'matter_new-mail' matter.id %}">Client
+                                        Communications</a></li>
+                                <li><a class="dropdown-item" href="#">Others</a></li>
+                            </ul>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'add_task' matter.id %}">New Task</a>
-                        </li>
-
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'matterawaiting_docs' matter.id %}">Awaiting Documents</a>
                         </li>
@@ -79,33 +83,16 @@ Dashboard
                                 {{form.appearance}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Reference No.</span>
-                                {{form.referenceno}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Date Filed</span>
-                                {{form.filing_date}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Filed At</span>
-                                {{form.filed_at}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Status</span>
-                                {{form.status}}
+                                <span class="input-group-text" style="width: 110px;">Type Of Case</span>
+                                {{form.case_type}}
                             </div>
                         </div>
 
                         <div class="col-lg-6">
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Type Of Case</span>
-                                {{form.case_type}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;">Type Of Appln</span>
                                 {{form.apptype}}
                             </div>
-
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;">Nature</span>
                                 {{form.nature}}
@@ -113,14 +100,6 @@ Dashboard
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;">Lawyer</span>
                                 {{form.handling_lawyer}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Client Ref</span>
-                                {{form.clientrefno}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Our Ref</span>
-                                {{form.matterno}}
                             </div>
                         </div>
                     </div>
@@ -141,8 +120,6 @@ Dashboard
 
                         </div>
                     </div>
-                    <a class='btn btn-outline-primary btn-sm mb-3'
-                        href="{% url 'clientlistmatters' client.id %}">Return</a>
                     <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
                 </form>
             </div>
@@ -150,11 +127,11 @@ Dashboard
 
         <!--         </div> -->
     </div>
-    <h6 class="card-title bg-primary text-white text-center">Due Dates</h6>
+    <div class="card-header text-center text-white bg-primary"> Due Dates</div>
     <div>
         <table class="table-hover table-bordered table-sm small table">
             <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-            <thead class="table-primary text-center">
+            <thead class="text-center text-white" style="background-color:green ;">
                 <tr>
                     <th style="width:5%;">Due Date</th>
                     <th style="width:95%;">Particulars</th>
@@ -168,10 +145,10 @@ Dashboard
             {% endfor %}
         </table>
     </div>
-    <h6 class="card-title bg-primary text-white text-center">Activities</h6>
+    <div class="card-header text-center text-white bg-primary">Activities</div>
     <table class="table-hover table-bordered table-sm small table">
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-        <thead class="table-primary text-center">
+        <thead class="text-center text-white" style="background-color:green ;">
             <tr>
                 <th style="width:5%;">Date</th>
                 <th style="width:10%;">Tran Type</th>

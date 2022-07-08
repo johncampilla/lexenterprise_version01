@@ -81,18 +81,19 @@
                 </div>
             </li>
 
-            <hr class="sidebar-divider">
-
             <li class="nav-item">
                 <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseThree"
                     aria-expanded="true" aria-controls="collapseThree">
                     <i class="fas fa-fw fa-user"></i>
-                    <span>Assignments</span>
+                    <span>System Users</span>
                 </a>
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{% url 'admin-management-list' %}">Management</a>
                         <a class="collapse-item" href="{% url 'admin-lawyer-list' %}">Lawyers</a>
-                        <a class="collapse-item" href="{% url 'admin-nonlawyer-list' %}">Secretaries</a>
+                        <a class="collapse-item" href="#">Clients</a>
+                        <a class="collapse-item" href="{% url 'admin-nonlawyer-list' %}">Support Staff</a>
+                        <a class="collapse-item" href="#">Admin</a>
 
                         <!-- <a class="collapse-item" href="#">Bills and Payments</a>
                                     <a class="collapse-item" href="{% url 'admin-ar-list' %}">Accounts Receivable</a> -->
@@ -101,16 +102,9 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link collapsed" href="{% url 'activity-code' %}" data-toggle="collapse"
-                    data-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Reference</span>
-                </a>
-                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{% url 'activity-code' %}">Lookup Codes</a>
-                    </div>
-                </div>
+                <a class="nav-link" href="{% url 'activity-code' %}">
+                    <i class="fas fa-columns"></i>
+                    <span>Lookup Codes</span></a>
             </li>
 
             <!-- Nav Item - Utilities Collapse Menu -->

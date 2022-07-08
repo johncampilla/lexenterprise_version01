@@ -163,6 +163,8 @@ urlpatterns = [
 
     path('sysadmin/lawyers/', main_view.lawyerlist, name='admin-lawyer-list'),
     path('sysadmin/nonlawyer/', main_view.nonlawyer, name='admin-nonlawyer-list'),
+    path('sysadmin/management_user/', main_view.management, name='admin-management-list'),
+
     path('sysadmin/lawyers/add_lawyer/',
          main_view.add_lawyer, name='admin-lawyer-add'),
     path('sysadmin/lawyers/edit_lawyer/<int:pk>/',

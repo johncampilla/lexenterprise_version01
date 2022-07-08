@@ -465,12 +465,11 @@ class EntryMatterForm(forms.ModelForm):
     class Meta:
         model = Matters
 #        fields = '__all__'
-        fields = 'appearance', 'referenceno', 'filing_date', 'filed_at', 'case_type', 'apptype', 'nature', 'handling_lawyer', 'matter_contact_person', 'lawyers_involve', 'matter_title', 'clientrefno', 'matterno', 'status', 'remarks', "opposing_counsel"
+        fields = 'appearance', 'case_type', 'apptype', 'nature', 'handling_lawyer', 'lawyers_involve', 'matter_title', "opposing_counsel", 'remarks'
         widgets = {
             'matter_title': Textarea(attrs={'cols': 200, 'rows': 2}),
             "lawyers_involve": Textarea(attrs={"placeholder": "type here the initials of the lawyers and put a comma in between...", "rows": 1}),
             "opposing_counsel": Textarea(attrs={"placeholder": "type here the name of the opposing law firm and lawyers...", "rows": 1}),
-            'filing_date': NumberInput(attrs={'type': 'date'}),
             'remarks': Textarea(attrs={'cols': 200, 'rows': 2})
         }
 
@@ -487,7 +486,7 @@ class ReviewMatterForm(forms.ModelForm):
             'remarks': Textarea(attrs={'cols': 200, 'rows': 2})
         }
 
-class ReviewMatterForm2(forms.ModelForm):
+class EditMatterForm(forms.ModelForm):
 
     class Meta:
         model = Matters

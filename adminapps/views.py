@@ -539,31 +539,23 @@ def lawyerlist(request):
     srank = request.user.user_profile.rank
     username = request.user.username
 
-
-    if 'q' in request.GET:
-        q = request.GET['q']
-        #clients = Client_Data.objects.filter(client_name__icontains=q)
-        multiple_q = Q(Q(lawyer_name__icontains=q) | Q(access_code__icontains=q) | Q(
-            Specialization__icontains=q) | Q(address__icontains=q) | Q(rank__icontains=q))
-        users = Lawyer_Data.objects.filter(
-            multiple_q).order_by("userid__last_name")
-    else:
-        users = Lawyer_Data.objects.all().order_by("lawyer_name")
-#        users = Lawyer_Data.objects.all()
-
+    users = User_Profile.objects.filter(rank ="ASSOCIATES")
     noofusers = users.count()
+    group = 'ASSOCIATES'
+
     context = {
         'users': users,
         'noofusers': noofusers,
         'alertmessages': alertmessages,
         'noofalerts': countalert,
         'username': username,
+        'group':group,
 
     }
     return render(request, 'adminapps/lawyerlist.html', context)
 
 @login_required
-def nonlawyer(request):
+def management(request):
     access_code = request.user.user_profile.userid
     user_id = User.id
 
@@ -573,9 +565,10 @@ def nonlawyer(request):
     countalert = alertmessages.count()
     srank = request.user.user_profile.rank
     username = request.user.username
-
-    users = User_Profile.objects.filter(rank = 'SECRETARY')
+    multiple_q = Q(Q(rank__icontains='partner'))
+    users = User_Profile.objects.filter(multiple_q)
     noofusers = users.count()
+    group = 'MANAGEMENT'
 
     context = {
         'users': users,
@@ -583,6 +576,33 @@ def nonlawyer(request):
         'alertmessages': alertmessages,
         'noofalerts': countalert,
         'username': username,
+        'group':group,
+
+    }
+    return render(request, 'adminapps/lawyerlist.html', context)
+
+@login_required
+def nonlawyer(request):
+    access_code = request.user.user_profile.userid
+    user_id = User.id
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    srank = request.user.user_profile.rank
+    username = request.user.username
+
+    users = User_Profile.objects.filter(rank = 'SECRETARY')
+    noofusers = users.count()
+    group = 'SUPPORT STAFF'
+
+    context = {
+        'users': users,
+        'noofusers': noofusers,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
+        'group':group,
 
     }
 
@@ -1172,7 +1192,7 @@ def removecasetype(request, pk):
 
 @login_required
 def duecodeentry(request):
-    duecodes = DueCode.objects.all()
+    duecodes = DueCode.objects.all().order_by('DueCode')
     if request.method == "POST":
         form = DueCodeEntryForm(request.POST)
         if form.is_valid():

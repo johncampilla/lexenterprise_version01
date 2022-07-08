@@ -9,7 +9,7 @@ from adminapps.models import *
 from datetime import date, datetime, timedelta
 from django.core.paginator import Paginator
 from dateutil.relativedelta import relativedelta
-from adminapps.forms import MailsInwardFormNew, InboxAttachmentEntryForm, InboxAttachmentViewForm, InboxMessageNewForm, InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry, ReviewMatterForm2, ReviewMatterForm,IPDetailForm, Non_IPDetailForm, ClassOfGoodsEntry, ApplicantEntryForm, AddTaskEntryForm
+from adminapps.forms import MailsInwardFormNew, InboxAttachmentEntryForm, InboxAttachmentViewForm, InboxMessageNewForm, InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry, EditMatterForm, ReviewMatterForm,IPDetailForm, Non_IPDetailForm, ClassOfGoodsEntry, ApplicantEntryForm, AddTaskEntryForm
 from django.db.models import Q, Sum, Count
 from django.core.exceptions import ObjectDoesNotExist
 from dateutil.relativedelta import relativedelta
@@ -252,7 +252,7 @@ def matter_review(request, pk):
     expenses = TempExpenses.objects.filter(
         Q(matter__id=pk), Q(status='O') | Q(status='P'))
     if request.method == 'POST':
-        form = ReviewMatterForm2(request.POST, instance=matter)
+        form = EditMatterForm(request.POST, instance=matter)
         if form.is_valid():
             form.save()
 #            apptype = request.POST["apptype"]
@@ -261,9 +261,9 @@ def matter_review(request, pk):
             validateduedates()
             return redirect('supportstaff-matter_review', pk)
         else:
-            form = ReviewMatterForm2(instance=matter)
+            form = EditMatterForm(instance=matter)
     else:
-        form = ReviewMatterForm2(instance=matter)
+        form = EditMatterForm(instance=matter)
 
     activities = task_detail.objects.filter(
         matter__id=pk).order_by('-tran_date')
@@ -780,25 +780,26 @@ def add_task(request, pk):
         def save_to_tempPF():
             tempbills = TempBills.objects.filter(
                 matter_id=matter_id, tran_date=tran_date, bill_service_id=bill_id)
-            if tempbills.exists():
+            if tempbills:
                 pass
             else:
+
                 # if prate > 0:
                 #     pesoamount = (PF_amount * prate)
                 # else:
                 #     prate = 0
                 #     pesoamount = 0
-
-                tempbills = TempBills(
-                    matter_id=matter_id,
-                    tran_date=tran_date,
-                    bill_service_id=bill_id,
-                    lawyer_id=lawyer,
-                    particulars=bill_description,
-                    amount=PF_amount,
-                    # pesorate=prate,
-                    currency=currency)
-                tempbills.save()
+                if bill_description is not None:
+                    tempbills = TempBills(
+                        matter_id=matter_id,
+                        tran_date=tran_date,
+                        bill_service_id=bill_id,
+                        lawyer_id=lawyer,
+                        particulars=bill_description,
+                        amount=PF_amount,
+                        # pesorate=prate,
+                        currency=currency)
+                    tempbills.save()
 
         def save_to_tempfiling():
             tempfees = TempFilingFees.objects.filter(
@@ -852,6 +853,9 @@ def add_task(request, pk):
     matter = Matters.objects.get(id=pk)
     codes = ActivityCodes.objects.all()
     tasks = task_detail.objects.filter(matter__id=pk)
+    username = request.user.username
+    userid = request.user.user_profile.userid_id
+
     if request.method == "POST":
         # Get the posted form
         form = TaskEntryForm(request.POST)
@@ -859,6 +863,8 @@ def add_task(request, pk):
             task_rec = form.save(commit=False)
             task_rec.matter_id = matter.id
             task_rec.task_code_id = request.POST['task_code']
+            task_rec.updatedby = username
+            task_rec.preparedby_id = userid
             task_rec.save()
             perform_billable_services()
 

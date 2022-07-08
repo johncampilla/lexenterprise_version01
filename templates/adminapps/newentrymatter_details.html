@@ -13,6 +13,7 @@ Dashboard
     {% include 'base/clientinfoheader.html' %}
 
     <div class="card">
+        <div class="card-header text-white text-center bg-primary"> New Matter Details </div>
         <!-- <div class="card-body"> -->
         <div class="card text-white">
             <div class="row mt-2">
@@ -31,30 +32,12 @@ Dashboard
                                 <span class="input-group-text" style="width: 110px;font-weight: bold"> Appearance</span>
                                 {{form.appearance}}
                             </div>
-
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Reference
-                                    No.</span>
-                                {{form.referenceno}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Date Filed</span>
-                                {{form.filing_date}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px; font-weight: bold;">Filed At</span>
-                                {{form.filed_at}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Status</span>
-                                {{form.status}}
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Case Type</span>
                                 {{form.case_type}}
                             </div>
+                        </div>
+                        <div class="col-lg-6">
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Appln Type</span>
                                 {{form.apptype}}
@@ -66,14 +49,6 @@ Dashboard
                             <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Lawyer</span>
                                 {{form.handling_lawyer}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Client Ref</span>
-                                {{form.clientrefno}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Our Ref</span>
-                                {{form.matterno}}
                             </div>
                         </div>
                     </div>
@@ -90,13 +65,12 @@ Dashboard
                                 {{form.lawyers_involve}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Opposing</span>
+                                {{form.opposing_counsel}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;font-weight: bold;">Remarks</span>
                                 {{form.remarks}}
-                            </div>
-                            <div class="input-group input-group-sm mb-2">
-                                <span class="input-group-text" style="width: 150px;font-weight: bold;">Opposing
-                                    Counsel</span>
-                                {{form.opposing_counsel}}
                             </div>
 
                         </div>

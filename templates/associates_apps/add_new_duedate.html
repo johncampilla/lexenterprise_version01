@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 
 {% block content %}
@@ -16,24 +16,21 @@
             <div class="card text-white">
                 <div class="row">
                     <form method="POST">
-                    {% csrf_token %}
-                    <!-- {{ form | crispy }} -->                   
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px;"> Matter</span>
                                     {{form.matter}}
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px;">Due Code</span>
-                                    {{form.duecode}}
+                                    <input type="text" value="{{matter.matter_title}}" class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px;">Due Date</span>
                                     {{form.duedate}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px;">Assigned To</span>
+                                    <span class="input-group-text" style="width: 110px;">Lawyer</span>
                                     {{form.assignto}}
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
@@ -47,18 +44,17 @@
                             </div>
                         </div>
                         <div>
-                            <a class= 'btn btn-outline-primary btn-sm' href="{% url 'associate-matter-review' m_id %}">Return</a>
+                            <a class='btn btn-outline-primary btn-sm'
+                                href="{% url 'associate-matter-review' m_id %}">Return</a>
                             <input class='btn btn-outline-primary btn-sm' type="submit" value="Save Record">
                         </div>
-                    
+
                     </form>
                 </div>
             </div>
         </div>
-    
+
     </div>
 </div>
 
 {% endblock content%}
-
-

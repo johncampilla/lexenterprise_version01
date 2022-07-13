@@ -31,26 +31,21 @@ Dashboard
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
         <thead class="table-primary text-center">
             <tr>
-                <th style="width:10%;">From</th>
                 <th style="width:10%;">Date</th>
+                <th style="width:10%;">From</th>
                 <th style="width:20%;">Subject</th>
                 <th style="width:50%;">Message</th>
-                <th style="width:5%;">Status</th>
-                <th style="width:5%;">Action</th>
+                <th style="width:10%;">Status</th>
             </tr>
         </thead>
         {% for items in receivedmessages %}
         <tr>
+            <td style="font-weight: bold;"><a href="{% url 'open_inboxmessage' items.id %}">
+                    {{ items.messagedate | date:'m/d/Y' }}</a></td>
             <td style="font-weight: bold;">{{ items.messagefrom }}</td>
-            <td style="font-weight: bold;">{{ items.messagedate | date:'m/d/Y' }}</td>
             <td style="font-weight: bold;">{{ items.subject }}</td>
             <td style="font-weight: bold;">{{ items.messagebox }}</td>
-            <td style="font-weight: bold;">{{ items.status }}</td>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{% url 'open_inboxmessage' items.id %}" title="Open Message">
-                    <i class="fas fa-pen"></i>
-                </a>
-            </td>
+            <td style="font-weight: bold;text-align: center;">{{ items.status }}</td>
         </tr>
         {% endfor %}
     </table>
@@ -59,26 +54,21 @@ Dashboard
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
         <thead class="table-primary text-center">
             <tr>
-                <th style="width:10%;">Sent To</th>
                 <th style="width:10%;">Date</th>
+                <th style="width:10%;">Sent To</th>
                 <th style="width:20%;">Subject</th>
                 <th style="width:50%;">Message</th>
-                <th style="width:5%;">Status</th>
-                <th style="width:5%;">Action</th>
+                <th style="width:10%;">Status</th>
             </tr>
         </thead>
         {% for items in sentmessages %}
         <tr>
+            <td style="font-weight: bold;"><a href="{% url 'open_sentitems' items.id %}">
+                    {{ items.messagedate | date:'m/d/Y' }}</a></td>
             <td style="font-weight: bold;">{{ items.messageto }}</td>
-            <td style="font-weight: bold;">{{ items.messagedate | date:'m/d/Y' }}</td>
             <td style="font-weight: bold;">{{ items.subject }}</td>
             <td style="font-weight: bold;">{{ items.messagebox }}</td>
-            <td style="font-weight: bold;">{{ items.status }}</td>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{% url 'open_sentitems' items.id %}" title="Open Message">
-                    <i class="fas fa-pen"></i>
-                </a>
-            </td>
+            <td style="font-weight: bold; text-align: center;">{{ items.status }}</td>
         </tr>
         {% endfor %}
     </table>

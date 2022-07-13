@@ -23,7 +23,8 @@ Dashboard
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text"
                                         style="width: 110px; font-weight: bold;">Matter</span>
-                                    {{form.matter}}
+                                    <input type="text" name="matter" value="{{matter.matter_title}}"
+                                        class="form-control" readonly>
                                 </div>
                             </div>
 
@@ -31,138 +32,168 @@ Dashboard
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">IPO
                                         Examiner</span>
-                                    {{form.ipo_examiner}}
+                                    <input type="text" value="{{matter.ipo_examiner}}" class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text"
                                         style="width: 110px; font-weight: bold;">Status</span>
-                                    {{form.status}}
+                                    <input type="text" value="{{matter.status}}" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">IPC #</span>
-                                    {{form.ipc_appno}}
+                                    <input type="text" value="{{matter.ipc_appno}}" class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">IPC
                                         Filed</span>
-                                    {{form.ipc_appdate}}
+                                    <input type="text" value="{{matter.ipc_appdate}}" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">Publication
                                         #</span>
-                                    {{form.publication_reference}}
+                                    <input type="text" value="{{matter.publication_reference}}" class="form-control"
+                                        readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">Publication
                                         Date</span>
-                                    {{form.publication_date}}
+                                    <input type="text" value="{{matter.publication_date}}" class="form-control"
+                                        readonly>
                                 </div>
                             </div>
-                            <!-- <div class="col-lg-6">
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Remarks</span>
-                                    {{form.reason_withdrawn}}
-                                </div>
-                            </div> -->
-
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">Certificate
                                         #</span>
-                                    {{form.certificate_no}}
+                                    <input type="text" value="{{matter.certificate_no}}" class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">Cert
                                         Date</span>
-                                    {{form.registration_date}}
+                                    <input type="text" value="{{matter.registration_date}}" class="form-control"
+                                        readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text"
                                         style="width: 110px; font-weight: bold;">CopyRight#</span>
-                                    {{form.copyright_number}}
+                                    <input type="text" value="{{matter.copyright_number}}" class="form-control"
+                                        readonly>
+
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Priority
                                     </span>
-                                    {{form.date_Of_PCTPriority}}
+                                    <input type="text" value="{{matter.date_Of_PCTPriority}}" class="form-control"
+                                        readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">Renewal
                                         Date</span>
-                                    {{form.renewal_date}}
+                                    <input type="text" value="{{matter.renewal_date}}" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT
                                         AppNo#</span>
-                                    {{form.pct_appno}}
+                                    <input type="text" value="{{matter.pct_appno}}" class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Filed
                                         Date</span>
-                                    {{form.pct_appdate}}
+                                    <input type="text" value="{{matter.pct_appdate}}" class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">Lng Inter
                                         App</span>
-                                    {{form.lng_interappln}}
+                                    <input type="text" value="{{matter.lng_interappln}}" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT
                                         Publn#</span>
-                                    {{form.pct_publication}}
+                                    <input type="text" value="{{matter.pct_publication}}" class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">PCT Publn
                                         Date</span>
-                                    {{form.pct_pubdate}}
+                                    <input type="text" value="{{matter.pct_pubdate}}" class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">Lng Inter
                                         Pub</span>
-                                    {{form.lng_interpubln}}
+                                    <input type="text" value="{{matter.lng_interpubln}}" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text"
                                         style="width: 110px; font-weight: bold;">Priority#</span>
-                                    {{form.priority_number}}
+                                    <input type="text" value="{{matter.priority_number}}" class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">Priority
                                         Date</span>
-                                    {{form.priority_date}}
+                                    <input type="text" value="{{matter.priority_date}}" class="form-control" readonly>
                                 </div>
                                 <div class="input-group input-group-sm mb-1">
                                     <span class="input-group-text" style="width: 110px; font-weight: bold;">Priority
                                         Filing</span>
-                                    {{form.priority_country_filing}}
+                                    <input type="text" value="{{matter.priority_country_filing}}" class="form-control"
+                                        readonly>
                                 </div>
                             </div>
 
-
                         </div>
                         <a class='btn btn-outline-primary btn-sm mb-3 mt-2'
-                            href="{% url 'supportstaff-matter_review' matter.id %}">Return</a>
-                        <input class='btn btn-outline-primary btn-sm mb-3 mt-2' type="submit" value="Save Record">
+                            href="{% url 'associate-matter-review' matter.id %}">Return</a>
                         <a class='btn btn-outline-primary btn-sm mb-3 mt-2'
                             href="{% url 'associate-matter-clasofgoods' matter.id matter.apptype%}">Classification Of
                             Goods</a>
                     </form>
                 </div>
-                <h6 class="card-title bg-primary text-white text-center">Due Dates</h6>
+                <div class="card-header text-white text-center bg-primary">Classification Of Goods</div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="text-white text-center" style="background-color:green ;">
+                        <tr">
+                            <th style="width:10%;">Nice Class</th>
+                            <th style="width:80%;">Description</th>
+                            <th colspan="2" style="width:10%;">Action</th>
+                            </tr>
+                    </thead>
+                    {% for goods in listofgoods %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ goods.classes }}</td>
+                        <td style="font-weight: bold;">{{ goods.Goods_Descriptions }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm"
+                                href="{% url 'admin-edit-classofgood' matter.id goods.id %}"
+                                title="Edit Classification Of Goods">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-info btn-sm btn-icon-split" href="#" title="Delete Matter">
+                                <span class="icon text-white-20">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+                <div class="card-header text-center text-white bg-primary">Due Dates</div>
                 <div>
                     <table class="table-hover table-bordered table-sm small table">
                         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                        <thead class="table-primary text-center">
+                        <thead class="text-center text-white" style="background-color:green ;">
                             <tr>
                                 <th style="width:10%;">Due Date</th>
                                 <th style="width:15%;">Assign To</th>

@@ -8,23 +8,34 @@ Dashboard
 {% block content %}
 <div class="container">
     {% include 'base/adminappsnavbar.html' %}
+
+    <form>
+        <div class="input-group input-group-sm mb-1 mt-2">
+            <input name="q" type="text" class="form-control" placeholder="Search for...">
+            <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+            <a href="{% url 'search_docs' %}" class="btn btn-dark" style="margin: left 2px;"><i
+                    class="fas fa-sync-alt"></i></a>
+        </div>
+    </form>
+
     <!-- Table -->
     <table class="table-hover table-bordered table-sm small table">
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
         <thead class="table-primary text-center">
             <tr>
-                <th style="width:25%;">Client</th>
                 <th style="width:10%;">Document Date</th>
+                <th style="width:25%;">Client</th>
                 <th style="width:15%;">Short Description</th>
                 <th style="width:40%;">Task Detail</th>
             </tr>
         </thead>
         {% for docs in clients %}
         <tr>
+            <td style="font-weight: bold;"><a href="{% url 'open_filingdocs' docs.id %}">
+                    {{ docs.DocDate | date:'m/d/Y'}}</a></td>
             <td style="font-weight: bold;">{{ docs.Task_Detail.matter.folder.client.client_name }}</td>
-            <td style="font-weight: bold;">{{ docs.DocDate | date:'m/d/Y'}}</td>
             <td style="font-weight: bold;">{{ docs.Description }}</td>
-            <td style="font-weight: bold;"><a href="{% url 'open_filingdocs' docs.id %}">{{ docs.Task_Detail }}</a></td>
+            <td style="font-weight: bold;">{{ docs.Task_Detail }}</td>
         </tr>
         {% endfor %}
     </table>

@@ -169,7 +169,17 @@ class MailsInwardFormNew(forms.ModelForm):
 class MailsInwardFormNewWithMatter(forms.ModelForm):
     class Meta:
         model = task_detail
-        fields = 'tran_date','task_code', 'preparedby', 'lawyer', 'task', 'doc_date','mailing_date', 'examiner', 'mail_type', 'contact_person', 'duecode'
+        fields = 'tran_date', 'preparedby', 'lawyer', 'task', 'task_code','doc_date', 'mail_type', 'contact_person', 'duecode'
+        widgets = {
+            'task': Textarea(attrs={'cols': 200, 'rows': 3}),
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'doc_date': NumberInput(attrs={'type': 'date'}),
+        }
+
+class MailsIn_IPO(forms.ModelForm):
+    class Meta:
+        model = task_detail
+        fields = 'tran_date','lawyer', 'task', 'task_code' ,'doc_date', 'mailing_date', 'examiner', 'duecode'
         widgets = {
             'task': Textarea(attrs={'cols': 200, 'rows': 3}),
             'tran_date': NumberInput(attrs={'type': 'date'}),
@@ -365,7 +375,6 @@ class DocumentEditForm(forms.ModelForm):
         widgets = {
             'DocDate': NumberInput(attrs={'type': 'date'}),
         }
-
 
 class DueDateEntryForm(forms.ModelForm):
     class Meta:

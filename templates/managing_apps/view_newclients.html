@@ -14,12 +14,12 @@ Dashboard
                     Current Month (New Clients)
                 </div>
                 <table class="table-hover table-bordered table-sm small table">
-                    <thead class="text-center text-white" style="background-color:grey ;">
+                    <thead class="text-center text-white" style="background-color:green ;">
                         <tr>
-                            <th style="width:30%;">Client</th>
+                            <th style="width:25%;">Client</th>
                             <th style="width:10%;">Date Acquired</th>
                             <th style="width:15%;">Email</th>
-                            <th style="width:10%;">Mobile</th>
+                            <th style="width:15%;">Mobile</th>
                             <th style="width:20%;"">Contact</th>
                             <th style=" width:15%;">Country</th>
                         </tr>
@@ -36,7 +36,7 @@ Dashboard
                             <td style="font-weight: bold;">{{ client.country.country }}</td>
                         </tr>
                         {% endfor %}
-                        <tr class="text-white" style="background-color:grey;font-weight: bold;">
+                        <tr style="font-weight: bold;">
                             <td> Total Clients : {{ clientcount }}</td>
                             <td> </td>
                             <td> </td>
@@ -58,12 +58,12 @@ Dashboard
                     Previous Month (New Clients)
                 </div>
                 <table class="table-hover table-bordered table-sm small table">
-                    <thead class="text-center text-white" style="background-color:grey ;">
+                    <thead class="text-center text-white" style="background-color:green ;">
                         <tr>
-                            <th style="width:30%;">Client</th>
+                            <th style="width:25%;">Client</th>
                             <th style="width:10%;">Date Acquired</th>
                             <th style="width:15%;">Email</th>
-                            <th style="width:10%;">Mobile</th>
+                            <th style="width:15%;">Mobile</th>
                             <th style="width:20%;"">Contact</th>
                             <th style=" width:15%;">Country</th>
                         </tr>
@@ -71,7 +71,7 @@ Dashboard
                     <tbody>
                         {% for prevclient in prevclients %}
                         <tr>
-                            <td style="font-weight: bold;"><a href="{% url 'management-clientview' prevclient.id %}">
+                            <td style="font-weight: bold;"> <a href="{% url 'management-clientview' prevclient.id %}">
                                     {{ prevclient.client_name }}</a></td>
                             <td style="font-weight: bold;">{{ prevclient.date_acquired | date:'m/d/Y'}}</td>
                             <td style="font-weight: bold;">{{ prevclient.email }}</td>
@@ -80,7 +80,7 @@ Dashboard
                             <td style="font-weight: bold;">{{ prevclient.country.country }}</td>
                         </tr>
                         {% endfor %}
-                        <tr class="text-white" style="background-color:grey;font-weight: bold;">
+                        <tr style="font-weight: bold;">
                             <td> Total Clients : {{ prevclientcount }}</td>
                             <td> </td>
                             <td> </td>

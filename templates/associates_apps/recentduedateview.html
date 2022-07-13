@@ -22,27 +22,26 @@ Dashboard
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;"> Matter</span>
-                                {{form.matter}}
+                                <span class="input-group-text" style="width: 110px; font-weight: bold;"> Matter</span>
+                                <input type="text" name="matter" value="{{duedate.matter}}" class="form-control"
+                                    readonly>
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Due Code</span>
-                                {{form.duecode}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Due Date</span>
+                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Due Date</span>
                                 {{form.duedate}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Assigned To</span>
+                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Lawyer</span>
                                 {{form.assignto}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Particulars</span>
+                                <span class="input-group-text"
+                                    style="width: 110px;font-weight: bold;">Particulars</span>
                                 {{form.particulars}}
                             </div>
                             <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Date Complied</span>
+                                <span class="input-group-text" style="width: 110px;font-weight: bold;">Date
+                                    Complied</span>
                                 {{form.date_complied}}
                             </div>
                         </div>
@@ -71,8 +70,9 @@ Dashboard
             </thead>
             {% for activity in activity %}
             <tr>
-                <td style="font-weight: bold;"><a
-                        href="{% url 'recent-activity-modify' activity.id due_id %}">{{activity.tran_date }}</a></td>
+                <td style="font-weight: bold; text-align: center;"><a
+                        href="{% url 'recent-activity-modify' activity.id due_id %}">
+                        {{activity.tran_date }}</a></td>
                 <td style="font-weight: bold;">{{ activity.doc_type }}</td>
                 <td style="font-weight: bold;">{{ activity.tran_type }}</td>
                 <td style="font-weight: bold;">{{ activity.lawyer }}</td>

@@ -17,7 +17,7 @@ Dashboard
                     New Matter Details
                 </div>
                 <table class="table-hover table-bordered table-sm small table">
-                    <thead class="text-center text-white" style="background-color:grey ;">
+                    <thead class="text-center text-white" style="background-color:green ;">
                         <tr>
                             <th style="width:35%;">Client</th>
                             <th style="width:15%;">Case Type</th>
@@ -37,7 +37,7 @@ Dashboard
                             <td style="font-weight: bold;">{{ matter.handling_lawyer.lawyer_name }}</td>
                         </tr>
                         {% endfor %}
-                        <tr class="text-white" style="background-color:grey ; font-weight: bold;">
+                        <tr style="font-weight: bold;">
                             <td>Total Matters : {{ mattercount}}</td>
                             <td></td>
                             <td></td>
@@ -62,7 +62,7 @@ Dashboard
                     New Matter Details - Previous Month
                 </div>
                 <table class="table-hover table-bordered table-sm small table">
-                    <thead class="text-center text-white" style="background-color:grey ;">
+                    <thead class="text-center text-white" style="background-color:green ;">
                         <tr>
                             <th style="width:35%;">Client</th>
                             <th style="width:15%;">Case Type</th>
@@ -82,7 +82,7 @@ Dashboard
                             <td style="font-weight: bold;">{{ prevmatter.handling_lawyer.lawyer_name }}</td>
                         </tr>
                         {% endfor %}
-                        <tr class="text-white" style="background-color:grey; font-weight: bold;">
+                        <tr style="font-weight: bold;">
                             <td>Total Matters : {{ prevcount}}</td>
                             <td></td>
                             <td></td>

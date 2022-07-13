@@ -164,6 +164,7 @@ urlpatterns = [
     path('sysadmin/lawyers/', main_view.lawyerlist, name='admin-lawyer-list'),
     path('sysadmin/nonlawyer/', main_view.nonlawyer, name='admin-nonlawyer-list'),
     path('sysadmin/management_user/', main_view.management, name='admin-management-list'),
+    path('sysadmin/admin_user/', main_view.admin, name='admin-admin-list'),
 
     path('sysadmin/lawyers/add_lawyer/',
          main_view.add_lawyer, name='admin-lawyer-add'),
@@ -188,6 +189,8 @@ urlpatterns = [
          main_view.matter_delete, name='admin-delete-matter'),
     path('sysadmin/matter/new_mail/<int:pk>/',
          main_view.matter_newmail, name='matter_new-mail'),
+    path('sysadmin/matter/new_mail_IPO/<int:pk>/',
+         main_view.new_mailIPO, name='matter_new-mailIPO'),
 
          
 
@@ -265,6 +268,8 @@ urlpatterns = [
     path('sysadmin/addmatterawaiting/<int:pk>/',
          main_view.addawaitingdocs_matter, name='addawaitingdocs_matter'),
 
+    path('sysadmin/message/view/<int:pk>/', main_view.open_message,
+         name='open_message'),
          
 
          
@@ -340,6 +345,10 @@ urlpatterns = [
          main_view.edittaskcode, name='admin-edit-taskcode'),
     path('sysadmin/del/activitycode/<int:pk>/',
          main_view.removetaskcode, name='admin-remove-taskcode'),
+    path('sysadmin/message/mymessages/', main_view.my_messages,
+         name='admin-my_messages'),
+
+
 
 
     # for Associates urls (associates)
@@ -350,6 +359,9 @@ urlpatterns = [
          associates.edit_alertmessage, name='associate-edit_alertmessage'),
     path('associates/alertmessages/new/',
          associates.new_message, name='associate-new_message'),
+    path('associates/fileattachment/new/<int:pk>/',
+         associates.message_withfile, name='associate-message_withfile'),
+
     path('associates/alertmessages/remove/<int:pk>/',
          associates.remove_alertmessage, name='associate-remove_alertmessage'),
     path('associates/alertmessages/status/<int:pk>/',

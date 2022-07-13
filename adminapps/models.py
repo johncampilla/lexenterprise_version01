@@ -538,7 +538,10 @@ class task_detail(models.Model):
     MAILTYPE = {
         ('Email', 'Email'),
         ('Mail', 'Mail'),
-        ('Personal', 'Personal')
+        ('Personal', 'Personal'),
+        ('IPO', 'IPO'),
+        ('Court', 'Court')
+
     }
 
     BILLSTATUS = {
@@ -636,6 +639,11 @@ class FilingDocs(models.Model):
     DocDate = models.DateField(null=True, blank=True)
     DocsPDF = models.FileField(
         blank=True, null=True, upload_to="Documents/%Y/%m/%D/")
+    createdby = models.CharField(max_length=30, blank=True, null=True)
+    updatedby = models.CharField(max_length=30, blank=True, null=True)
+    datemodified = models.DateTimeField(auto_now=True)
+    datecreated = models.DateTimeField(auto_now_add=True)
+
 
 
 DUEDATESTATUS = {

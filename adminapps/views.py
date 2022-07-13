@@ -37,21 +37,25 @@ def main(request):
 
     user_message_id = request.user.user_profile.id
     alertmessages = inboxmessage.objects.filter(
-        messageto_id=user_message_id, status="UNREAD")
+        messageto_id=user_message_id, status="UNREAD").order_by('-messagedate')
     countalert = alertmessages.count()
     srank = request.user.user_profile.rank
     username = request.user.username
+    matters = Matters.objects.all().order_by('-filing_date')
+    count_matters = matters.count()
 
     context = {
         'alertmessages': alertmessages,
         'noofalerts': countalert,
         'username': username,
+        'matters': matters,
+        'count_matters': count_matters,
     }
 
     if User.is_staff and User.is_superuser:
         if srank == 'MANAGING PARTNER' or srank == 'PARTNER':
             return redirect('management-home')
-        elif srank == 'SYSTEM ADMIN':
+        elif srank == 'SYSTEM ADMIN':  
             return render(request, 'adminapps/index.html', context)
         elif srank == 'ASSOCIATES':
             return redirect('associate-home')
@@ -595,6 +599,31 @@ def nonlawyer(request):
     users = User_Profile.objects.filter(rank = 'SECRETARY')
     noofusers = users.count()
     group = 'SUPPORT STAFF'
+
+    context = {
+        'users': users,
+        'noofusers': noofusers,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
+        'group':group,
+
+    }
+
+    return render(request, 'adminapps/lawyerlist.html', context)
+
+def admin(request):
+    access_code = request.user.user_profile.userid
+    user_id = User.id
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    srank = request.user.user_profile.rank
+    username = request.user.username
+    users = User_Profile.objects.filter(rank = 'SYSTEM ADMIN')
+    noofusers = users.count()
+    group = 'ADMIN - STAFF'
 
     context = {
         'users': users,
@@ -1815,14 +1844,19 @@ def open_filingdocs(request, pk):
     m_id = document.Task_Detail.matter.id
     matter = Matters.objects.get(id=m_id)
     c_id = matter.folder.client.id
+    user_id = request.user.id
+
 
     client = Client_Data.objects.get(id=c_id)
-    print(client)
-    print(matter.matter_title)
     if request.method == 'POST':
         form = FilingDocsEntry(request.POST, instance=document)
         if form.is_valid():
             form.save()
+            document_rec = form.save(commit=False)
+            document_rec.Task_Detail_id = pk
+            document_rec.updatedby = user_id
+            document_rec.save()
+
             return redirect('search_docs')
     else:
         form = FilingDocsEntry(instance=document)
@@ -1831,6 +1865,7 @@ def open_filingdocs(request, pk):
         'form': form,
         'client':client,
         'matter':matter,
+        'document':document
     }
     return render(request, 'adminapps/opendocument.html', context)
 
@@ -1844,8 +1879,6 @@ def search_docs(request):
         messageto_id=user_message_id, status="UNREAD")
     countalert = alertmessages.count()
     username = request.user.username
-
-
 
     if 'q' in request.GET:
         q = request.GET['q']
@@ -2121,6 +2154,13 @@ def matter_newmail(request, pk):
     c_id = matter.folder.client.id    
     client = Client_Data.objects.get(id = c_id)
     tasks = task_detail.objects.filter(matter__id = pk).order_by('-tran_date')
+    user_id = request.user.id
+    codes = ActivityCodes.objects.all()
+    taskcode= ""
+    if 'task_code' in request.GET:
+        taskcode = request.GET['task_code']
+    
+    print(taskcode)
 
     if request.method == 'POST':
         task_form = MailsInwardFormNewWithMatter(request.POST)
@@ -2129,6 +2169,7 @@ def matter_newmail(request, pk):
             mailin_rec.matter_id = pk
             mailin_rec.tran_type = 'Non-Billable'
             mailin_rec.doc_type = 'Incoming'
+            mailin_rec.preparedby_id = user_id
             mailin_rec.save()
             return redirect('admin-update-matter_client', pk)
     else:
@@ -2139,8 +2180,39 @@ def matter_newmail(request, pk):
         'matter': matter,
         'client': client,
         'tasks': tasks,
+        'codes': codes,
     }
     return render(request, 'adminapps/newmail.html', context)
+
+def new_mailIPO(request, pk):
+    matter = Matters.objects.get(id=pk)
+    c_id = matter.folder.client.id    
+    client = Client_Data.objects.get(id = c_id)
+    tasks = task_detail.objects.filter(matter__id = pk).order_by('-tran_date')
+    user_id = request.user.id
+    
+    if request.method == 'POST':
+        task_form = MailsIn_IPO(request.POST)
+        if task_form.is_valid():
+            mailin_rec = task_form.save()
+            mailin_rec.matter_id = pk
+            mailin_rec.tran_type = 'Non-Billable'
+            mailin_rec.doc_type = 'Incoming'
+            mailin_rec.mail_type = "IPO"
+            mailin_rec.preparedby_id = user_id
+            mailin_rec.save()
+            return redirect('admin-update-matter_client', pk)
+    else:
+        task_form =  MailsIn_IPO()
+    
+    context = {
+        'form':task_form,
+        'matter': matter,
+        'client': client,
+        'tasks': tasks,
+    }
+    return render(request, 'adminapps/newmailIPO.html', context)
+        
 
 def add_task(request, pk):
     def perform_billable_services():
@@ -2256,8 +2328,21 @@ def add_task(request, pk):
     }
     return render(request, 'adminapps/add_new_task.html', context)
 
+def open_message(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    attachments = messageattachment.objects.filter(message_id=pk)
+    message.status = "READ"
+    message.save()
+    if request.method == 'POST':
+        form = InboxMessageForm(request.POST, instance=message)
+        return redirect('supportstaff-my_messages')
+    else:
+        form = InboxMessageForm(instance=message)
 
+    context = {
+        'form': form,
+        'replyid': pk,
+        'attachments': attachments,
+    }
 
-
-
-    
+    return render(request, 'adminapps/readmessage.html', context)

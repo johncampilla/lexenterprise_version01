@@ -10,76 +10,70 @@ Dashboard
 {% block content %}
 
 <div class="container">
-    <div class="card mt-3">
-        <div class="card-body">
-            <div class="card text-white">
-                <div class="row mt-2">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <!-- {{ form | crispy }} -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;"> Sender
-                                    </span>
-                                    <input type="text" name="messagefrom" value="{{messagefrom}}" class="form-control"
-                                        readonly>
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Date</span>
-                                    <input type="text" name="messagedate" value="{{messagedate}}" class="form-control"
-                                        readonly>
-                                </div>
-                                <div class="input-group input-group-sm mb-1 readonly">
-                                    <span class="input-group-text"
-                                        style="width: 110px; font-weight: bold;">Subject</span>
-                                    <input type="text" name="subject" value="{{subject}}" class="form-control" readonly>
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text"
-                                        style="width: 110px; font-weight: bold;">Message</span>
-                                    <input type="text" name="messagebox" value="{{messagebox}}" class="form-control"
-                                        readonly>
-                                </div>
-                                <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Specific
-                                        Matter</span>
-                                    <input type="text" name="see_matter" value="{{see_matter}}" class="form-control"
-                                        readonly>
-                                </div>
-                            </div>
+    <!-- <div class="card mt-3"> -->
+    <!-- <div class="card-body"> -->
+    <div class="card-header text-center text-white bg-primary">My Message</div>
+    <div class="card text-white">
+        <div class="row mt-2">
+            <form method="POST">
+                {% csrf_token %}
+                <!-- {{ form | crispy }} -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="input-group input-group-sm mb-1">
+                            <span class="input-group-text" style="width: 110px; font-weight: bold;"> Sender
+                            </span>
+                            <input type="text" name="messagefrom" value="{{messagefrom}}" class="form-control" readonly>
                         </div>
-                        <a class='btn btn-outline-primary btn-sm mb-3' href="{% url 'associate-list_messages' %}"><i
-                                class="fa fa-file-text fa-sm"></i>&nbsp; Return</a>
-                        <a class='btn btn-outline-primary btn-sm mb-3' href="#"><i
-                                class="fa fa-file-text fa-sm"></i>Reply</a>
-                    </form>
+                        <div class="input-group input-group-sm mb-1">
+                            <span class="input-group-text" style="width: 110px; font-weight: bold;">Date</span>
+                            <input type="text" name="messagedate" value="{{messagedate}}" class="form-control" readonly>
+                        </div>
+                        <div class="input-group input-group-sm mb-1 readonly">
+                            <span class="input-group-text" style="width: 110px; font-weight: bold;">Subject</span>
+                            <input type="text" name="subject" value="{{subject}}" class="form-control" readonly>
+                        </div>
+                        <div class="input-group input-group-sm mb-1">
+                            <span class="input-group-text" style="width: 110px; font-weight: bold;">Message</span>
+                            <input type="text" name="messagebox" value="{{messagebox}}" class="form-control" readonly>
+                        </div>
+                        <div class="input-group input-group-sm mb-1">
+                            <span class="input-group-text" style="width: 110px; font-weight: bold;">Specific
+                                Matter</span>
+                            <input type="text" name="see_matter" value="{{see_matter}}" class="form-control" readonly>
+                        </div>
+                    </div>
                 </div>
-                <table class="table-hover table-bordered table-sm small table mt-1">
-                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                    <thead class="table-primary text-center">
-                        <tr>
-                            <th style="width:40%;">Description</th>
-                            <th style="width:50%;">Document</th>
-                            <th colspan="2" style="width:10%;">Action</th>
-                        </tr>
-                    </thead>
-                    {% for file in attachments %}
-                    <tr>
-                        <td style="font-weight: bold;">{{ file.description }}</td>
-                        <td style="font-weight: bold;">{{ file.DocsPDF }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" href="#" title="Open Attachment">
-                                <i class="fas fa-pen"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-
-            </div>
+                <a class='btn btn-outline-primary btn-sm mb-3' href="{% url 'associate-list_messages' %}"><i
+                        class="fa fa-file-text fa-sm"></i>&nbsp; Return</a>
+                <a class='btn btn-outline-primary btn-sm mb-3' href="#"><i class="fa fa-file-text fa-sm"></i>Reply</a>
+            </form>
         </div>
+        <table class="table-hover table-bordered table-sm small table mt-1">
+            <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+            <thead class="text-white text-center" style="background-color:green ;">
+                <tr>
+                    <th style="width:40%;">Description</th>
+                    <th style="width:50%;">Document</th>
+                    <th colspan="2" style="width:10%;">Action</th>
+                </tr>
+            </thead>
+            {% for file in attachments %}
+            <tr>
+                <td style="font-weight: bold;">{{ file.description }}</td>
+                <td style="font-weight: bold;">{{ file.DocsPDF }}</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="#" title="Open Attachment">
+                        <i class="fas fa-pen"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
     </div>
+    <!-- </div> -->
+    <!-- </div> -->
 
 </div>
 

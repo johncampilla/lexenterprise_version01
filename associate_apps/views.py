@@ -23,7 +23,7 @@ from userprofile.models import User_Profile
 from django.core.paginator import Paginator
 from datetime import date, datetime, timedelta
 from django.db.models import Q, Sum, Count
-from adminapps.forms import InboxMessageNewForm, MailsInwardForm, EntryBillForm, EntryExpensesForm, Non_IPDetailForm, ClassOfGoodsEntry, IPDetailForm, AREntryForm, EntryMatterForm, DocumentEditForm, TaskEntryForm1, TaskEntryForm, FilingDocsEntry, AlertMessageForm, AlertUpdateStatusForm, DueDateEntryForm
+from adminapps.forms import InboxMessageNewForm, MailsInwardForm, EntryBillForm, EntryExpensesForm, Non_IPDetailForm, ClassOfGoodsEntry, IPDetailForm, AREntryForm, EntryMatterForm, DocumentEditForm, TaskEntryForm1, TaskEntryForm, FilingDocsEntry, AlertMessageForm, AlertUpdateStatusForm, DueDateEntryForm, InboxAttachmentEntryForm
 from django.core.exceptions import ObjectDoesNotExist
 from dateutil.relativedelta import relativedelta
 from django.contrib import messages
@@ -497,6 +497,7 @@ def matter_otherdetails(request, pk, sk):
     matter = Matters.objects.get(id=pk)
     m_id = matter.folder.client.id
     client = Client_Data.objects.get(id=m_id)
+    listofgoods = ClassOfGoods.objects.filter(matter__id=pk)
 
     duedates = AppDueDate.objects.filter(matter__id=pk)
     if sk == "IPO":
@@ -533,6 +534,7 @@ def matter_otherdetails(request, pk, sk):
             'duedatelist': duedates,
             'm_id': pk,
             'client': client,
+            'listofgoods':listofgoods,
 
         }
         return render(request, 'associates_apps/ipdetailform.html', context)
@@ -654,15 +656,20 @@ def portfolio_new_task(request, m_id):
 
 
 def add_duedate(request, pk):
+    username = request.user.username
     matter = Matters.objects.get(id=pk)
     m_id = matter.folder.client.id
     client = Client_Data.objects.get(id=m_id)
 
     if request.method == "POST":
+        print("posting")
         # Get the posted form
         form = DueDateEntryForm(request.POST)
         if form.is_valid():
-            form.save()
+            due_rec = form.save(commit=False)
+            due_rec.matter_id = pk
+            due_rec.createdby = username
+            due_rec.save()
             return redirect('associate-add_duedate', pk)
         else:
             return redirect('associate-add_duedate', pk)
@@ -686,23 +693,13 @@ def modify_duedate(request, pk, m_id):
     c_id = matter.folder.client.id
     client = Client_Data.objects.get(id=c_id)
 
-    if request.method == 'POST':
-        task_form = DueDateEntryForm(request.POST, instance=task)
-        if task_form.is_valid():
-            task_form.save()
-            return redirect('associate-matter-review', m_id)
-        else:
-            task_form = DueDateEntryForm(instance=task)
-    else:
-        task_form = DueDateEntryForm(instance=task)
-
     context = {
-        'form': task_form,
         'pk': pk,
         'm_id': m_id,
         'matter': matter,
         'client': client,
         'tasks': activities,
+        'dues':task,
     }
     return render(request, 'associates_apps/modify_duedate.html', context)
 
@@ -1484,6 +1481,7 @@ def recentviewduedates(request, pk):
         'tmpbills': tmpbills,
         'tmpfees': tmpfees,
         'tmpexp': tmpexp,
+        'duedate':duedate,
 
     }
     return render(request, 'associates_apps/recentduedateview.html', context)
@@ -1874,8 +1872,8 @@ def new_message(request):
             inbox_rec.messagedate = dateconvert
             inbox_rec.status = "UNREAD"
             inbox_rec.save()
-            messages.info(request, 'Your password has been changed successfully!')            
-            return redirect('associate-my_messages')
+            message_id = inbox_rec.id
+            return redirect('associate-message_withfile', message_id)
         else:
             return redirect('associate-new_message')
     else:
@@ -1889,3 +1887,28 @@ def new_message(request):
     }
 
     return render(request, 'associates_apps/new_message.html', context)
+
+def message_withfile(request, pk):
+    message = inboxmessage.objects.get(id=pk)
+    if request.method == "POST":
+        # Get the posted form
+        form = InboxAttachmentEntryForm(request.POST, request.FILES)
+        if form.is_valid():
+            inbox_rec = form.save(commit=False)
+            inbox_rec.message_id = pk
+            inbox_rec.save()
+            return redirect('associate-my_messages')
+        else:
+            return redirect('associate-message_withfile', pk)
+    else:
+        form = InboxAttachmentEntryForm()
+    
+    context = {
+        'form': form,
+        'pk' : pk,
+        'message' : message,
+    }
+
+    return render(request, 'associates_apps/message_withattachment.html', context)
+
+

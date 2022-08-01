@@ -4,7 +4,7 @@
 {% load static %}
 
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
 
     <div class="card">
         <div class="card-body">
-        <h5 class="card-title">Task Detail</h5>
+            <h5 class="card-title">Task Detail</h5>
             <div class="card text-white">
                 <div class="row mt-2">
                     <form method="POST">
@@ -22,114 +22,114 @@
                         <!-- {{ form | crispy }} -->
                         <div class="row">
                             <div class="col-lg-12">
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;"> Matter</span>
-                                        {{form.matter}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Activity Date</span>
-                                        {{form.tran_date}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Tran Type</span>
-                                        {{form.tran_type}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Doc Type</span>
-                                        {{form.doc_type}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Activity Codes</span>
-                                        {{form.task_code}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Prepared By</span>
-                                        {{form.preparedby}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Lawyer</span>
-                                        {{form.lawyer}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Activity Details</span>
-                                        {{form.task}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Spent (hrs)</span>
-                                        {{form.spentinhrs}}
-                                    </div>
-                                    <div class="input-group input-group-sm mb-1">
-                                        <span class="input-group-text" style="width: 110px;">Spent (Mins)</span>
-                                        {{form.spentinmin}}
-                                    </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;"> Matter</span>
+                                    <input style="font-weight: bold;" type="text" value="{{matter.matter_title}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Activity Date</span>
+                                    <input style="font-weight: bold;" type="text" value="{{task.tran_date}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Tran Type</span>
+                                    <input style="font-weight: bold;" type="text" value="{{task.tran_type}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Doc Type</span>
+                                    <input style="font-weight: bold;" type="text" value="{{task.doc_type}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Activity Codes</span>
+                                    <input style="font-weight: bold;" type="text" value="{{task.task_code}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Prepared By</span>
+                                    <input style="font-weight: bold;" type="text" value="{{task.preparedby}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                    <input style="font-weight: bold;" type="text" value="{{task.lawyer}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Activity Details</span>
+                                    <input style="font-weight: bold;" type="text" value="{{task.task}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Spent (hrs)</span>
+                                    <input style="font-weight: bold;" type="text" value="{{task.spentinhrs}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Spent (Mins)</span>
+                                    <input style="font-weight: bold;" type="text" value="{{task.spentinmin}}"
+                                        class="form-control" readonly>
+                                </div>
                             </div>
-                        </div>    
-                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'associate-home' %}"><i class="fa fa-angle-double-left"></i>&nbsp; Return</a>
-                       <!-- <input class='btn btn-success btn-sm mb-3 mt-2' type="submit" value="Save Record"> -->
-                        <a class= 'btn btn-outline-primary btn-sm mb-3 mt-2' href="#"><i class="far fa-envelope-open"></i>&nbsp; Send E-Mail</a>
+                        </div>
+                        <a class='btn btn-outline-primary btn-sm mb-3 mt-2' href="{% url 'associate-home' %}"><i
+                                class="fa fa-angle-double-left"></i>&nbsp; Return</a>
+                        <!-- <input class='btn btn-success btn-sm mb-3 mt-2' type="submit" value="Save Record"> -->
+                        <a class='btn btn-outline-primary btn-sm mb-3 mt-2' href="#"><i
+                                class="far fa-envelope-open"></i>&nbsp; Send E-Mail</a>
 
                     </form>
                 </div>
             </div>
-<!-- Document List Table View -->
-            <table class="table-hover table-bordered table-sm small table mt-2">
-                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                        <thead class="table-primary text-center">
-                            <tr>
-                            <th style="width:5%;">Document Date</th>
-                            <th style="width:90%">Deocument Name</th>
-                           <th colspan="1" style="width:5%;">Action</th>
-                            </tr>
-                        </thead>
-                        {% for docs in listofdocs %}
-                        <tr>
-                           <td style="font-weight: bold;">{{ docs.DocDate | date:'m/d/Y' }}</td>
-                           <td style="font-weight: bold;">{{ docs.DocsPDF }}</td>
-                           <td>
-                            <a class="btn btn-primary btn-sm" href="#" title="Open Document">
-                                <i class="fas fa-info-circle"></i>
-                            </a>
-                        </td>                       
-        </tr>
-                        {% endfor %}
-            </table> 
+            <!-- Document List Table View -->
+            <div class="card-header text-center text-white bg-primary">Uploaded Documents</div>
             <table class="table-hover table-bordered table-sm small table">
                 <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                <thead class="table-primary text-center">
+                <thead class="text-center text-white" style="background-color:green ;">
                     <tr>
-                        <th style="width:3%;">Payment Tag</th>
+                        <th style="width:10%;">Date</th>
+                        <th style="width:90%">Deocument Name</th>
+                    </tr>
+                </thead>
+                {% for docs in listofdocs %}
+                <tr>
+                    <td style="font-weight: bold;"><a href="#">{{ docs.DocDate | date:'m/d/Y' }}</a></td>
+                    <td style="font-weight: bold;">{{ docs.DocsPDF }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <div class="card-header text-center text-white bg-primary">Invoices</div>
+            <table class="table-hover table-bordered table-sm small table">
+                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                <thead class="text-white text-center" style="background-color:green ;">
+                    <tr>
                         <th style="width:10%;">Bill Number</th>
                         <th style="width:10%;">Bill Date</th>
+                        <th style="width:3%;">Status</th>
                         <th style="width:10%;">Bill_Amount</th>
                         <th style="width:10%;">PF Amount</th>
                         <th style="width:10%;">Filing Fees</th>
                         <th style="width:10%;">OPE</th>
-                        <th colspan="2" style="width:5%;">Action</th>
                     </tr>
                 </thead>
                 {% for AR in ARBills %}
-                    <tr>
-                        <td style="font-weight: bold;">{{ AR.payment_tag }}</td>
-                        <td style="font-weight: bold;">{{ AR.bill_number }}</td>
-                        <td style="font-weight: bold;">{{ AR.bill_date }}</td>
-                        <td style="font-weight: bold;">{{ AR.bill_amount}}</td>
-                        <td style="font-weight: bold;">{{ AR.pf_amount }}</td>
-                        <td style="font-weight: bold;">{{ AR.ofees_amount }}</td>
-                        <td style="font-weight: bold;">{{ AR.ope_amount }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" href="#" title="Edit Client">
-                                <i class="fas fa-pen"></i>
-                            </a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td style="font-weight: bold;"><a href="#">{{ AR.bill_number }}</a></td>
+                    <td style="font-weight: bold;">{{ AR.bill_date }}</td>
+                    <td style="font-weight: bold;">{{ AR.payment_tag }}</td>
+                    <td style="font-weight: bold;">{{ AR.bill_amount}}</td>
+                    <td style="font-weight: bold;">{{ AR.pf_amount }}</td>
+                    <td style="font-weight: bold;">{{ AR.ofees_amount }}</td>
+                    <td style="font-weight: bold;">{{ AR.ope_amount }}</td>
+                </tr>
                 {% endfor %}
-            </table>    
-               
+            </table>
+
         </div>
-       
+
     </div>
 </div>
 
 {% endblock content%}
-
-

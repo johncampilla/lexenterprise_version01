@@ -8,7 +8,8 @@ Dashboard
 <div class="container">
     <!-- Create Button & get username -->
     <div class="d-flex justify-content-between mt-1">
-        <a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-plus"></i>&nbsp;&nbsp; Print</a>
+        <a href="{% url 'print_matterlist' %}" class="btn btn-outline-primary btn-sm"><i
+                class="fas fa-plus"></i>&nbsp;&nbsp; Print</a>
         <span>
             Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
         </span>

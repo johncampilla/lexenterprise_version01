@@ -7,14 +7,11 @@ Dashboard
 {% endblock %}
 {% block content %}
 <div class="container">
+    {% include 'base/supportstaffnavbar.html' %}
+
     <!-- Create Button & get username -->
-    <div class="d-flex justify-content-between mt-1">
-        <a href="{% url 'supportstaff-new_message' %}" class="btn btn-outline-primary btn-sm"><i
-                class="fas fa-plus"></i>&nbsp;&nbsp; New Message</a>
-        <span>
-            Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
-        </span>
-    </div>
+    <a href="{% url 'supportstaff-new_message' %}" class="btn btn-outline-primary btn-sm"><i
+            class="fas fa-plus"></i>&nbsp;&nbsp; New Message</a>
 
     <!-- input search + buttons search and reset -->
     <form>
@@ -26,10 +23,10 @@ Dashboard
         </div>
     </form>
     <!-- Table -->
-    <h6 class="card-title bg-primary text-white text-center">InBox</h6>
+    <div class="card-header text-center text-white bg-primary">Inbox</div>
     <table class="table-hover table-bordered table-sm small table">
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-        <thead class="table-primary text-center">
+        <thead class="text-white text-center" style="background-color:green ;">
             <tr>
                 <th style="width:10%;">From</th>
                 <th style="width:10%;">Date</th>
@@ -55,10 +52,10 @@ Dashboard
         </tr>
         {% endfor %}
     </table>
-    <h6 class="card-title bg-primary text-white text-center">Sent Items</h6>
+    <div class="card-header text-center text-white bg-primary">Sent Items</div>
     <table class="table-hover table-bordered table-sm small table">
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-        <thead class="table-primary text-center">
+        <thead class="text-white text-center" style="background-color:green ;">
             <tr>
                 <th style="width:10%;">Sent To</th>
                 <th style="width:10%;">Date</th>

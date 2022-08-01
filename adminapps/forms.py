@@ -70,6 +70,14 @@ class FilingDocsEntry(forms.ModelForm):
         }
 
 
+class ReplyToMessageForm(forms.ModelForm):
+    class Meta:
+        model = inboxmessage
+        fields =  'messagebox',
+        widgets = {
+            'messagebox': Textarea(attrs={'cols': 200, 'rows': 10, 'placeholder': 'Type here your message...'}),
+        }
+
 class AlertMessageForm(forms.ModelForm):
     class Meta:
         model = inboxmessage
@@ -214,6 +222,23 @@ class TaskEntryForm(forms.ModelForm):
             'mailing_date': NumberInput(attrs={'type': 'date'}),
 
         }
+
+class TaskEntryFormLawyer(forms.ModelForm):
+    # TRANTYPE = {
+    #     ('Billable', 'Billable'),
+    #     ('Non-Billable', 'Non-Billable'),
+    # }
+    class Meta:
+        model = task_detail
+        fields = 'tran_date', 'tran_type', 'doc_type', 'task','spentinhrs', 'spentinmin'
+        widgets = {
+            'task': Textarea(attrs={'cols': 200, 'rows': 3, 'placeholder': 'Type here the activity details..'}),
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'doc_date': NumberInput(attrs={'type': 'date'}),
+            'mailing_date': NumberInput(attrs={'type': 'date'}),
+
+        }
+
 
     # matter = forms.ModelChoiceField(label="Matter", queryset=Matters.objects.all().order_by('matter_title'))
     # tran_date = forms.DateField(label='Activity Date', widget=NumberInput(attrs={'type':'date'}))
@@ -427,7 +452,7 @@ class NatureOfCaseForm(forms.ModelForm):
 class EntryExpensesForm(forms.ModelForm):
     class Meta:
         model = TempExpenses
-        fields = 'matter', 'tran_date', 'lawyer', 'exp_preparedby', 'expense_detail', 'expense_actual_amt', 'currency', 'pesorate', 'pesoamount', 'status', 'chargetoclient', 'DocPDFs'
+        fields = 'tran_date', 'expense_detail', 'expense_actual_amt', 'currency', 'pesorate', 'pesoamount', 'status', 'chargetoclient', 'DocPDFs'
         widgets = {
             'tran_date': NumberInput(attrs={'type': 'date'}),
             'expense_detail': Textarea(attrs={'cols': 250, 'rows': 2})

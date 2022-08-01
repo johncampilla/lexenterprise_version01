@@ -25,6 +25,7 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', auth_views.LoginView.as_view(
@@ -357,6 +358,9 @@ urlpatterns = [
          name='associate-alert_messages'),
     path('associates/alertmessages/edit/<int:pk>/',
          associates.edit_alertmessage, name='associate-edit_alertmessage'),
+    path('associates/replymessages/edit/<int:pk>/',
+         associates.replymessage, name='associate-replymessage'),
+
     path('associates/alertmessages/new/',
          associates.new_message, name='associate-new_message'),
     path('associates/fileattachment/new/<int:pk>/',
@@ -378,6 +382,9 @@ urlpatterns = [
          name='associate-view_sentmessages'),
     path('associates/mymatters/', associates.matterlist,
          name='associate-matter-list'),
+    path('associates/print_mymatters/', associates.print_matterlist,
+         name='print_matterlist'),
+
     path('associates/myclients/', associates.myclientlist,
          name='associate-myclient-list'),
     path('associates/mybills/', associates.mybillinglist,
@@ -414,6 +421,10 @@ urlpatterns = [
          associates.viewfiled_document, name='associate-viewfiled_document'),
     path('associates/matters/review/<int:pk>/',
          associates.matter_review, name='associate-matter-review'),
+    path('associates/unbilled_servicesPF/<int:pk>/',
+         associates.unbilled_PF, name='associate-unbilled-services_PF'),
+
+
     path('associates/matters/otherinfo/<int:pk>/<str:sk>/',
          associates.matter_otherdetails, name='associate-matter-otherdetails'),
     path('associates/matters/classofgoods/<int:pk>/<str:sk>/',
@@ -486,6 +497,7 @@ urlpatterns = [
     #   URL for lawyers button in the associate portal
     # query list
     path('sysadmin/output/list/', main_view.outputlist, name='output-list'),
+    path('report_pdf', associates.pdf_report_create, name='duedate_list-PDF')
 
 ]
 

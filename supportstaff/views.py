@@ -521,6 +521,7 @@ def reply_message(request, pk):
 @login_required
 def my_messages(request):
 
+
     myuserid = request.user.user_profile.userid
     access_code = request.user.user_profile.access_code
 
@@ -542,12 +543,21 @@ def my_messages(request):
 
     # receivedmessages = inboxmessage.objects.filter(messageto__userid=myuserid)
     # sentmessages = inboxmessage.objects.filter(messagefrom=access_code)
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    username = request.user.username    
 
     context = {
         'myuserid': myuserid,
         'access_code': access_code,
         'receivedmessages': receivedmessages,
         'sentmessages': sentmessages,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
+
     }
 
     return render(request, 'supportstaff/mymessages.html', context)
@@ -1167,7 +1177,7 @@ def attach_document(request, pk, m_id):
 def list_messages(request):
     user_message_id = request.user.user_profile.id
     alertmessages = inboxmessage.objects.filter(
-        messageto_id=user_message_id, status="READ")
+        messageto_id=user_message_id, status="UNREAD")
 
     context = {
         'alertmessages': alertmessages,

@@ -1,0 +1,101 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        {% include 'base/caseinfoheader.html' %}
+        <!-- <div class="card-body"> -->
+        <div class="card-header text-center text-white bg-primary">
+            Unbilled Services
+        </div>
+        <div>
+            <table class="table-hover table-bordered table-sm small table">
+                <thead class="text-center text-white" style="background-color:green ;">
+                    <tr>
+                        <th style="width:10%;">Tran Date</th>
+                        <th style="width:5%;">Lawyer</th>
+                        <th style="width:45%;">Particulars</th>
+                        <th style="width:5%;">Time (hrs)</th>
+                        <th style="width:5%;">Time (Min)</th>
+                        <th style="width:10%;">Currency</th>
+                        <th style="width:10%;">Fee (USD) </th>
+                        <th style="width:10%;">Fee (PhP) </th>
+                    </tr>
+                </thead>
+                {% for tempPF in tempPF %}
+                <tr>
+                    <td style="font-weight: bold;">{{ tempPF.tran_date | date:'m/d/Y' }}</td>
+                    <td style="font-weight: bold;">{{ tempPF.lawyer.access_code }}</td>
+                    <td style="font-weight: bold;">{{ tempPF.particulars }}</td>
+                    <td style="font-weight: bold;">{{ tempPF.spentinhrs }}</td>
+                    <td style="font-weight: bold;">{{ tempPF.spentinmin }}</td>
+                    <td style="font-weight: bold;">{{ tempPF.currency }}</td>
+                    <td style="font-weight: bold;">{{ tempPF.amount }}</td>
+                    <td style="font-weight: bold;">{{ tempPF.pesoamount }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="card-header text-center text-white bg-primary">Unbilled Filing Fees</div>
+        <div>
+            <table class="table-hover table-bordered table-sm small table">
+                <thead class="text-center text-white" style="background-color:green ;">
+                    <tr>
+                        <th style="width:10%;">Tran Date</th>
+                        <th style="width:5%;">Lawyer</th>
+                        <th style="width:60%;">Filing Particulars</th>
+                        <th style="width:5%;">Expense (PhP) </th>
+                        <th style="width:10%;">Currency</th>
+                        <th style="width:10%;">Fee (USD) </th>
+                    </tr>
+                </thead>
+                {% for tempFiling in tempFiling %}
+                <tr>
+                    <td style="font-weight: bold;">{{ tempFiling.tran_date | date:'m/d/Y' }}</td>
+                    <td style="font-weight: bold;">{{ tempFiling.lawyer.access_code }}</td>
+                    <td style="font-weight: bold;">{{ tempFiling.expense_detail }}</td>
+                    <td style="font-weight: bold;">{{ tempFiling.pesoamount }}</td>
+                    <td style="font-weight: bold;">{{ tempFiling.currency }}</td>
+                    <td style="font-weight: bold;">{{ tempFiling.expense_actual_amt }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="card-header text-center text-white bg-primary">Unbilled OPEs</div>
+        <div>
+            <table class="table-hover table-bordered table-sm small table">
+                <thead class="text-center text-white" style="background-color:green ;">
+                    <tr>
+                        <th style="width:10%;">Tran Date</th>
+                        <th style="width:5%;">Lawyer</th>
+                        <th style="width:60%;">Filing Particulars</th>
+                        <th style="width:5%;">Expense (PhP) </th>
+                        <th style="width:10%;">Currency</th>
+                        <th style="width:10%;">Fee (USD) </th>
+                    </tr>
+                </thead>
+                {% for tempFiling in tempFiling %}
+                <tr>
+                    <td style="font-weight: bold;">{{ tempFiling.tran_date | date:'m/d/Y' }}</td>
+                    <td style="font-weight: bold;">{{ tempFiling.lawyer.access_code }}</td>
+                    <td style="font-weight: bold;">{{ tempFiling.expense_detail }}</td>
+                    <td style="font-weight: bold;">{{ tempFiling.pesoamount }}</td>
+                    <td style="font-weight: bold;">{{ tempFiling.currency }}</td>
+                    <td style="font-weight: bold;">{{ tempFiling.expense_actual_amt }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content%}

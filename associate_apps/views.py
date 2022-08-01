@@ -1,11 +1,14 @@
 #from asyncio.windows_events import NULL
 #from os import CLD_CONTINUED
 from asyncio.windows_events import NULL
+from cgitb import text
 from multiprocessing.connection import Client
 from pickletools import read_uint1
+from re import T
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from pandas import notnull, set_eng_float_format
+from urllib3 import HTTPResponse
 
 from adminapps.models import *
 from django.core.paginator import Paginator
@@ -23,14 +26,123 @@ from userprofile.models import User_Profile
 from django.core.paginator import Paginator
 from datetime import date, datetime, timedelta
 from django.db.models import Q, Sum, Count
-from adminapps.forms import InboxMessageNewForm, MailsInwardForm, EntryBillForm, EntryExpensesForm, Non_IPDetailForm, ClassOfGoodsEntry, IPDetailForm, AREntryForm, EntryMatterForm, DocumentEditForm, TaskEntryForm1, TaskEntryForm, FilingDocsEntry, AlertMessageForm, AlertUpdateStatusForm, DueDateEntryForm, InboxAttachmentEntryForm
+from adminapps.forms import InboxMessageNewForm, MailsInwardForm, EntryBillForm, EntryExpensesForm, Non_IPDetailForm, ClassOfGoodsEntry, IPDetailForm, AREntryForm, EntryMatterForm, DocumentEditForm, TaskEntryForm1, TaskEntryForm, TaskEntryFormLawyer, FilingDocsEntry, AlertMessageForm, AlertUpdateStatusForm, DueDateEntryForm, InboxAttachmentEntryForm, ReplyToMessageForm
 from django.core.exceptions import ObjectDoesNotExist
 from dateutil.relativedelta import relativedelta
 from django.contrib import messages
+
 import io
 
+# import for printing to PDF xhtml2pdf
+from django.http import FileResponse, HttpResponse
+from django.views.generic import View   
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+# ***********************************************
+
+from .utils import render_to_pdf
+
+
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+
+def pdf_report_create(request):
+    access_code = request.user.user_profile.userid
+    username = request.user.username
+#    alertmessages = Alert_Messages.objects.filter(messageto=access_code)
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+
+    matterlist = Matters.objects.filter(created_at__year=today.year, created_at__month=today.month,
+                                        handling_lawyer__lawyerID__userid=access_code).order_by('-filing_date')
+    duedates = AppDueDate.objects.filter(duedate__year=today.year, duedate__month=today.month,
+                                         matter__handling_lawyer__lawyerID__userid=access_code, date_complied__isnull=True).order_by('-duedate')
+    recentdocs = FilingDocs.objects.filter(
+        Task_Detail__lawyer__lawyerID__userid=access_code).order_by('-DocDate')
+    multiple_q = Q(matter__handling_lawyer__lawyerID__userid=access_code)
+    recent_billables = TempBills.objects.filter(
+        multiple_q, tran_date__year=today.year, tran_date__month=today.month).order_by('-tran_date')
+
+    recenttask = task_detail.objects.filter(
+        multiple_q, tran_date__year=today.year, tran_date__month=today.month).order_by('-tran_date')
+    number_of_task = recenttask.count()
+    number_of_dues = duedates.count()
+    number_of_docs = matterlist.count()
+
+    template_path = 'associates_apps/IndexPDF.html'
+
+    context = {
+        'alertmessages': alertmessages,
+        'username': username,
+        'noofalerts': countalert,
+        'duedates': duedates,
+        'recenttask': recenttask,
+        'recentdocs': recentdocs,
+        'recent_billables': recent_billables,
+        'matterlist': matterlist,
+        'number_of_task': number_of_task,
+        'number_of_dues': number_of_dues,
+        'number_of_docs': number_of_docs,
+
+    }
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="MatterList.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funny view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response    
 
 # printing option
+# generate a pdf format
+
+def duedatePDF(request):
+    # create a byte stream buffer
+    buf = io.BytesIO()
+    # create a canvas
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    # create a textbox object
+    textobj = c.beginText()
+    textobj.setTextOrigin(inch, inch)
+    textobj.setFont("Helvetica", 14)
+
+    # added some tezt
+    clientlist = Client_Data.objects.all().order_by('client_name')
+
+    lines = []
+
+    for client in clientlist:
+        lines.append(client.client_name)
+        lines.append(client.industry.industry)
+        lines.append(client.address)
+        lines.append(client.country.country)
+        lines.append(client.email)
+
+        # lines.append(dues.assignto)
+        # lines.append(dues.particulars)
+        # lines.append(dues.date_complied)
+        lines.append(" ")
+    
+    for line in lines:
+        textobj.textLine(line)
+
+    # finish up
+    c.drawText(textobj)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    return FileResponse(buf, as_attachment=True, filename='duedate.pdf')
 
 
 today = date.today()
@@ -58,7 +170,7 @@ def main(request):
     matterlist = Matters.objects.filter(created_at__year=today.year, created_at__month=today.month,
                                         handling_lawyer__lawyerID__userid=access_code).order_by('-filing_date')
     duedates = AppDueDate.objects.filter(duedate__year=today.year, duedate__month=today.month,
-                                         matter__handling_lawyer__lawyerID__userid=access_code, date_complied__isnull=True).order_by('duedate')
+                                         matter__handling_lawyer__lawyerID__userid=access_code, date_complied__isnull=True).order_by('-duedate')
     recentdocs = FilingDocs.objects.filter(
         Task_Detail__lawyer__lawyerID__userid=access_code).order_by('-DocDate')
     multiple_q = Q(matter__handling_lawyer__lawyerID__userid=access_code)
@@ -113,7 +225,7 @@ def matterlist(request):
     #     matters = Matters.objects.all().order_by("folder__client__client_name")
 
     noofmatters = matters.count()
-    paginator = Paginator(matters, 11)
+    paginator = Paginator(matters, 15)
     page = request.GET.get('page')
     all_matters = paginator.get_page(page)
 
@@ -123,6 +235,34 @@ def matterlist(request):
         'matters': all_matters
     }
     return render(request, 'associates_apps/listmatters.html', context)
+
+def print_matterlist(request):
+    access_code = request.user.user_profile.userid
+    matters = Matters.objects.filter(handling_lawyer__lawyerID__userid=access_code).order_by("-filing_date")
+
+    matter_count = matters.count()
+
+    context = {
+        'matters' : matters,
+        'matter_count': matter_count,
+    }
+
+
+    template_path = 'associates_apps/pdf_listmatters.html'
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="MatterList.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+       html, dest=response)
+    # if error then show some funny view
+    if pisa_status.err:
+       return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response    
+
 
 
 def alert_messages(request):
@@ -147,6 +287,47 @@ def view_sentmessages(request):
 
     }
     return render(request, 'associates_apps/sentmessages.html', context)
+
+def replymessage(request, pk):
+    username = request.user.username
+    prevmessage = inboxmessage.objects.get(id=pk)
+
+
+    messageto = prevmessage.messagefrom
+    subject = "REPLY: "+ prevmessage.subject
+    see_matter = prevmessage.see_matter
+
+    if request.method=='POST':
+        form = ReplyToMessageForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(username=messageto)
+            user_id = user.id
+            messageto = User_Profile.objects.get(userid_id=user_id)
+            message_rec = form.save(commit=False)
+            message_rec.messageto_id = messageto.id
+            message_rec.messagefrom = username
+            message_rec.messagedate = today
+            message_rec.subject = subject
+            message_rec.see_matter = see_matter
+            message_rec.status = "UNREAD"
+            message_rec.save()
+            message_id = message_rec.id
+            return redirect('associate-message_withfile', message_id)
+        else:
+            form = ReplyToMessageForm()
+    else:
+        form = ReplyToMessageForm()
+    
+    context = {
+        'form':form,
+        'prevmessage':prevmessage,
+        'messagedate':today,
+        'see_matter':see_matter,
+        'subject': subject,
+    }
+    
+    return render(request, 'associates_apps/reply_msg.html', context)
+
 
 
 def edit_statusmessage(request, pk):
@@ -183,29 +364,18 @@ def edit_alertmessage(request, pk):
     message = inboxmessage.objects.get(id=pk)
     message.status = "READ"
     message.save()
-    messagefrom = message.messagefrom
-    messageto = message.messageto
-    a = message.messagedate
-    messagedate = a.strftime('%m/%d/%Y')
-    subject = message.subject
-    messagebox = message.messagebox
-    see_matter = message.see_matter
+    # a = message.messagedate
+    # messagedate = a.strftime('%m/%d/%Y')
 
     attachments = messageattachment.objects.filter(message_id=pk)
 
     context = {
-        'messagefrom': messagefrom,
-        'messageto': messageto,
-        'messagedate': messagedate,
-        'subject': subject,
-        'messagebox': messagebox,
-        'see_matter': see_matter,
+        'message':message,
         'attachments': attachments,
-
-
     }
     return render(request, 'associates_apps/edit_msg.html', context)
 
+    
 
 def my_messages(request):
     myuserid = request.user.user_profile.userid
@@ -359,7 +529,7 @@ def matter_review(request, pk):
     c_id = matter.folder.client.id
     client = Client_Data.objects.get(id=c_id)
     appduedates = AppDueDate.objects.filter(matter__id=pk).order_by('-duedate')
-    tempbills = TempBills.objects.filter(matter__id=pk)
+    tempbills = TempBills.objects.filter(matter__id=pk).order_by('-tran_date')
     tempfilings = TempFilingFees.objects.filter(matter__id=pk)
     expenses = TempExpenses.objects.filter(
         Q(matter__id=pk), Q(status='O') | Q(status='P'))
@@ -436,6 +606,22 @@ def matter_review(request, pk):
 
     return render(request, 'associates_apps/openmatter_details.html', context)
     # return render(request, 'associates_apps/seevalues.html', context)
+
+def unbilled_PF(request, pk):
+    matter = Matters.objects.get(id = pk)
+    tempPF = TempBills.objects.filter(matter_id = pk).exclude(status = 'B')
+    tempFiling = TempFilingFees.objects.filter(matter_id = pk).exclude(status='B')
+    tempExp = TempExpenses.objects.filter(matter_id=pk).exclude(status='B')
+    
+    context = {
+        'matter':matter,
+        'tempPF':tempPF,
+        'tempFiling': tempFiling,
+        'tempExp': tempExp
+    }
+
+    return render(request, 'associates_apps/unbill_PF.html', context)
+
 
 
 def matter_otherdetails(request, pk, sk):
@@ -721,7 +907,7 @@ def add_task(request, pk):
         def save_to_tempPF():
             tempbills = TempBills.objects.filter(
                 matter_id=matter_id, tran_date=tran_date, bill_service_id=bill_id)
-            if tempbills.exists():
+            if tempbills:
                 pass
             else:
                 # if prate > 0:
@@ -729,28 +915,28 @@ def add_task(request, pk):
                 # else:
                 #     prate = 0
                 #     pesoamount = 0
-
-                tempbills = TempBills(
-                    matter_id=matter_id,
-                    tran_date=tran_date,
-                    bill_service_id=bill_id,
-                    lawyer_id=lawyer,
-                    particulars=bill_description,
-                    amount=PF_amount,
-                    # pesorate=prate,
-                    currency=currency)
-                tempbills.save()
+                if bill_description is not None:
+                    tempbills = TempBills(
+                        matter_id=matter_id,
+                        tran_date=tran_date,
+                        bill_service_id=bill_id,
+                        lawyer_id=lawyer,
+                        particulars=bill_description,
+                        amount=PF_amount,
+                        # pesorate=prate,
+                        currency=currency)
+                    tempbills.save()
 
         def save_to_tempfiling():
             tempfees = TempFilingFees.objects.filter(
                 matter_id=matter_id, tran_date=tran_date, filing=filing)
-            if tempfees.exists():
+            if tempfees:
                 pass
             else:
                 tempfees = TempFilingFees(
                     matter_id=matter_id,
                     tran_date=tran_date,
-                    bill_id=filingfees.activitycode.id,
+                    bill_service_id=filingfees.activitycode.id,
                     filing=filing,
                     lawyer_id=lawyer,
                     expense_detail=bill_description,
@@ -791,20 +977,33 @@ def add_task(request, pk):
                 save_to_tempfiling()
 
     matter = Matters.objects.get(id=pk)
-    codes = IPTaskCodes.objects.all()
+#    codes = IPTaskCodes.objects.all()
+    codes = ActivityCodes.objects.all()
     tasks = task_detail.objects.filter(matter__id=pk)
+    username = request.user.username
+    userid = request.user.user_profile.userid_id
+    lawyer_id = matter.handling_lawyer.id
+
     if request.method == "POST":
         # Get the posted form
-        form = TaskEntryForm(request.POST)
+        form = TaskEntryFormLawyer(request.POST)
         if form.is_valid():
-            form.save()
+            task_rec = form.save(commit=False)
+            task_rec.matter_id = pk
+            task_rec.task_code_id = request.POST['task_code']
+            task_rec.updatedby = username
+            task_rec.preparedby_id = userid
+            task_rec.lawyer_id = lawyer_id
+            task_rec.save()
+
+
             perform_billable_services()
 
             return redirect('associate-matter-review', pk)
         else:
             return redirect('associate-matter-review', pk)
     else:
-        form = TaskEntryForm()
+        form = TaskEntryFormLawyer()
 
     context = {
         'form': form,
@@ -1493,18 +1692,18 @@ def recentactivities(request, pk):
     matter = Matters.objects.get(id=m_id)
     #activities = task_detail.objects.filter(matter__id=m_id)
     listofdocs = FilingDocs.objects.filter(Task_Detail__id=pk)
-    print(listofdocs)
     duedates = AppDueDate.objects.filter(matter__id=m_id)
-    unpaidbills = AccountsReceivable.objects.filter(matter__id=m_id)
-    form = TaskEntryForm(instance=task)
+    ARBills = AccountsReceivable.objects.filter(matter__id=m_id, payment_tag="UN")
+    #form = TaskEntryForm(instance=task)
 
     context = {
-        'form': form,
+#        'form': form,
         'matter': matter,
         'listofdocs': listofdocs,
         'duedates': duedates,
         'task': task,
-        'm_id': m_id
+        'm_id': m_id,
+        'ARBills': ARBills,
 
     }
     return render(request, 'associates_apps/recenttaskview.html', context)
@@ -1910,5 +2109,4 @@ def message_withfile(request, pk):
     }
 
     return render(request, 'associates_apps/message_withattachment.html', context)
-
 

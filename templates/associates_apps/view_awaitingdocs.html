@@ -1,0 +1,53 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        {% include 'base/caseinfoheader.html' %}
+        <!-- <div class="card-body"> -->
+        <div>
+            <a href="{% url 'new_awaitingdocs' matter.id %}" class="btn btn-outline-danger btn-sm"><i
+                    class="fas fa-plus"></i>
+                Awaiting Document</a>
+            <a href="#" class="btn btn-outline-danger btn-sm"><i class="fas fa-plus"></i>
+                Print</a>
+
+        </div>
+        <div class="card-header text-center text-white bg-primary">
+            Awaiting Documents
+        </div>
+
+        <div>
+            <table class="table-hover table-bordered table-sm small table">
+                <thead class="text-center text-white" style="background-color:green ;">
+                    <tr>
+                        <th style="width:10%;">Tran Date</th>
+                        <th style="width:10%;">Lawyer</th>
+                        <th style="width:10%;">Wait Until</th>
+                        <th style="width:60%;">Particulars</th>
+                        <th style="width:10%;">Status</th>
+                    </tr>
+                </thead>
+                {% for awaitdocs in awaitingdocs %}
+                <tr>
+                    <td style="font-weight: bold;">{{ awaitdocs.tran_date | date:'m/d/Y' }}</td>
+                    <td style="font-weight: bold;">{{ awaitdocs.lawyer.access_code }}</td>
+                    <td style="font-weight: bold;">{{ awaitdocs.awaiting_date | date:'m/d/Y' }}</td>
+                    <td style="font-weight: bold;">{{ awaitdocs.particulars }}</td>
+                    <td style="font-weight: bold;">{{ awaitdocs.status }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

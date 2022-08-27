@@ -133,14 +133,6 @@ urlpatterns = [
     path('management/alertmessages/new/', management.new_message, name='management-new_message'),
 
 
-
-
-
-    
-
-  
-
-
     # for Main VIew  urls (adimin)
     path('sysadmin/', main_view.main, name='sysadmin-home'),
     # client url
@@ -452,6 +444,9 @@ urlpatterns = [
          associates.add_expensedetails, name='associate-add-ope'),
     path('associates/matters/add_PF/<int:pk>/',
          associates.add_PFdetails, name='associate-add-PF'),
+    path('associates/matters/add_tmpexepense/<int:pk>/',
+         associates.add_tmpexpense, name='associate-add_tmpexpense'),
+
 
     path('associates/matters/removetask/<int:pk>/<int:m_id>/',
          associates.remove_task, name='associate-remove_task'),
@@ -493,6 +488,13 @@ urlpatterns = [
 
     path('associates/recent_viewdocs/<int:pk>/<int:frm>/',
          associates.recent_taskviewdocs, name='recent-tasks-docs-review'),
+
+    path('associates/awaitingdocs/<int:pk>/',
+         associates.viewawaitingdocs, name='view_awaitingdocs'),
+
+    path('associates/newawaitingdoc/<int:pk>/',
+         associates.newawaitingdocs, name='new_awaitingdocs'),
+
 
     #   URL for lawyers button in the associate portal
     # query list

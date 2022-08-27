@@ -477,9 +477,8 @@ class OpendocForm(forms.ModelForm):
 class NewAwaitingDocForm(forms.ModelForm):
     class Meta:
         model = awaitingdocs
-        fields = 'tran_date', 'awaiting_date', 'lawyer', 'particulars', 'status'
+        fields = 'awaiting_date', 'particulars', 'status'
         widgets = {
-            'tran_date': NumberInput(attrs={'type': 'date'}),
             'awaiting_date': NumberInput(attrs={'type': 'date'}),
             'particulars': Textarea(attrs={'cols': 200, 'rows': 2})
         }

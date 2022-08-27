@@ -26,7 +26,7 @@ from userprofile.models import User_Profile
 from django.core.paginator import Paginator
 from datetime import date, datetime, timedelta
 from django.db.models import Q, Sum, Count
-from adminapps.forms import InboxMessageNewForm, MailsInwardForm, EntryBillForm, EntryExpensesForm, Non_IPDetailForm, ClassOfGoodsEntry, IPDetailForm, AREntryForm, EntryMatterForm, DocumentEditForm, TaskEntryForm1, TaskEntryForm, TaskEntryFormLawyer, FilingDocsEntry, AlertMessageForm, AlertUpdateStatusForm, DueDateEntryForm, InboxAttachmentEntryForm, ReplyToMessageForm
+from adminapps.forms import InboxMessageNewForm, MailsInwardForm, EntryBillForm, EntryExpensesForm, Non_IPDetailForm, ClassOfGoodsEntry, IPDetailForm, AREntryForm, EntryMatterForm, DocumentEditForm, TaskEntryForm1, TaskEntryForm, TaskEntryFormLawyer, FilingDocsEntry, AlertMessageForm, AlertUpdateStatusForm, DueDateEntryForm, InboxAttachmentEntryForm, ReplyToMessageForm, NewAwaitingDocForm
 from django.core.exceptions import ObjectDoesNotExist
 from dateutil.relativedelta import relativedelta
 from django.contrib import messages
@@ -606,6 +606,46 @@ def matter_review(request, pk):
 
     return render(request, 'associates_apps/openmatter_details.html', context)
     # return render(request, 'associates_apps/seevalues.html', context)
+
+def newawaitingdocs(request, pk):
+    access_code = request.user.user_profile.userid
+    matter = Matters.objects.get(id=pk)
+    lawyerid = matter.handling_lawyer.id
+    if request.method == 'POST':
+        form = NewAwaitingDocForm(request.POST)
+        if form.is_valid():
+            awaitingdoc_rec = form.save(commit=False)
+            awaitingdoc_rec.matter_id = pk
+            awaitingdoc_rec.tran_date = today
+            awaitingdoc_rec.lawyer_id = lawyerid
+            awaitingdoc_rec.save()
+            return redirect('view_awaitingdocs', pk)
+        else:
+            return redirect('new_awaitingdocs', pk)
+    else:
+        form = NewAwaitingDocForm()
+
+    
+    context = {
+        'form'  :form,
+        'matter':matter,
+        'today' :today,
+        'access_code':access_code,
+    }
+
+    return render(request, 'associates_apps/newawaitingdocs.html', context)
+
+
+def viewawaitingdocs(request, pk):
+    matter = Matters.objects.get(id=pk)
+    awaiting = awaitingdocs.objects.filter(matter__id=pk).order_by('-awaiting_date')
+
+    context = {
+        'matter':matter,
+        'awaitingdocs':awaiting,
+    }
+
+    return render(request, 'associates_apps/view_awaitingdocs.html', context)
 
 def unbilled_PF(request, pk):
     matter = Matters.objects.get(id = pk)
@@ -1792,6 +1832,22 @@ def recent_taskviewdocs(request, pk, frm):
     elif frm == 1:
         return render(request, 'associates_apps/taskdocsview.html', context)
 
+def add_tmpexpense(request, pk):
+    matter = Matters.objects.get(id=pk)
+    if request.method == 'POST':
+        form = EntryExpensesForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        else:
+            form = EntryExpensesForm()
+    else:
+        form = EntryExpensesForm()
+
+    context = {
+        'form' : form,
+        'matter':matter,
+    }        
+    return render(request, 'associates_apps/newtmpexpense.html', context)
 
 def add_expensedetails(request, pk, t_id):
     listofexpenses = TempExpenses.objects.filter(

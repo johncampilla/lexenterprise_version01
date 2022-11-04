@@ -1,0 +1,205 @@
+{% extends 'base/userclientmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        {% include 'base/clientinfoheader.html' %}
+        <div class="card-body">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light small">
+                <div class="container-fluid" style="font-weight:bold ;">
+                    <a class="navbar-brand" href="#">Matter Detail</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav">
+                            <li class="nav-item" style="font-weight:bold ;">
+                                <a class="nav-link" href="#">Search Document</a>
+                            </li>
+                            <li class="nav-item" style="font-weight:bold ;">
+                                <a class="nav-link" href="#">View Unpaid Bills</a>
+                            </li>
+                            <li class="nav-item" style="font-weight:bold ;">
+                                <a class="nav-link" href="#">Print Matter Details</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="card text-white">
+                <div class="row mt-2">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px; font-weight: bold;">Case
+                                        Folder</span>
+                                    <input type="text" name="matter" value="{{ matter.folder }}" class="form-control"
+                                        readonly>
+                                </div>
+
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Appearance</span>
+                                    <input type="text" name="appearance" value="{{matter.appearance}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Reference No.</span>
+                                    <input type="text" name="referenceno" value="{{matter.referenceno}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Date Filed</span>
+                                    <input type="text" name="filing_date" value="{{matter.filing_date}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Filed At</span>
+                                    <input type="text" name="filed_at" value="{{matter.filed_at}}" class="form-control"
+                                        readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Status</span>
+                                    <input type="text" name="status" value="{{matter.status}}" class="form-control"
+                                        readonly>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Type Of Case</span>
+                                    <input type="text" name="case_type" value="{{matter.case_type}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Type Of Appln</span>
+                                    <input type="text" name="apptype" value="{{matter.apptype}}" class="form-control"
+                                        readonly>
+                                </div>
+
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Nature</span>
+                                    <input type="text" name="nature" value="{{matter.nature}}" class="form-control"
+                                        readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                    <input type="text" name="handling_lawyer" value="{{matter.handling_lawyer}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Client Ref#</span>
+                                    <input type="text" name="clientrefno" value="{{matter.clientrefno}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Our Ref#</span>
+                                    <input type="text" name="matterno" value="{{matter.matterno}}" class="form-control"
+                                        readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 110px;">Matter Title</span>
+                                    <input type="text" name="matter_title" value="{{matter.matter_title}}"
+                                        class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-2">
+                                    <span class="input-group-text" style="width: 110px;">Remarks</span>
+                                    <input type="text" name="remarks" value="{{matter.remarks}}" class="form-control"
+                                        readonly>
+                                </div>
+
+                            </div>
+                        </div>
+                        <a href="{% url 'client-home' %}" class="btn btn-outline-primary btn-sm mb-3">Return</a>
+
+                        <!-- <a class= 'btn btn-success btn-sm mb-3' href="{% url 'associates-view-myclient-det' client.id %}">Return</a> -->
+                        <a class="btn btn-outline-primary btn-sm mb-3"
+                            href="{% url 'clientuserapps-matter-otherdetails' m_id matter.filed_at %}">Other Info
+                            Details</a>
+                    </form>
+                </div>
+            </div>
+            <!----------------- Infocard for the duedates of the selected matter ---------->
+            <div class="card-header text-center text-white bg-primary">
+                Due Dates
+            </div>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="text-center text-white" style="background-color:green ;">
+                        <tr>
+                            <th style="width:10%;">Due Date</th>
+                            <th style="width:70%;">Particulars</th>
+                            <th style="width:10%;">Date Complied</th>
+                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_duedate' m_id %}"><i
+                                        class="fas fa-plus text-center"></i>&nbsp;Due Date</a></th>
+                        </tr>
+                    </thead>
+                    {% for duedate in duedatelist %}
+                    <tr>
+                        <td style="font-weight: bold;">{{ duedate.duedate | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;">{{ duedate.particulars }}</td>
+                        <td style="font-weight: bold;">{{ duedate.date_complied | date:'m/d/Y' }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="{% url 'associate-edit_duedate' duedate.id m_id %}"
+                                title="Edit Due Date">
+                                <i class="fas fa-pen"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <!----------------- Infocard for the activity of the selected matter ---------->
+            <div class="card-header text-center text-white bg-primary">
+                Activities
+            </div>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="text-center text-white" style="background-color:green ;">
+                        <tr>
+                            <th style="width:10%;">Date</th>
+                            <th style="width:15%;">Lawyer</th>
+                            <th style="width:10%;">Doc Type</th>
+                            <th style="width:10%;">Tran Type</th>
+                            <th style="width:45%;">Activity</th>
+                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_new_task' m_id %}"><i
+                                        class="fas fa-plus text-center"></i>&nbsp;Activity</a></th>
+                        </tr>
+                    </thead>
+                    {% for task in tasks %}
+                    <tr>
+                        <td style="font-weight: bold;"><a href="{% url 'associate-modify_task' task.id m_id %}">
+                                {{task.tran_date | date:'m/d/Y' }}</a></td>
+                        <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
+                        <td style="font-weight: bold;">{{ task.doc_type }}</td>
+                        <td style="font-weight: bold;">{{ task.tran_type }}</td>
+                        <td style="font-weight: bold;">{{ task.task }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

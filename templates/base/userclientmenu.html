@@ -3,6 +3,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -34,6 +35,7 @@
         crossorigin="anonymous"></script>
     <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
 </head>
 
 <body id="page-top">
@@ -49,7 +51,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">Sys-Admin Portal</div>
+                <div class="sidebar-brand-text mx-3">Client Portal</div>
             </a>
 
             <!-- Divider -->
@@ -57,7 +59,7 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="{% url 'sysadmin-home' %}">
+                <a class="nav-link" href="{% url 'client-home' %}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -70,44 +72,47 @@
                 <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Portfolio</span>
+                    <span>Due Date Monitoring</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{% url 'admin-client-list' %}">Clients</a>
-                        <a class="collapse-item" href="{% url 'admin-matter-list' %}">Matters</a>
-
-                    </div>
-                </div>
             </li>
-
             <li class="nav-item">
-                <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseThree"
-                    aria-expanded="true" aria-controls="collapseThree">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>System Users</span>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    aria-expanded="true" aria-controls="collapseUtilities">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Message</span>
                 </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+            </li>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities1"
+                    aria-expanded="true" aria-controls="collapseUtilities1">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Other Information</span>
+                </a>
+                <div id="collapseUtilities1" class="collapse" aria-labelledby="headingUtilities1"
+                    data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{% url 'admin-management-list' %}">Management</a>
-                        <a class="collapse-item" href="{% url 'admin-lawyer-list' %}">Lawyers</a>
-                        <a class="collapse-item" href="{% url 'admin-client-userlist' %}">Clients</a>
-                        <a class="collapse-item" href="{% url 'admin-nonlawyer-list' %}">Support Staff</a>
-                        <a class="collapse-item" href="{% url 'admin-admin-list' %}">Admin</a>
-
-                        <!-- <a class="collapse-item" href="#">Bills and Payments</a>
-                                    <a class="collapse-item" href="{% url 'admin-ar-list' %}">Accounts Receivable</a> -->
-
+                        <a class="collapse-item" href="#">Search Document</a>
+                        <a class="collapse-item" href="#">Non-Billable Activity</a>
+                        <a class="collapse-item" href="#">Upcoming Due Dates</a>
                     </div>
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'activity-code' %}">
-                    <i class="fas fa-columns"></i>
-                    <span>Lookup Codes</span></a>
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Reports</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="#">Matter List</a>
+                        <a class="collapse-item" href="#">Due Dates</a>
+                        <a class="collapse-item" href="#">Unpaid Bills</a>
+                    </div>
+                </div>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
+
 
             <!-- Divider -->
             <!-- <hr class="sidebar-divider"> -->
@@ -145,9 +150,7 @@
 
         <!-- Content Wrapper -->
         {% block content %}
-
         {% endblock %}
-
 
         <!-- End of Content Wrapper -->
     </div>
@@ -174,8 +177,8 @@
     <script src="{% static 'vendor/chart.js/Chart.min.js' %}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
-    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
+    <!-- <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script> -->
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"

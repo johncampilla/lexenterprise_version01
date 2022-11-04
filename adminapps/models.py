@@ -984,3 +984,27 @@ class awaitingdocs(models.Model):
     particulars = models.CharField(max_length=200, blank=True, null=True)
     status = models.CharField(max_length=15, choices=STATUS, blank=True)
 
+class client_user_profile(models.Model):
+    user = models.OneToOneField(User, on_delete=CASCADE, null=True)
+    client = models.ForeignKey(Client_Data, on_delete=CASCADE, null=True)
+    remarks = models.CharField(max_length=200, blank=True, null=True)
+    date_request = models.DateField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'User Client Profile'
+
+    def __str__(self):
+        return f'{self.client}'
+
+class client_user_activity(models.Model):
+    user = models.ForeignKey(User, on_delete=PROTECT, blank=True, null=True)
+    matter = models.ForeignKey(Matters, on_delete=PROTECT, null=True)
+    viewdate = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = 'User Client View Actvities'
+
+    def __str__(self):
+        return f'{self.user}'

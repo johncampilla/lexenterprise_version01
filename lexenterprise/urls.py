@@ -20,6 +20,7 @@ from adminapps import views as main_view
 from authentication import views as authenticate_view
 from managing_apps import views as management
 from supportstaff import views as supportstaff_view
+from clientuserapps import views as clientuserapps_view
 from associate_apps import views as associates
 from django.contrib.auth import views as auth_views
 from django.conf import settings
@@ -41,6 +42,8 @@ urlpatterns = [
 
     # for supportstaff
     path('support/', supportstaff_view.main, name='supportstaff-home'),
+
+
     path('support/matters', supportstaff_view.matterlist,
          name='supportstaff-matterlist'),
     path('support/matters/review/<int:pk>/', supportstaff_view.matter_review,
@@ -158,6 +161,7 @@ urlpatterns = [
     path('sysadmin/nonlawyer/', main_view.nonlawyer, name='admin-nonlawyer-list'),
     path('sysadmin/management_user/', main_view.management, name='admin-management-list'),
     path('sysadmin/admin_user/', main_view.admin, name='admin-admin-list'),
+    path('sysadmin/client_userlist/', main_view.client_userlists, name='admin-client-userlist'),
 
     path('sysadmin/lawyers/add_lawyer/',
          main_view.add_lawyer, name='admin-lawyer-add'),
@@ -494,6 +498,22 @@ urlpatterns = [
 
     path('associates/newawaitingdoc/<int:pk>/',
          associates.newawaitingdocs, name='new_awaitingdocs'),
+
+     # URL for client users
+
+    path('client_user/', clientuserapps_view.main, name='client-home'),
+
+    path('clientuserapps/matters/review/<int:pk>/<int:m_id>/',
+         clientuserapps_view.review_task, name='clientuserapps-modify_task'),
+
+
+    path('clientuserapps/matters/review/<int:pk>/',
+         clientuserapps_view.matter_review, name='clientuserapps-matter-review'),
+
+    path('clientuserapps/matters/otherinfo/<int:pk>/<str:sk>/',
+         clientuserapps_view.matter_otherdetails, name='clientuserapps-matter-otherdetails'),
+
+
 
 
     #   URL for lawyers button in the associate portal

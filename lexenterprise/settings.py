@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'supervising_apps.apps.SupervisingAppsConfig',
     'supportstaff.apps.SupportstaffConfig',
     'userprofile.apps.UserprofileConfig',
+    'clientuserapps.apps.ClientuserappsConfig',
     'authentication.apps.AuthenticationConfig',
     'crispy_forms',
 ]

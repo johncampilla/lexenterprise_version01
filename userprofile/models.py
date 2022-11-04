@@ -1,3 +1,6 @@
+from multiprocessing.connection import Client
+from tabnanny import verbose
+from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -14,8 +17,7 @@ RANK = (
     ('FRONTEND DEVELOPER', 'FRONTEND DEVELOPER'),
     ('BACKEND DEVELOPER', 'BACKEND DEVELOPER'),
     ('SYSTEM DEVELOPER', 'SYSTEM DEVELOPER'),
-    ('LOCAL CIENT', 'LOCAL CIENT'),
-    ('FOREIGN CIENT', 'FOREIGN CIENT'),
+    ('CLIENT', 'CLIENT'),
 
 )
 
@@ -38,5 +40,5 @@ class User_Profile(models.Model):
 
     def __str__(self):
         return f'{self.userid.username}'
-
+    
 # Create your models here.

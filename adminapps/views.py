@@ -559,6 +559,33 @@ def lawyerlist(request):
     return render(request, 'adminapps/lawyerlist.html', context)
 
 @login_required
+def client_userlists(request):
+    access_code = request.user.user_profile.userid
+    user_id = User.id
+
+    user_message_id = request.user.user_profile.id
+    alertmessages = inboxmessage.objects.filter(
+        messageto_id=user_message_id, status="UNREAD")
+    countalert = alertmessages.count()
+    srank = request.user.user_profile.rank
+    username = request.user.username
+
+    users = User_Profile.objects.filter(rank ="CLIENT")
+    noofusers = users.count()
+    group = 'CLIENT'
+
+    context = {
+        'users': users,
+        'noofusers': noofusers,
+        'alertmessages': alertmessages,
+        'noofalerts': countalert,
+        'username': username,
+        'group':group,
+
+    }
+    return render(request, 'adminapps/clientuserlist.html', context)
+
+@login_required
 def management(request):
     access_code = request.user.user_profile.userid
     user_id = User.id

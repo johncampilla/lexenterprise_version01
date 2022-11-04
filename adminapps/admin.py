@@ -85,6 +85,8 @@ admin.site.register(Currency)
 admin.site.register(inboxmessage)
 admin.site.register(messageattachment)
 admin.site.register(awaitingdocs)
+admin.site.register(client_user_profile)
+admin.site.register(client_user_activity)
 
 
 # Register your models here.

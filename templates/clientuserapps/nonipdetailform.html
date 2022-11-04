@@ -1,0 +1,121 @@
+{% extends 'base/userclientmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card text-white bg-primary">
+        <div class="row">
+            <div class="col-lg-6">
+                <table class="table table-sm table-borderless small table my-2 text-white">
+                    <tbody>
+                        <tr>
+                            <th>Client</th>
+                            <td>{{ client.client_name}} </td>
+                        </tr>
+                        <tr>
+                            <th>Case Folder</th>
+                            <td>{{ matter.folder}} </td>
+                        </tr>
+                        <tr>
+                            <th>Matter</th>
+                            <td>{{ matter.matter_title}} </td>
+                        </tr>
+                        <tr>
+                            <th>Lawyer</th>
+                            <td>{{ matter.handling_lawyer}}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-3">
+                <table class="table table-sm table-borderless small table my-2 text-white">
+                    <tbody>
+                        <tr>
+                            <th>Matter Number</th>
+                            <td>{{ matter.matterno }}</td>
+                        </tr>
+                        <tr>
+                            <th>Date Filed</th>
+                            <td>{{ matter.filing_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Our Reference</th>
+                            <td>{{ matter.referenceno }}</td>
+                        </tr>
+                        <tr>
+                            <th>Status</th>
+                            <td>{{ matter.status }}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-3">
+                <table class="table table-sm table-borderless small table my-2 text-white">
+                    <tbody>
+                        <tr>
+                            <th>Aquired</th>
+                            <td>{{ client.date_acquired }}</td>
+                        </tr>
+                        <tr>
+                            <th>Created At</th>
+                            <td>{{ client.created_at }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Updated At</th>
+                            <td>{{ client.updated_at }}</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="card text-white">
+                <div class="row mt-2">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <!-- {{ form | crispy }} -->
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text"
+                                        style="width: 150px; font-weight: bold;">Matter</span>
+                                    <input type="text" value="{{matter.matter_title}}" class="form-control" readonly>
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 150px; font-weight: bold;">Case
+                                        Description</span>
+                                    {{form.case_description}}
+                                </div>
+                                <div class="input-group input-group-sm mb-1">
+                                    <span class="input-group-text" style="width: 150px; font-weight: bold;">Case
+                                        Theory</span>
+                                    {{form.case_theory}}
+                                </div>
+                            </div>
+                        </div>
+                        <a class='btn btn-outline-primary btn-sm mb-3 mt-2'
+                            href="{% url 'clientuserapps-matter-review' matter.id %}">Return</a>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

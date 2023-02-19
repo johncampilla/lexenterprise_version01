@@ -1,0 +1,95 @@
+{% extends 'base/supportstaffmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <a class='btn btn-outline-primary btn-sm my-1' href="{% url 'supportstaff-add_newmail' %}"> <i
+            class="fas fa-plus text-center"></i>&nbsp;New Inward Document</a>
+    <div class="card-header text-center text-white bg-primary">Mails Inward</div>
+
+    <table class="table-hover table-bordered table-sm small table">
+        <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+        <thead class="text-center text-white" style="background-color:green ;">
+            <tr>
+                <th style="width:10%;">Date Receipt</th>
+                <th style="width:10%;">Doc Date</th>
+                <th style="width:3%;">Lawyer</th>
+                <th style="width:20%;">Client</th>
+                <th style="width:20%;">Matter</th>
+                <th style="width:32%;">Activity</th>
+                <th style="width:5%;">Action</th>
+            </tr>
+        </thead>
+        {% for matter in page.object_list %}
+        <tr>
+            <td style="font-weight: bold;">{{ matter.tran_date | date:'m/d/Y' }}</td>
+            <td style="font-weight: bold;">{{ matter.doc_date | date:'m/d/Y' }}</td>
+            <td style="font-weight: bold;">{{ matter.matter.handling_lawyer.access_code }}</td>
+            <td style="font-weight: bold;">{{ matter.matter.folder.client.client_name }}</td>
+            <td style="font-weight: bold;">{{ matter.matter.matter_title }}</td>
+            <td style="font-weight: bold;">{{ matter.task }}</td>
+            <td>
+                <!-- <a class="btn btn-primary btn-sm" href="{% url 'associate-matter-review' matter.id %}" title="Edit Matter"> -->
+                <a class="btn btn-primary btn-sm"
+                    href="{% url 'supportstaff-mailsinward_update' matter.id matter.matter.id %}" title="Open Matter">
+                    <i class="fas fa-pen"></i>
+                </a>
+            </td>
+            <!-- <td>
+                       <a class="btn btn-info btn-sm btn-icon-split" href="#" title="Delete Matter">
+                           <span class="icon text-white-20">
+                               <i class="fas fa-trash"></i>
+                           </span>                         
+                       </a>
+                    </td> -->
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="container">
+        <!-- <p>Page: {{ page.number }}/{{ page.paginator.num_pages }}</p> -->
+        <div class="row my-3">
+            <div class="col-md-2">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        {% if page.has_previous %}
+                        <li class="page-item"><a class="page-link"
+                                href="{% url 'supportstaff-mails_new' %}?page={{ page.previous_page_number }}">Previous</a>
+                        </li>
+                        {% endif %}
+                        {% for num_page in page.paginator.page_range %}
+                        {% if page.number == num_page %}
+                        <li class="page-item active"><a class="page-link"
+                                href="{% url 'supportstaff-mails_new' %}?page={{ num_page }}">{{ num_page }}
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link"
+                                href="{% url 'supportstaff-mails_new' %}?page={{ num_page }}">{{ num_page }}
+                            </a>
+                        </li>
+
+                        {% endif %}
+                        {% endfor %}
+                        {% if page.has_next %}
+                        <li class="page-item"><a class="page-link"
+                                href="{% url 'supportstaff-mails_new' %}?page={{ page.next_page_number }}">Next</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock content%}

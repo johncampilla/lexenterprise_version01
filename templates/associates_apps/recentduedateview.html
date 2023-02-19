@@ -89,7 +89,7 @@ Dashboard
             </thead>
             {% for activity in activity %}
             <tr>
-                <td style="font-weight: bold; text-align: center;"><a
+                <td style="font-weight: bold; text-align: center;" title="Modify Activity"><a
                         href="{% url 'recent-activity-modify' activity.id due_id %}">
                         {{activity.tran_date }}</a></td>
                 <td style="font-weight: bold;">{{ activity.doc_type }}</td>

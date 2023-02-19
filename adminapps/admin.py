@@ -87,6 +87,8 @@ admin.site.register(messageattachment)
 admin.site.register(awaitingdocs)
 admin.site.register(client_user_profile)
 admin.site.register(client_user_activity)
+admin.site.register(inifile)
+admin.site.register(sysinifile)
 
 
 # Register your models here.

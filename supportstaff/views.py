@@ -7,9 +7,9 @@ from django.shortcuts import render, redirect
 from pandas import notnull
 from adminapps.models import *
 from datetime import date, datetime, timedelta
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from dateutil.relativedelta import relativedelta
-from adminapps.forms import MailsInwardFormNew, InboxAttachmentEntryForm, InboxAttachmentViewForm, InboxMessageNewForm, InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry, EditMatterForm, ReviewMatterForm,IPDetailForm, Non_IPDetailForm, ClassOfGoodsEntry, ApplicantEntryForm, AddTaskEntryForm
+from adminapps.forms import MailsIn_REG, MailsInwardFormNew, InboxAttachmentEntryForm, InboxAttachmentViewForm, InboxMessageNewForm, InboxMessageEntryForm, TaskEditForm, EntryMatterForm, InboxMessageForm, TaskEntryForm, DueDateEntryForm, FilingDocsEntry, EditMatterForm, ReviewMatterForm,IPDetailForm, Non_IPDetailForm, ClassOfGoodsEntry, ApplicantEntryForm, AddTaskEntryForm, ReplyToMessageForm, DocumentEditForm, MailsInwardFormUpdate, newmailform 
 from django.db.models import Q, Sum, Count
 from django.core.exceptions import ObjectDoesNotExist
 from dateutil.relativedelta import relativedelta
@@ -27,6 +27,8 @@ if prev_month == 0:
 
 @login_required
 def main(request):
+    inifile = sysinifile.objects.first()
+    inifile = inifile.company
     ndays = int(1)
     svalue1 = ("+"+str(ndays))
     ndays = int(35)
@@ -76,7 +78,13 @@ def main(request):
         matter__handling_lawyer__access_code=code4) | Q(matter__handling_lawyer__access_code=code5) | Q(matter__handling_lawyer__access_code=code6) | Q(matter__handling_lawyer__access_code=code7))
 
 
-#    print(multiple_q)
+    #print(multiple_q)
+    handlingLawyer_q = Q(Q(handling_lawyer__access_code=code1) | Q(handling_lawyer__access_code=code2) | Q(handling_lawyer__access_code=code3) | Q(handling_lawyer__access_code=code4) | Q(handling_lawyer__access_code=code5) | Q(handling_lawyer__access_code=code6) | Q(handling_lawyer__access_code=code7))
+
+
+    recentmatters = Matters.objects.filter(handlingLawyer_q, created_at__gte=duedate1, created_at__lte=duedate2).order_by('-created_at')
+
+    recentmatters_count = recentmatters.count()
 
     duedates = AppDueDate.objects.filter(
         multiple_q, duedate__gte=duedate1, duedate__lte=duedate2, date_complied__isnull=True).order_by('-duedate')
@@ -112,7 +120,9 @@ def main(request):
         'recentdocs': recentdocs,
         'duedates_count': duedates_count,
         'recenttask_count':recenttask_count,
-
+        'recentmatters':recentmatters,
+        'recentmatters_count':recentmatters_count,
+        'inifile':inifile,
         'sw': sw,
     }
 
@@ -247,10 +257,12 @@ def matter_review(request, pk):
     c_id = matter.folder.client.id
     client = Client_Data.objects.get(id=c_id)
     appduedates = AppDueDate.objects.filter(matter__id=pk).order_by('-duedate')
-    tempbills = TempBills.objects.filter(matter__id=pk)
-    tempfilings = TempFilingFees.objects.filter(matter__id=pk)
-    expenses = TempExpenses.objects.filter(
-        Q(matter__id=pk), Q(status='O') | Q(status='P'))
+#    tempbills = TempBills.objects.filter(matter__id=pk)
+#    tempfilings = TempFilingFees.objects.filter(matter__id=pk)
+
+    tempbills = TempBills.objects.filter(Q(matter__id=pk), Q(status='O') | Q(status='P'))
+    tempfilings = TempFilingFees.objects.filter(Q(matter__id=pk), Q(status='O') | Q(status='P'))
+    expenses = TempExpenses.objects.filter(Q(matter__id=pk), Q(status='O') | Q(status='P'))
     if request.method == 'POST':
         form = EditMatterForm(request.POST, instance=matter)
         if form.is_valid():
@@ -314,7 +326,7 @@ def matter_review(request, pk):
         'filingdocs': filingdocs,
         'form': form,
         'm_id': pk,
-        'listofexpenses': expenses,
+        'expenses': expenses,
         'tempbills': tempbills,
         'tempfilings': tempfilings,
         'apptype': apptype,
@@ -437,6 +449,7 @@ def view_attachment(request, pk):
     context = {
         'form': form,
         'message': message,
+        'viewattachment' : viewattachment,
     }
 
     return render(request, 'supportstaff/viewattachment.html', context)
@@ -520,8 +533,6 @@ def reply_message(request, pk):
 
 @login_required
 def my_messages(request):
-
-
     myuserid = request.user.user_profile.userid
     access_code = request.user.user_profile.access_code
 
@@ -662,7 +673,7 @@ def mails_inward_new(request):
 
     docs = task_detail.objects.filter(
         multiple_q, doc_type='Incoming').order_by('-tran_date')
-    print(docs)
+
     if request.method == 'POST':
         task_form = MailsInwardFormNew(request.POST)
         if task_form.is_valid():
@@ -677,11 +688,19 @@ def mails_inward_new(request):
     else:
         task_form = MailsInwardFormNew()
 
+    page = Paginator(docs, 11)
+    page_list = request.GET.get('page')
+    page = page.get_page(page_list)
+
     context = {
-        'form': task_form,
-        'matters': docs,
-    }
-    return render(request, 'supportstaff/newinward.html', context)
+            'page': page,
+            'form': task_form,
+            'matters': docs,
+        }
+
+    
+    # return render(request, 'supportstaff/newinward.html', context)
+    return render(request, 'supportstaff/listofinwardmails.html', context)
 
 
 @login_required
@@ -760,7 +779,7 @@ def mails_inward_update(request, pk, m_id):
     client = Client_Data.objects.get(id=c_id)
 
     if request.method == 'POST':
-        task_form = MailsInwardFormNew(request.POST, instance=task)
+        task_form = MailsInwardFormUpdate(request.POST, instance=task)
         if task_form.is_valid():
             task_form.save()
             apptype = matter.apptype.apptype
@@ -769,9 +788,9 @@ def mails_inward_update(request, pk, m_id):
 
             return redirect('supportstaff-mails_inward')
         else:
-            task_form = MailsInwardFormNew(instance=task)
+            task_form = MailsInwardFormUpdate(instance=task)
     else:
-        task_form = MailsInwardFormNew(instance=task)
+        task_form = MailsInwardFormUpdate(instance=task)
 
     context = {
         'form': task_form,
@@ -820,7 +839,7 @@ def add_task(request, pk):
                 tempfees = TempFilingFees(
                     matter_id=matter_id,
                     tran_date=tran_date,
-                    bill_id=filingfees.activitycode.id,
+                    bill_service_id=filingfees.activitycode.id,
                     filing=filing,
                     lawyer_id=lawyer,
                     expense_detail=bill_description,
@@ -892,6 +911,64 @@ def add_task(request, pk):
         'tasks': tasks,
     }
     return render(request, 'supportstaff/add_new_task.html', context)
+
+def newmail(request):
+
+    if request.method == 'POST':
+        task_form = newmailform(request.POST)
+        if task_form.is_valid():
+            mailin_rec = task_form.save()
+            mailin_rec.tran_type = 'Non-Billable'
+            mailin_rec.doc_type = 'Incoming'
+            mailin_rec.save()
+
+            return redirect('supportstaff-mails_inward')
+        else:
+            task_form = newmailform()
+    else:
+        task_form = newmailform()
+    
+    context = {
+        'form': task_form,
+    }
+    
+    return render(request, 'supportstaff/newinward.html', context)
+    
+
+def add_mail(request, pk):
+    matter = Matters.objects.get(id=pk)
+    tasks = task_detail.objects.filter(matter__id = pk)
+    codes = ActivityCodes.objects.filter(TranType = 'MAILSIN')
+    username = request.user.username
+    userid = request.user.user_profile.userid_id
+
+    if request.method == 'POST':
+        form = MailsIn_REG(request.POST)
+        if form.is_valid():
+            task_rec = form.save(commit=False)
+            task_rec.matter_id = matter.id
+            task_rec.task_code_id = request.POST['task_code']
+            task_rec.doc_type = 'Incoming'
+            task_rec.tran_type = 'Non-Billable'
+            task_rec.createdby = username
+            task_rec.updatedby = username
+            task_rec.preparedby_id = userid
+            task_rec.save()
+            return redirect('supportstaff-matter_review', pk)
+        else:
+            return redirect('supportstaff-matter_review', pk)
+    else:
+        form = MailsIn_REG()
+    
+    context = {
+        'form':form,
+        'matter':matter,
+        'tasks':tasks,
+        'codes':codes,
+        'm_id': pk,
+    }
+    return render(request, 'supportstaff/add_new_incoming.html', context)
+
 
 
 def add_duedate(request, pk):
@@ -999,7 +1076,8 @@ def recentactivities(request, pk):
         'listofdocs': listofdocs,
         'duedates': duedates,
         'task': task,
-        'm_id': m_id
+        'm_id': m_id,
+        'unpaidbills':unpaidbills,
 
     }
     return render(request, 'supportstaff/recenttaskview.html', context)
@@ -1122,7 +1200,7 @@ def newdocumentPDF(request, pk, m_id):
     matter = Matters.objects.get(id=m_id)
     task = task_detail.objects.get(id=pk)
     docs = FilingDocs.objects.filter(Task_Detail__id=pk)
-    print("pk=", pk)
+    access_code = request.user.user_profile.userid
     if request.method == "POST":
         # Get the posted form
 
@@ -1130,6 +1208,7 @@ def newdocumentPDF(request, pk, m_id):
         if form.is_valid():
             docs_rec = form.save(commit=False)
             docs_rec.Task_Detail_id = pk
+            docs_rec.createdby = access_code
             docs_rec.save()
             return redirect('superstaff-recent_adddocument', pk, m_id)
         else:
@@ -1429,3 +1508,68 @@ def add_applicant(request, pk):
         'matter':matter
     }
     return render(request, 'supportstaff/new_applicant_IP.html', context)
+
+def replymessage(request, pk):
+    username = request.user.username
+    prevmessage = inboxmessage.objects.get(id=pk)
+
+
+    messageto = prevmessage.messagefrom
+    subject = "REPLY: "+ prevmessage.subject
+    see_matter = prevmessage.see_matter
+
+    if request.method=='POST':
+        form = ReplyToMessageForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(username=messageto)
+            user_id = user.id
+            messageto = User_Profile.objects.get(userid_id=user_id)
+            message_rec = form.save(commit=False)
+            message_rec.messageto_id = messageto.id
+            message_rec.messagefrom = username
+            message_rec.messagedate = today
+            message_rec.subject = subject
+            message_rec.see_matter = see_matter
+            message_rec.status = "UNREAD"
+            message_rec.save()
+            message_id = message_rec.id
+            return redirect('associate-message_withfile', message_id)
+        else:
+            form = ReplyToMessageForm()
+    else:
+        form = ReplyToMessageForm()
+    
+    context = {
+        'form':form,
+        'prevmessage':prevmessage,
+        'messagedate':today,
+        'see_matter':see_matter,
+        'subject': subject,
+    }
+    
+    return render(request, 'supportstaff/reply_msg.html', context)
+
+def view_document(request, pk, m_id, t_id):
+    fileddocs = FilingDocs.objects.get(id=pk)
+    matter = Matters.objects.get(id=m_id)
+    if request.method == 'POST':
+        form = DocumentEditForm(request.POST, request.FILES, instance=fileddocs)
+        if form.is_valid():
+          form.save()
+          return redirect('associate-list_uploaded_docs', pk, m_id)
+        else:
+            form = DocumentEditForm(instance=fileddocs)
+    else:
+        form = DocumentEditForm(instance=fileddocs)
+
+    context = {
+            'form': form,
+            'matter': matter,
+            'docs': fileddocs,
+            't_id': t_id,
+            'm_id': m_id,
+
+        }
+
+    return render(request, 'supportstaff/editdocument.html', context)
+

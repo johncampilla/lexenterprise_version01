@@ -1,0 +1,59 @@
+{% extends 'base/associatemenu.html' %}
+{% block title %} Clients {% endblock %}
+{% load crispy_forms_tags %}
+{% block appname %}
+Dashboard
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Create Button & get username -->
+    <div class="d-flex justify-content-between mt-1">
+        <a href="{% url 'print_matterlist' %}" class="btn btn-outline-primary btn-sm"><i
+                class="fas fa-plus"></i>&nbsp;&nbsp; Print</a>
+        <span>
+            Welcome: <strong><span class="text-primary">{{ user.get_username }}</span></strong>
+        </span>
+    </div>
+
+    <!-- input search + buttons search and reset -->
+    <form>
+        <div class="input-group input-group-sm mb-1 mt-2">
+            <input name="q" type="text" class="form-control" placeholder="Search for...">
+            <button class="btn btn-secondary"><i class="fas fa-search"></i></button>
+            <a href="{% url 'associate-matter-list' %}" class="btn btn-dark" style="margin: left 2px;"><i
+                    class="fas fa-sync-alt"></i></a>
+
+        </div>
+    </form>
+    <!-- Table -->
+    <table class="table-hover table-bordered table-sm small table">
+        <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+        <thead class="text-center text-white" style="background-color:green ;">
+            <tr>
+                <th style="width:40%;">Subject</th>
+                <th style="width:40%;">Description</th>
+                <th style="width:10%;">Document Date</th>
+                <th style="width:10%;">Document</th>
+            </tr>
+        </thead>
+        {% for doc in docs %}
+        <tr>
+            <td style="font-weight: bold;"><a href="#">
+                    {{ doc.Task_Detail }}</a></td>
+            <td style="font-weight: bold;">{{ doc.Description }}</td>
+            <td style="font-weight: bold;">{{ doc.DocDate | date:'m/d/Y' }}</td>
+            <td style="font-weight: bold;">{{ doc.DocsPDF }}</td>
+            <!-- <td>
+                    <a class="btn btn-info btn-sm btn-icon-split" href="#" title="Delete Matter">
+                        <span class="icon text-white-20">
+                            <i class="fas fa-trash"></i>
+                        </span>                         
+                    </a>
+                 </td> -->
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+{% endblock %}

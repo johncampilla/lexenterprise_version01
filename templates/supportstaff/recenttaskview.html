@@ -79,29 +79,56 @@ Dashboard
                 </div>
             </form>
         </div>
+        <div>
+            <a class='btn btn-outline-primary btn-sm mt-1'
+                href="{% url 'superstaff-recent_adddocument' task.id m_id %}"> <i
+                    class="fa fa-paperclip fa-sm"></i>&nbsp;
+                Add Attachment</a>
+
+
+        </div>
         <!-- Document List Table View -->
-        <div class="card-header text-white text-center bg-primary">Attachments</div>
+        <div class="card-header text-white text-center bg-primary mt-2">Attachments</div>
         <table class="table-hover table-bordered table-sm small table">
             <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
             <thead class="text-center text-white" style="background-color:green ;">
                 <tr>
                     <th style="width:5%;">Document Date</th>
-                    <th style="width:90%">Deocument Name</th>
-                    <th colspan="1" style="width:5%;">Action</th>
+                    <th style="width:20%;">Attached BY</th>
+                    <th style="width:30%">Description</th>
+                    <th style="width:45%">Document</th>
                 </tr>
             </thead>
             {% for docs in listofdocs %}
             <tr>
-                <td style="font-weight: bold;">{{ docs.DocDate | date:'m/d/Y' }}</td>
+                <td style="font-weight: bold;"><a href="{% url 'supportstaff-view_document' docs.id m_id task.id %}">
+                        {{ docs.DocDate | date:'m/d/Y' }}</a></td>
+                <td style="font-weight: bold;">{{ docs.createdby }}</td>
+                <td style="font-weight: bold;">{{ docs.Description }}</td>
                 <td style="font-weight: bold;">{{ docs.DocsPDF }}</td>
-                <td>
-                    <a class="btn btn-primary btn-sm" href="#" title="Open Document">
-                        <i class="fas fa-info-circle"></i>
-                    </a>
-                </td>
             </tr>
             {% endfor %}
         </table>
+        <div class="card-header text-white text-center bg-primary mt-2"> Due Dates </div>
+        <table class="table-hover table-bordered table-sm small table">
+            <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+            <thead class="text-center text-white" style="background-color:green ;">
+                <tr>
+                    <th style="width:5%;">Due Date</th>
+                    <th style="width:5%;">Date Complied</th>
+                    <th style="width:90%;">Particulars</th>
+                </tr>
+            </thead>
+            {% for duedates in duedates %}
+            <tr>
+                <td style="font-weight: bold;">{{ duedates.duedate | date:'m/d/Y' }}</td>
+                <td style="font-weight: bold;">{{ duedates.date_complied | date:'m/d/Y' }}</td>
+                <td style="font-weight: bold;">{{ duedates.particulars }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+
     </div>
     <!-- </div> -->
 </div>

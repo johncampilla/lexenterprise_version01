@@ -15,7 +15,8 @@
                         <table class="table table-borderless">
                             <thead>
                                 <span class="h4 text-dark">Porfile Information </span class="h4">
-                                <a class="btn btn-info btn-sm float-right" href="{% url 'user-update-profile' %}">Edit</a>
+                                <a class="btn btn-info btn-sm float-right"
+                                    href="{% url 'user-update-profile' %}">Edit</a>
                                 <hr>
                             </thead>
                             <tbody>
@@ -41,9 +42,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    <div class="col-md-4">
-                        <img class="img-thumbnail" src="{{ user.user_profile.image.url }}" alt="profile-image">
                     </div>
                 </div>
             </div>

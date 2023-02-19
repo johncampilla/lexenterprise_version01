@@ -466,8 +466,15 @@ class Order_Activity(models.Model):
 
 
 class ActivityCodes(models.Model):
+
+    TRANTYPE = {
+        ('MAILSIN', 'MAILSIN'),
+        ('BILLABLE', 'BILLABLE'),
+    }
+
     foldertype = models.ForeignKey(FolderType, on_delete=models.CASCADE)
     ActivityCode = models.CharField(max_length=15, blank=True)
+    TranType = models.CharField(max_length=15, choices=TRANTYPE, null=True, blank=True)
     seqorder = models.IntegerField(blank=True, null=True)
     Activity = models.CharField(max_length=250)
     bill_description = models.CharField(max_length=250, blank=True, null=True)
@@ -586,7 +593,7 @@ class task_detail(models.Model):
         verbose_name_plural = 'Tasks/Activities'
 
     def __str__(self):
-        return f'{self.matter.matter_title} - {self.task}'
+        return f'{self.task}'
 
 
 class DocumentCode(models.Model):
@@ -747,7 +754,7 @@ class AccountsReceivable(models.Model):
         verbose_name_plural = 'Accounts Receivable'
 
     def __str__(self):
-        return f'{self.matter.folder.client} - {self.bill_number} - {self.matter.matter_title} - {self.bill_amount}'
+        return f'{self.matter.folder.client} - {self.bill_number} - {self.matter.matter_title} - {self.bill_amount} - {self.lawyer}'
 
 
 class Bills(models.Model):
@@ -1008,3 +1015,23 @@ class client_user_activity(models.Model):
 
     def __str__(self):
         return f'{self.user}'
+
+class inifile(models.Model):
+    company = models.CharField(max_length=200)
+    address = models.CharField(max_length=200, blank=True, null=True)
+    email = models.EmailField(max_length=200, blank=True, null=True)
+    Contact_Number = models.CharField(max_length=100, null=True, blank=True)
+    ContactPerson = models.CharField(max_length=100, null=True, blank=True)
+
+class sysinifile(models.Model):
+    company = models.CharField(max_length=200)
+    address = models.CharField(max_length=200, blank=True, null=True)
+    email = models.EmailField(max_length=200, blank=True, null=True)
+    Contact_Number = models.CharField(max_length=100, null=True, blank=True)
+    ContactPerson = models.CharField(max_length=100, null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "System INI File"
+    
+    def __str__(self):
+        return f'{self.company}'

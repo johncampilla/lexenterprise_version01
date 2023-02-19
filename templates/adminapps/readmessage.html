@@ -48,8 +48,11 @@ Dashboard
                             </div>
                         </div>
                     </div>
-                    <a class='btn btn-outline-primary btn-sm mb-3' href="{% url 'sysadmin-home' %}"><i
+                    <a class='btn btn-outline-primary btn-sm mb-3' href="{% url 'supportstaff-my_messages' %}"><i
                             class="fa fa-file-text fa-sm"></i>Return</a>
+                    <a class='btn btn-outline-primary btn-sm mb-3' href="#"><i
+                            class="fa fa-file-text fa-sm"></i>Reply</a>
+
                 </form>
             </div>
             <h6 class="card-title bg-primary text-white text-center">Attachments</h6>
@@ -59,12 +62,20 @@ Dashboard
                     <tr>
                         <th style="width:60%;">Description</th>
                         <th style="width:35%;">Document</th>
+                        <th style="width:5%;">Action</th>
                     </tr>
                 </thead>
                 {% for items in attachments %}
                 <tr>
                     <td style="font-weight: bold;">{{ items.description }}</td>
-                    <td style="font-weight: bold;"><a href="{% url 'open_document' items.id %}">{{items.DocsPDF}}</a>
+                    <td style="font-weight: bold;"><a
+                            href="{% url 'supportstaff-open_document' items.id %}">{{items.DocsPDF}}</a></td>
+
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="{% url 'supportstaff-open_document' items.id %}"
+                            title="Open Message">
+                            <i class="fas fa-pen"></i>
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}

@@ -20,35 +20,20 @@ Dashboard
         <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
         <thead class="table-primary text-center">
             <tr>
-                <th scope="col">Name</th>
+                <th scope="col">User Name</th>
                 <th scope="col">Access Code</th>
                 <th scope="col">Mobile</th>
-                <th scope="col">Specialization/th>
+                <th scope="col">Address</th>
                 <th scope="col">Remarks</th>
-                <th colspan="2" style="width:3%;">Action</th>
             </tr>
         </thead>
         {% for user in users %}
         <tr>
-            <td style="font-weight: bold;">{{ user.lawyer_name }}</td>
+            <td style="font-weight: bold;">{{ user.userid.username }}</td>
             <td style="font-weight: bold;">{{ user.access_code }}</td>
-            <td style="font-weight: bold;">{{ user.phone }}</td>
-            <td style="font-weight: bold;">{{ user.Specialization }}</td>
+            <td style="font-weight: bold;">{{ user.mobile }}</td>
+            <td style="font-weight: bold;">{{ user.address }}</td>
             <td style="font-weight: bold;">{{ user.remarks }}</td>
-            <td>
-                <a class="btn btn-primary btn-sm" href="{% url 'admin-lawyer-edit' user.id %}"
-                    title="Edit User Profile">
-                    <i class="fas fa-pen"></i>
-                </a>
-            </td>
-            <td>
-                <a class="btn btn-info btn-sm btn-icon-split" href="{% url 'admin-lawyer-delete' user.id %}"
-                    title="Delete User Profile">
-                    <span class="icon text-white-20">
-                        <i class="fas fa-trash"></i>
-                    </span>
-                </a>
-            </td>
         </tr>
         {% endfor %}
     </table>

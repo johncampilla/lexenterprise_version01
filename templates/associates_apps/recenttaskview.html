@@ -11,7 +11,6 @@ Dashboard
 
 <div class="container">
     {% include 'base/caseinfoheader.html' %}
-
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">Task Detail</h5>
@@ -79,10 +78,16 @@ Dashboard
                         <!-- <input class='btn btn-success btn-sm mb-3 mt-2' type="submit" value="Save Record"> -->
                         <a class='btn btn-outline-primary btn-sm mb-3 mt-2' href="#"><i
                                 class="far fa-envelope-open"></i>&nbsp; Send E-Mail</a>
+                        <a class='btn btn-outline-primary btn-sm mb-3 mt-2'
+                            href="{% url 'recent_adddocument' task.id m_id %}"> <i
+                                class="fa fa-paperclip fa-sm"></i>&nbsp;Add Attachment</a>
 
                     </form>
                 </div>
             </div>
+            <div>
+            </div>
+
             <!-- Document List Table View -->
             <div class="card-header text-center text-white bg-primary">Uploaded Documents</div>
             <table class="table-hover table-bordered table-sm small table">
@@ -90,12 +95,15 @@ Dashboard
                 <thead class="text-center text-white" style="background-color:green ;">
                     <tr>
                         <th style="width:10%;">Date</th>
-                        <th style="width:90%">Deocument Name</th>
+                        <th style="width:50%">Description</th>
+                        <th style="width:40%">Document Name</th>
                     </tr>
                 </thead>
                 {% for docs in listofdocs %}
                 <tr>
-                    <td style="font-weight: bold;"><a href="#">{{ docs.DocDate | date:'m/d/Y' }}</a></td>
+                    <td style="font-weight: bold;"><a href="{% url 'recent-viewdocument' docs.id%}">
+                            {{docs.DocDate | date:'m/d/Y' }}</a></td>
+                    <td style="font-weight: bold;">{{ docs.Description }}</td>
                     <td style="font-weight: bold;">{{ docs.DocsPDF }}</td>
                 </tr>
                 {% endfor %}

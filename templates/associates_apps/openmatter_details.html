@@ -27,6 +27,10 @@ Dashboard
                                 <a class="nav-link" href="{% url 'associate-add_new_task' matter.id %}">New Activity</a>
                             </li>
                             <li class="nav-item" style="font-weight:bold ;">
+                                <a class="nav-link" href="{% url 'associate-add_duedate' matter.id %}">Add Due Date</a>
+                            </li>
+
+                            <li class="nav-item" style="font-weight:bold ;">
                                 <a class="nav-link" href="{% url 'associate-add_tmpexpense' matter.id %}">Add Misc
                                     Expenses</a>
                             </li>
@@ -37,10 +41,6 @@ Dashboard
                             </li>
                             <li class="nav-item" style="font-weight:bold ;">
                                 <a class="nav-link" href="#">Search Document</a>
-                            </li>
-                            <li class="nav-item" style="font-weight:bold ;">
-                                <a class="nav-link" href="{% url 'associate-unbilled-services_PF' matter.id %}">Unbilled
-                                    Services</a>
                             </li>
                         </ul>
                     </div>
@@ -139,12 +139,9 @@ Dashboard
                             </div>
                         </div>
                         <a href="{% url 'associates-view-myclient-det' client.id %}"
-                            class="btn btn-outline-primary btn-sm mb-3">Return</a>
-
-                        <!-- <a class= 'btn btn-success btn-sm mb-3' href="{% url 'associates-view-myclient-det' client.id %}">Return</a> -->
-                        <a class="btn btn-outline-primary btn-sm mb-3"
+                            class="btn btn-primary btn-sm mb-3">Return</a>
+                        <a class="btn btn-primary btn-sm mb-3"
                             href="{% url 'associate-matter-otherdetails' m_id matter.filed_at %}">Other Info Details</a>
-                        <a class="btn btn-outline-primary btn-sm mb-3" href="#">Special Instructions</a>
                     </form>
                 </div>
             </div>
@@ -158,23 +155,17 @@ Dashboard
                     <thead class="text-center text-white" style="background-color:green ;">
                         <tr>
                             <th style="width:10%;">Due Date</th>
-                            <th style="width:70%;">Particulars</th>
+                            <th style="width:80%;">Particulars</th>
                             <th style="width:10%;">Date Complied</th>
-                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_duedate' m_id %}"><i
-                                        class="fas fa-plus text-center"></i>&nbsp;Due Date</a></th>
                         </tr>
                     </thead>
                     {% for duedate in duedatelist %}
                     <tr>
-                        <td style="font-weight: bold;">{{ duedate.duedate | date:'m/d/Y' }}</td>
+                        <td style="font-weight: bold;"><a href="{% url 'associate-edit_duedate' duedate.id m_id %}"
+                                title="Modify Due Date">
+                                {{ duedate.duedate | date:'m/d/Y' }}</a></td>
                         <td style="font-weight: bold;">{{ duedate.particulars }}</td>
                         <td style="font-weight: bold;">{{ duedate.date_complied | date:'m/d/Y' }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" href="{% url 'associate-edit_duedate' duedate.id m_id %}"
-                                title="Edit Due Date">
-                                <i class="fas fa-pen"></i>
-                            </a>
-                        </td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -192,14 +183,13 @@ Dashboard
                             <th style="width:15%;">Lawyer</th>
                             <th style="width:10%;">Doc Type</th>
                             <th style="width:10%;">Tran Type</th>
-                            <th style="width:45%;">Activity</th>
-                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_new_task' m_id %}"><i
-                                        class="fas fa-plus text-center"></i>&nbsp;Activity</a></th>
+                            <th style="width:55%;">Activity</th>
                         </tr>
                     </thead>
                     {% for task in tasks %}
                     <tr>
-                        <td style="font-weight: bold;"><a href="{% url 'associate-modify_task' task.id m_id %}">
+                        <td style="font-weight: bold;" title="Modify Activity"><a
+                                href="{% url 'recent-activity-review' task.id %}">
                                 {{task.tran_date | date:'m/d/Y' }}</a></td>
                         <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
                         <td style="font-weight: bold;">{{ task.doc_type }}</td>

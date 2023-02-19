@@ -57,7 +57,47 @@ Dashboard
             </div>
             {% endif %}
             <div class="row">
-                <div class="card-header text-center text-white bg-primary">Upcoming Due Dates</div>
+                <div class="card-header text-center text-white bg-primary">New Matters<a
+                        href="{% url 'report-createpdf-newmatter' %}" class="btn btn-primary btn-sm"><i
+                            class="fa fa-file-text"></i>&nbsp;&nbsp;Print</a></div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <thead class="text-center text-white" style="background-color:green ;">
+                        <tr>
+                            <th style="width:10%;">Date Created</th>
+                            <th style="width:10%;">Lawyer</th>
+                            <th style="width:30%;">Matter Title</th>
+                            <th style="width:40%;">Type</th>
+                            <th style="width:10%;">Application</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for newmatter in recentmatters %}
+                        <tr>
+                            <td style="font-weight: bold; text-align: center;"><a
+                                    href="{% url 'supportstaff-matter_review' newmatter.id %}">
+                                    {{ newmatter.created_at | date:'m/d/Y' }}</a></td>
+                            <td style="font-weight: bold;">{{ newmatter.handling_lawyer.access_code }}</td>
+                            <td style="font-weight: bold;">{{ newmatter.matter_title }}</td>
+                            <td style="font-weight: bold;">{{ newmatter.case_type }}</td>
+                            <td style="font-weight: bold;">{{ newmatter.apptype }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td style="font-weight:bold ;">Total count :{{recentmatters_count}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="card-header text-center text-white bg-primary">Upcoming Due Dates <a
+                        href="{% url 'report-createpdf-duedatelist' %}" class="btn btn-primary btn-sm"><i
+                            class="fa fa-file-text"></i>&nbsp;&nbsp;Print</a></div>
                 <table class="table-hover table-bordered table-sm small table">
                     <thead class="text-center text-white" style="background-color:green ;">
                         <tr>
@@ -88,11 +128,15 @@ Dashboard
                             <td></td>
                             <td></td>
                         </tr>
+
                     </tbody>
                 </table>
             </div>
             <div class="row">
-                <div class="card-header text-center text-white bg-primary">Recent Activities</div>
+                <div class="card-header text-center text-white bg-primary">Recent Activities <a href="#"
+                        class="btn btn-primary btn-sm"><i class="fa fa-file-text"></i>&nbsp;&nbsp;Print</a>
+                </div>
+
                 <table class="table-hover table-bordered table-sm small table">
                     <thead class="text-white text-center" style="background-color:green ;">
                         <tr>

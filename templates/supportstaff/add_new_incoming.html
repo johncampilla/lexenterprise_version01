@@ -1,0 +1,115 @@
+{% extends 'base/supportstaffmenu.html' %}
+{% block title %} Case Folder Entry Form {% endblock %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block appname %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="card">
+        <!-- <div class="card-body"> -->
+        {% include 'base/caseinfoheader.html' %}
+        <div class="card text-white">
+            <div class="row mt-2">
+                <form method="POST">
+                    {% csrf_token %}
+                    <!-- {{ form | crispy }} -->
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;"> Matter</span>
+                                <input type="text" name="matter" value="{{matter}}" class="form-control" readonly>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Date Received</span>
+                                {{form.tran_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Document Date</span>
+                                {{form.doc_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">IPO Mail Date</span>
+                                {{form.mailing_date}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">IPO Examiner</span>
+                                {{form.examiner}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Lawyer</span>
+                                {{form.lawyer}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Tran Codes</span>
+                                <select name="task_code" class="form-select form-control">
+                                    <option selected></option>
+                                    {% for code in codes %}
+                                    <option value="{{code.id}}">
+                                        {{ code.Activity }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Activity</span>
+                                {{form.task}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Due Code</span>
+                                {{form.duecode}}
+                            </div>
+
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Contact Person</span>
+                                {{form.contact_person}}
+                            </div>
+                            <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Addressed to</span>
+                                {{form.lawyer}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <a href="{% url 'supportstaff-matter_review' matter.id %}#"
+                            class="btn btn-outline-primary btn-sm mb-3">Return</a>
+                        <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+                    </div>
+                </form>
+            </div>
+            <div class="card-header text-center text-white bg-primary">Activities</div>
+            <div>
+                <table class="table-hover table-bordered table-sm small table">
+                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                    <thead class="text-center text-white" style="background-color:green ;">
+                        <tr>
+                            <th style="width:10%;">Date</th>
+                            <th style="width:15%;">Lawyer</th>
+                            <th style="width:10%;">Doc Type</th>
+                            <th style="width:10%;">Tran Type</th>
+                            <th style="width:45%;">Activity</th>
+                            <th colspan="1" style="width:10%;"><a href="">Action</a></th>
+                        </tr>
+                    </thead>
+                    {% for task in tasks %}
+                    <tr>
+                        <td style="font-weight: bold;"><a href="{% url 'superstaff-activity-modify' task.id m_id %}">
+                                {{task.tran_date | date:'m/d/Y' }}</a></td>
+                        <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
+                        <td style="font-weight: bold;">{{ task.doc_type }}</td>
+                        <td style="font-weight: bold;">{{ task.tran_type }}</td>
+                        <td style="font-weight: bold;">{{ task.task }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% endblock content%}

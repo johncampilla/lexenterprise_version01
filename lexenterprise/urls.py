@@ -28,6 +28,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     path('', auth_views.LoginView.as_view(
         template_name='user/login.html'), name='user-login'),
@@ -64,10 +65,19 @@ urlpatterns = [
          name='supportstaff-mails_inward'),
     path('support/message/inward/add/', supportstaff_view.mails_inward_new,
          name='supportstaff-mails_new'),
+
+    path('support/newmail/', supportstaff_view.newmail,
+         name='supportstaff-add_newmail'),
+
+
+
     path('support/inward/update/<int:pk>/<int:m_id>/',
          supportstaff_view.mails_inward_update, name='supportstaff-mailsinward_update'),
     path('support/matters/createtask/<int:pk>/',
          supportstaff_view.add_task, name='supportstaff-add_new_task'),
+    path('support/matters/mailsin/<int:pk>/',
+         supportstaff_view.add_mail, name='supportstaff-add_mail'),
+
     path('support/recent/activities/<int:pk>/',
          supportstaff_view.recentactivities, name='superstaff-activity-review'),
     path('support/recent/duedate/<int:pk>/',
@@ -78,6 +88,9 @@ urlpatterns = [
          supportstaff_view.recent_modify_task, name='superstaff-activity-modify'),
     path('support/recent_add/documents/<int:pk>/<int:m_id>/',
          supportstaff_view.newdocumentPDF, name='superstaff-recent_adddocument'),
+    path('support/viewdocs/<int:pk>/<int:m_id>/<int:t_id>/',
+         supportstaff_view.view_document, name='supportstaff-view_document'),
+
     path('support/attach/<int:pk>/<int:m_id>/',
          supportstaff_view.attach_document, name='superstaff-attach-document'),
     path('support/inboxmessages/list/',
@@ -96,10 +109,18 @@ urlpatterns = [
          supportstaff_view.matter_otherdetails, name='supportstaff-matter-otherdetails'),
     path('support/matters/classofgoods/<int:pk>/',
          supportstaff_view.matter_classofgoods, name='supportstaff-matter-classofgoods'),
+    path('associates/matters/classofgoods/<int:pk>/',
+         associates.matter_classofgoods, name='associates-matter-classofgoods'),
+
     path('support/matters/applicant/<int:pk>/',
          supportstaff_view.add_applicant, name='supportstaff-matter-add-applicant'),
+    path('associates/matters/applicant/<int:pk>/',
+         associates.add_applicant, name='associates-matter-add-applicant'),
+
     path('support/task/addactivy/',
          supportstaff_view.add_activity, name='superstaff-add_activity'),
+    path('support/replymessages/edit/<int:pk>/',
+         main_view.replymessage, name='supportstaff-replymessage'),
 
 
     # for management urls
@@ -169,6 +190,10 @@ urlpatterns = [
          main_view.edit_lawyer, name='admin-lawyer-edit'),
     path('sysadmin/lawyers/delete_lawyer/<int:pk>/',
          main_view.remove_lawyer, name='admin-lawyer-delete'),
+
+    path('sysadmin/matters/removetask/<int:pk>/<int:m_id>/',
+          main_view.remove_task, name='main_view-remove_task'),
+
 
     # path('sysadmin/matters/', main_view.matterlist, name='admin-matter-list'),
 
@@ -342,8 +367,9 @@ urlpatterns = [
          main_view.edittaskcode, name='admin-edit-taskcode'),
     path('sysadmin/del/activitycode/<int:pk>/',
          main_view.removetaskcode, name='admin-remove-taskcode'),
-    path('sysadmin/message/mymessages/', main_view.my_messages,
-         name='admin-my_messages'),
+    path('sysadmin/replymessages/edit/<int:pk>/',
+         main_view.replymessage, name='admin-replymessage'),
+
 
 
 
@@ -420,6 +446,8 @@ urlpatterns = [
     path('associates/unbilled_servicesPF/<int:pk>/',
          associates.unbilled_PF, name='associate-unbilled-services_PF'),
 
+    path('associates/matters/special/',
+         associates.specialinstruction, name='special-instruction'),
 
     path('associates/matters/otherinfo/<int:pk>/<str:sk>/',
          associates.matter_otherdetails, name='associate-matter-otherdetails'),
@@ -490,14 +518,33 @@ urlpatterns = [
     path('associates/attach/<int:pk>/<int:m_id>/',
          associates.attach_document, name='attach-document'),
 
-    path('associates/recent_viewdocs/<int:pk>/<int:frm>/',
-         associates.recent_taskviewdocs, name='recent-tasks-docs-review'),
+    path('associates/message/view/<int:pk>/', associates.open_message,
+         name='associates-open_inboxmessage'),
+
+    path('associates/alertmessages/viewattachment/<int:pk>/',
+         associates.view_attachment, name='associates-open_document'),
+
+
+
+#    path('associates/recent_viewdocs/<int:pk>/<int:frm>/',
+#         associates.recent_taskviewdocs, name='recent-tasks-docs-review'),
+
+     path('associates/recent_viewdocs/<int:pk>/',
+         associates.viewdocument, name='recent-viewdocument'),
+
+         
 
     path('associates/awaitingdocs/<int:pk>/',
          associates.viewawaitingdocs, name='view_awaitingdocs'),
 
+    path('associates/searchdocument/<int:pk>/',
+         associates.accesstemplate, name='access_template'),
+
     path('associates/newawaitingdoc/<int:pk>/',
          associates.newawaitingdocs, name='new_awaitingdocs'),
+
+    path('associates/docsearch/',
+         associates.docsearch, name='doc_search'),
 
      # URL for client users
 
@@ -513,6 +560,7 @@ urlpatterns = [
     path('clientuserapps/matters/otherinfo/<int:pk>/<str:sk>/',
          clientuserapps_view.matter_otherdetails, name='clientuserapps-matter-otherdetails'),
 
+    path('pdf/', include('pdf_report.urls')),
 
 
 

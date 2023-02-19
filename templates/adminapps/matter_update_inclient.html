@@ -106,6 +106,11 @@ Dashboard
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="input-group input-group-sm mb-1">
+                                <span class="input-group-text" style="width: 110px;">Filed At</span>
+                                {{form.filed_at}}
+                            </div>
+
+                            <div class="input-group input-group-sm mb-1">
                                 <span class="input-group-text" style="width: 110px;">Matter Title</span>
                                 {{form.matter_title}}
                             </div>
@@ -154,7 +159,8 @@ Dashboard
                 <th style="width:10%;">Mail Type</th>
                 <th style="width:10%;">Docketed</th>
                 <th style="width:10%;">Lawyer</th>
-                <th style="width:60%;">Task</th>
+                <th style="width:55%;">Task</th>
+                <th style="width:5%;">Action</th>
             </tr>
         </thead>
         {% for task in task %}
@@ -164,6 +170,14 @@ Dashboard
             <td style="font-weight: bold;">{{ task.preparedby }}</td>
             <td style="font-weight: bold;">{{ task.lawyer.access_code }}</td>
             <td style="font-weight: bold;">{{ task.task }}</td>
+            <td>
+                <a class="btn btn-info btn-sm btn-icon-split" href="{% url 'main_view-remove_task' task.id matter.id %}"
+                    title="Delete Activity">
+                    <span class="icon text-white-20">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                </a>
+            </td>
         </tr>
         {% endfor %}
     </table>

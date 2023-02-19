@@ -4,82 +4,74 @@
 {% load static %}
 
 {% block appname %}
-    Dashboard
+Dashboard
 {% endblock %}
 
 {% block content %}
 
 <div class="container">
-    {% include 'base/taskinfoheader.html' %}
-    <div class="card">
-        <!-- <div class="card-body"> -->
-        <div class="card text-white">
-            <div class="row">
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px;"> Activity </span>
-                                    {{form.Task_Detail}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;"> Description </span>
-                                {{form.Description}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                    <span class="input-group-text" style="width: 110px;">Doc Date</span>
-                                    {{form.DocDate}}
-                            </div>
-                            <div class="input-group input-group-sm mb-1">
-                                <span class="input-group-text" style="width: 110px;">Document</span>
-                                {{form.DocsPDF}}
-                            </div>
+    {% include 'base/caseinfoheader.html' %}
+    <!-- <div class="card-body"> -->
+    <div class="card text-white">
+        <div class="row">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="input-group input-group-sm mb-1">
+                            <span class="input-group-text" style="width: 110px; font-weight: bold;"> Case Folder
+                            </span>
+                            <input type="text" name="folder" value="{{task}}" class="form-control" readonly>
+                        </div>
+
+                        <div class="input-group input-group-sm mb-1">
+                            <span class="input-group-text" style="width: 110px;"> Description </span>
+                            {{form.Description}}
+                        </div>
+                        <div class="input-group input-group-sm mb-1">
+                            <span class="input-group-text" style="width: 110px;">Doc Date</span>
+                            {{form.DocDate}}
+                        </div>
+                        <div class="input-group input-group-sm mb-1">
+                            <span class="input-group-text" style="width: 110px;">Document</span>
+                            {{form.DocsPDF}}
                         </div>
                     </div>
-                    <div>
-                        <a class='btn btn-outline-primary btn-sm mb-3' href="{% url 'associate-modify_task' pk matter.id %}">Return</a>
-                        <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
+                </div>
+                <div>
+                    <a class='btn btn-outline-primary btn-sm mb-3'
+                        href="{% url 'superstaff-activity-review' t_id %}">Return</a>
+                    <input class='btn btn-outline-primary btn-sm mb-3' type="submit" value="Save Record">
 
-                    </div>
-                </form>
-            </div>
-            <h6 class="card-title bg-primary text-white text-center">Activities</h6>
-            <div>
-                <table class="table-hover table-bordered table-sm small table">
-                    <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
-                    <thead class="table-primary text-center">
-                        <tr>
-                            <th style="width:10%;">Activity Date</th>
-                            <th style="width:35%;">Description</th>
-                            <th style="width:10%;">Document Date</th>
-                            <th style="width:35%;">File Name</th>
-                            <th colspan="1" style="width:10%;"><a href="{% url 'associate-add_new_task' m_id %}"><i
-                                        class="fas fa-plus text-center"></i>&nbsp;Activity</a></th>
-                        </tr>
-                    </thead>
-                    {% for docs in docs %}
-                    <tr>
-                        <td style="font-weight: bold;">{{ docs.Task_Detail.tran_date | date:'m/d/Y' }}</td>
-                        <td style="font-weight: bold;">{{ docs.Description }}</td>
-                        <td style="font-weight: bold;">{{ docs.DocDate | date:'m/d/Y'}}</td>
-                        <td style="font-weight: bold;">{{ docs.DocsPDF }}</td>
-                        <td>
-                            <a class="btn btn-primary btn-sm" href="{% url 'associate-modify_task' task.id m_id %}"
-                                title="Edit Activity">
-                                <i class="fas fa-pen"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-
+                </div>
+            </form>
         </div>
-        <!-- </div>     -->
+        <div class="card-header text-center text-white bg-primary">Activities</div>
+        <div>
+            <table class="table-hover table-bordered table-sm small table">
+                <!-- <table class="table-hover table-sm table-bordered small table table-dark table-striped">         -->
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th style="width:10%;">Activity Date</th>
+                        <th style="width:35%;">Description</th>
+                        <th style="width:10%;">Document Date</th>
+                        <th style="width:35%;">File Name</th>
+                    </tr>
+                </thead>
+                {% for docs in docs %}
+                <tr>
+                    <td style="font-weight: bold;"><a href="{% url 'recent-viewdocument' docs.id %}">
+                            {{docs.Task_Detail.tran_date | date:'m/d/Y' }}</a></td>
+                    <td style="font-weight: bold;">{{ docs.Description }}</td>
+                    <td style="font-weight: bold;">{{ docs.DocDate | date:'m/d/Y'}}</td>
+                    <td style="font-weight: bold;">{{ docs.DocsPDF }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
     </div>
+    <!-- </div>     -->
 </div>
 
 {% endblock content%}
-
-

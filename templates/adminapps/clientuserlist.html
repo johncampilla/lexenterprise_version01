@@ -15,24 +15,20 @@ Dashboard
             <tr>
                 <th scope="col">User Name</th>
                 <th scope="col">Access Code</th>
-                <th scope="col">Mobile</th>
-                <th scope="col">Address</th>
+                <th scope="col">Date Access</th>
                 <th scope="col">Remarks</th>
             </tr>
         </thead>
         {% for user in users %}
         <tr>
-            <td style="font-weight: bold;"><a href="{% url 'admin-lawyer-edit' user.id %}">
-                    {{ user.userid.username }}</a></td>
-            <td style="font-weight: bold;">{{ user.access_code }}</td>
-            <td style="font-weight: bold;">{{ user.mobile }}</td>
-            <td style="font-weight: bold;">{{ user.address }}</td>
+            <td style="font-weight: bold;">{{ user.user.username }}</a></td>
+            <td style="font-weight: bold;">{{ user.client.client_name }}</td>
+            <td style="font-weight: bold;">{{ user.date_request }}</td>
             <td style="font-weight: bold;">{{ user.remarks }}</td>
         </tr>
         {% endfor %}
         <tr>
             <td style="font-weight:bold ;">Total count: {{noofusers}}</td>
-            <td></td>
             <td></td>
             <td></td>
             <td></td>

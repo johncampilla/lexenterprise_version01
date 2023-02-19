@@ -243,7 +243,7 @@ def add_lawyer(request):
 
 @login_required
 def edit_lawyer(request, pk):
-    selected = Lawyer_Data.objects.get(id=pk)
+    selected = Lawyer_Data.objects.get(lawyerID_id=pk)
     userlist = Lawyer_Data.objects.all()
     if request.method == "POST":
         form = LawyerEntryForm(request.POST, request.FILES, instance=selected)
@@ -266,6 +266,13 @@ def remove_lawyer(request, pk):
     selected = Lawyer_Data.objects.get(id=pk)
     selected.delete()
     return redirect('admin-lawyer-add')
+
+@login_required
+def remove_task(request, pk, m_id):
+    selected = task_detail.objects.get(id=pk)
+    selected.delete()
+    return redirect('admin-update-matter_client', m_id)
+
 
 
 @login_required
@@ -569,8 +576,9 @@ def client_userlists(request):
     countalert = alertmessages.count()
     srank = request.user.user_profile.rank
     username = request.user.username
+    users = client_user_profile.objects.all()
 
-    users = User_Profile.objects.filter(rank ="CLIENT")
+#    users = User_Profile.objects.filter(rank ="CLIENT")
     noofusers = users.count()
     group = 'CLIENT'
 
@@ -637,7 +645,7 @@ def nonlawyer(request):
 
     }
 
-    return render(request, 'adminapps/lawyerlist.html', context)
+    return render(request, 'adminapps/nonlawyerlist.html', context)
 
 def admin(request):
     access_code = request.user.user_profile.userid
@@ -662,7 +670,7 @@ def admin(request):
 
     }
 
-    return render(request, 'adminapps/lawyerlist.html', context)
+    return render(request, 'adminapps/adminlist.html', context)
 
 @login_required
 def client_information(request, pk):
@@ -825,7 +833,7 @@ def matter_update(request, pk):
 @login_required
 def matter_update_client(request, pk):
     matter = Matters.objects.get(id=pk)
-    task = task_detail.objects.filter(matter__id=pk)
+    task = task_detail.objects.filter(matter__id=pk).order_by("-tran_date")
     duedates = AppDueDate.objects.filter(matter__id=pk, date_complied__isnull=True)
     print(pk, duedates)
     f_id = matter.folder.id
@@ -1735,6 +1743,7 @@ def open_message(request, pk):
         'form': form,
         'replyid': pk,
         'attachments': attachments,
+        'message': message,
     }
 
     return render(request, 'adminapps/readmessage_dashboard.html', context)
@@ -2370,6 +2379,47 @@ def open_message(request, pk):
         'form': form,
         'replyid': pk,
         'attachments': attachments,
+        'message' : message,
     }
 
     return render(request, 'adminapps/readmessage.html', context)
+
+def replymessage(request, pk):
+    username = request.user.username
+    prevmessage = inboxmessage.objects.get(id=pk)
+
+
+    messageto = prevmessage.messagefrom
+    subject = "REPLY: "+ prevmessage.subject
+    see_matter = prevmessage.see_matter
+
+    if request.method=='POST':
+        form = ReplyToMessageForm(request.POST)
+        if form.is_valid():
+            user = User.objects.get(username=messageto)
+            user_id = user.id
+            messageto = User_Profile.objects.get(userid_id=user_id)
+            message_rec = form.save(commit=False)
+            message_rec.messageto_id = messageto.id
+            message_rec.messagefrom = username
+            message_rec.messagedate = today
+            message_rec.subject = subject
+            message_rec.see_matter = see_matter
+            message_rec.status = "UNREAD"
+            message_rec.save()
+            message_id = message_rec.id
+            return redirect('associate-message_withfile', message_id)
+        else:
+            form = ReplyToMessageForm()
+    else:
+        form = ReplyToMessageForm()
+    
+    context = {
+        'form':form,
+        'prevmessage':prevmessage,
+        'messagedate':today,
+        'see_matter':see_matter,
+        'subject': subject,
+    }
+    
+    return render(request, 'adminapps/reply_msg.html', context)

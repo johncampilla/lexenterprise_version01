@@ -57,13 +57,9 @@ Dashboard
             </thead>
             {% for file in attachments %}
             <tr>
-                <td style="font-weight: bold;">{{ file.description }}</td>
-                <td style="font-weight: bold;">{{ file.DocsPDF }}</td>
-                <td>
-                    <a class="btn btn-primary btn-sm" href="#" title="Open Attachment">
-                        <i class="fas fa-pen"></i>
-                    </a>
-                </td>
+                <td style="font-weight: bold;">{{file.description }}</td>
+                <td style="font-weight: bold;"><a
+                        href="{% url 'supportstaff-open_document' file.id %}">{{file.DocsPDF}}</a></td>
             </tr>
             {% endfor %}
         </table>

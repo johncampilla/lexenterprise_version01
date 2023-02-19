@@ -163,6 +163,18 @@ class UserEntryForm(forms.ModelForm):
             'remarks': Textarea(attrs={'cols': 200, 'rows': 3}),
             'date_acquired' : NumberInput(attrs={'type': 'date'}),
         }
+
+class newmailform(forms.ModelForm):
+    class Meta:
+        model = task_detail
+        fields = 'matter', 'tran_date','task_code', 'preparedby', 'lawyer', 'task', 'doc_date','mailing_date', 'examiner', 'mail_type', 'contact_person', 'duecode'
+        widgets = {
+            'task': Textarea(attrs={'cols': 200, 'rows': 3}),
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'doc_date': NumberInput(attrs={'type': 'date'}),
+            'mailing_date': NumberInput(attrs={'type': 'date'}),
+        }
+        
 class MailsInwardFormNew(forms.ModelForm):
     class Meta:
         model = task_detail
@@ -174,20 +186,44 @@ class MailsInwardFormNew(forms.ModelForm):
             'mailing_date': NumberInput(attrs={'type': 'date'}),
         }
 
-class MailsInwardFormNewWithMatter(forms.ModelForm):
+class MailsInwardFormNew(forms.ModelForm):
     class Meta:
         model = task_detail
-        fields = 'tran_date', 'preparedby', 'lawyer', 'task', 'task_code','doc_date', 'mail_type', 'contact_person', 'duecode'
+        fields = 'matter', 'tran_date','task_code', 'preparedby', 'lawyer', 'task', 'doc_date','mailing_date', 'examiner', 'mail_type', 'contact_person', 'duecode'
         widgets = {
             'task': Textarea(attrs={'cols': 200, 'rows': 3}),
             'tran_date': NumberInput(attrs={'type': 'date'}),
             'doc_date': NumberInput(attrs={'type': 'date'}),
+            'mailing_date': NumberInput(attrs={'type': 'date'}),
+        }
+
+class MailsInwardFormUpdate(forms.ModelForm):
+    class Meta:
+        model = task_detail
+        fields = 'tran_date', 'preparedby', 'lawyer', 'task', 'task_code','doc_date', 'mail_type', 'mailing_date', 'examiner', 'contact_person', 'duecode'
+        widgets = {
+            'task': Textarea(attrs={'cols': 200, 'rows': 3}),
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'doc_date': NumberInput(attrs={'type': 'date'}),
+            'mailing_date': NumberInput(attrs={'type': 'date'}),
+
         }
 
 class MailsIn_IPO(forms.ModelForm):
     class Meta:
         model = task_detail
         fields = 'tran_date','lawyer', 'task', 'task_code' ,'doc_date', 'mailing_date', 'examiner', 'duecode'
+        widgets = {
+            'task': Textarea(attrs={'cols': 200, 'rows': 3}),
+            'tran_date': NumberInput(attrs={'type': 'date'}),
+            'doc_date': NumberInput(attrs={'type': 'date'}),
+            'mailing_date': NumberInput(attrs={'type': 'date'}),
+        }
+
+class MailsIn_REG(forms.ModelForm):
+    class Meta:
+        model = task_detail
+        fields = 'tran_date','lawyer', 'task', 'task_code', 'tran_type', 'doc_type', 'mail_type', 'doc_date', 'lawyer', 'contact_person', 'duecode','mailing_date', 'examiner', 'duecode'
         widgets = {
             'task': Textarea(attrs={'cols': 200, 'rows': 3}),
             'tran_date': NumberInput(attrs={'type': 'date'}),
@@ -412,6 +448,7 @@ class DueDateEntryForm(forms.ModelForm):
 
         }
 
+
     # matter = forms.ModelChoiceField(label="Matter", queryset=Matters.objects.all().order_by('matter_title'))
     # duecode = forms.CharField(label="Due Code", max_length=20)
     # duedate = forms.DateField(label='Due Date', widget=NumberInput(attrs={'type':'date'}))
@@ -498,7 +535,7 @@ class EntryMatterForm(forms.ModelForm):
     class Meta:
         model = Matters
 #        fields = '__all__'
-        fields = 'appearance', 'case_type', 'apptype', 'nature', 'handling_lawyer', 'lawyers_involve', 'matter_title', "opposing_counsel", 'remarks'
+        fields = 'appearance', 'case_type', 'apptype', 'nature', 'handling_lawyer', 'lawyers_involve', 'filed_at','matter_title', "opposing_counsel", 'remarks'
         widgets = {
             'matter_title': Textarea(attrs={'cols': 200, 'rows': 2}),
             "lawyers_involve": Textarea(attrs={"placeholder": "type here the initials of the lawyers and put a comma in between...", "rows": 1}),

@@ -82,20 +82,21 @@ Dashboard
                         <th style="width:10%;">Fee (USD) </th>
                     </tr>
                 </thead>
-                {% for tempFiling in tempFiling %}
+                {% for tempExpense in tempExp %}
                 <tr>
-                    <td style="font-weight: bold;">{{ tempFiling.tran_date | date:'m/d/Y' }}</td>
-                    <td style="font-weight: bold;">{{ tempFiling.lawyer.access_code }}</td>
-                    <td style="font-weight: bold;">{{ tempFiling.expense_detail }}</td>
-                    <td style="font-weight: bold;">{{ tempFiling.pesoamount }}</td>
-                    <td style="font-weight: bold;">{{ tempFiling.currency }}</td>
-                    <td style="font-weight: bold;">{{ tempFiling.expense_actual_amt }}</td>
+                    <td style="font-weight: bold;">{{ tempExpense.tran_date | date:'m/d/Y' }}</td>
+                    <td style="font-weight: bold;">{{ tempExpense.lawyer.access_code }}</td>
+                    <td style="font-weight: bold;">{{ tempExpense.expense_detail }}</td>
+                    <td style="font-weight: bold;">{{ tempExpense.expense_actual_amt }}</td>
+                    <td style="font-weight: bold;">{{ tempExpense.currency }}</td>
+                    <td style="font-weight: bold;">{{ tempExpense.Pesoamount }}</td>
                 </tr>
                 {% endfor %}
             </table>
         </div>
-
     </div>
+    <a class='btn btn-outline-primary btn-sm mb-3' href="#">Prepare Billing</a>
+
 </div>
 
 {% endblock content%}

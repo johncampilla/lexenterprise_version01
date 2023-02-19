@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'SycipLexenprise'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9BA77939B1EC4B609C9B9AC580F091D4 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6B9649E20F0C4F38ADA1B7BD9BDAE385 }}

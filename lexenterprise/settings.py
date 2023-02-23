@@ -23,11 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-icm-+0%f4rcd%3db(2y#6jp7mo36+m#s_@%nrcb#b2u8f9593&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['syciplexenprise.azurewebsites.net']
+ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['syciplexenprise.azurewebsites.net']
 
 # Application definition
 
@@ -90,13 +90,23 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'lexenterprise',
-#        'NAME': 'lexsystem',
         'USER': 'postgres',
         'PASSWORD':'640515john',
         'HOST':'localhost',
         'PORT':'5432',
     }
  }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'LexEnprise',
+#         'USER': 'postgres',
+#         'PASSWORD':'640515john',
+#         'HOST':'DESKTOP-GH9PS35\SQLEXPRESS',
+#         'PORT':'1433',
+#     }
+#  }
 
 # DATABASES = {
 #     'default': {

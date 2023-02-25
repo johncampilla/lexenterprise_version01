@@ -87,15 +87,29 @@ WSGI_APPLICATION = 'lexenterprise.wsgi.application'
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lexenterprise',
-        'USER': 'postgres',
-        'PASSWORD':'640515john',
-        'HOST':'localhost',
-        'PORT':'5432',
+    "default": {
+        'ENGINE': 'mssql',
+        'NAME': 'LexEnprise',
+        'USER': 'John',
+        'PASSWORD': '640515',
+        'HOST': '(LocalDb)\\MSSQLLocalDB',
+        'PORT': '',
     }
- }
+}
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'lexenterprise',
+#         'USER': 'postgres',
+#         'PASSWORD':'640515john',
+#         'HOST':'localhost',
+#         'PORT':'5432',
+#     }
+#  }
+
+
 
 # DATABASES = {
 #     'default': {
@@ -103,7 +117,7 @@ DATABASES = {
 #         'NAME': 'LexEnprise',
 #         'USER': 'postgres',
 #         'PASSWORD':'640515john',
-#         'HOST':'DESKTOP-GH9PS35\SQLEXPRESS',
+#         'HOST':'DESKTOP-GH9PS35\\SQLEXPRESS',
 #         'PORT':'1433',
 #     }
 #  }
